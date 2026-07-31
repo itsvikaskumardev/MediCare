@@ -19,7 +19,7 @@ import { serviceAppointmentsStyles } from "../../assets/dummyStyles";
 /* ----------------------
   Config
 ------------------------ */
-const API_BASE = "http://localhost:4000";
+const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
 
 /* ----------------------
   Helpers
