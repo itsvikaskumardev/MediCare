@@ -1,0 +1,21 @@
+# Ignore old Express backend
+backend/
+
+# Node modules
+frontend/node_modules/
+admin/node_modules/
+
+# Environment files
+frontend/.env
+admin/.env
+backend-dotnet/.env
+
+# .NET build files
+backend-dotnet/bin/
+backend-dotnet/obj/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
