@@ -32,7 +32,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Endpoints\Appointment\" />
-	  <Folder Include="Endpoints\Doctor\" />
 	  <Folder Include="Endpoints\ServiceAppointment\" />
 	</ItemGroup>
 

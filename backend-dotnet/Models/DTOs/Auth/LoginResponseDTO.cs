@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace backend_dotnet.Models.DTOs
 {
     public class LoginResponseDTO

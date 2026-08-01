@@ -1,13 +1,22 @@
-using System.Text;
 using backend_dotnet.Data;
-using backend_dotnet.Services; // adjust namespace to wherever IPasswordHasher, IJwtTokenGenerator, ICategoryService live
+using backend_dotnet.Endpoints;
+using backend_dotnet.Models;
+using backend_dotnet.Services;
+using backend_dotnet.Services.Appointment;
+using backend_dotnet.Services.Doctor;
+using backend_dotnet.Services.ImageUpload;
+using backend_dotnet.Services.Jwt;
+using backend_dotnet.Services.Password;
+using backend_dotnet.Services.Service;
+using backend_dotnet.Services.ServiceAppointment;
 using backend_dotnetWebMinimalExample.Endpoints;
+using backend_dotnetWebMinimalExample.Endpoints.Doctor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +61,9 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
+//---------------------Db Connection and Jwt Token -----------------------------------------------------------------------
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -89,6 +101,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+//----------------------------- Cloudinary Image Upload Service -----------------------------------------------------------------------
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
+
+//----------------------------- Module Services -----------------------------------------------------------------------
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IServiceModuleService, ServiceModuleService>();
+builder.Services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -100,7 +122,10 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();// scalar add in program.cs
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowAll");
 //-----------------------------Configuration -----------------------------------------------------------------------
@@ -111,5 +136,9 @@ app.UseAuthorization();
 
 //-----------------------------Endpoints-----------------------------------------------------------------------
 app.MapAuthEndpoints();
+app.MapDoctorEndpoints();
+app.MapAppointmentEndpoints();
+app.MapServiceEndpoints();
+app.MapServiceAppointmentEndpoints();
 
 app.Run();

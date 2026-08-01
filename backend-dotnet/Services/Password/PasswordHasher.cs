@@ -1,4 +1,4 @@
-namespace backend_dotnet.Services
+namespace backend_dotnet.Services.Password
 {
     public class PasswordHasher : IPasswordHasher
     {

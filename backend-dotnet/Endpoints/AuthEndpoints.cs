@@ -1,10 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Text;
 using backend_dotnet.Data;
 using backend_dotnet.Models;
 using backend_dotnet.Models.DTOs;
 using backend_dotnet.Services;
+using backend_dotnet.Services.Jwt;
+using backend_dotnet.Services.Password;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace backend_dotnetWebMinimalExample.Endpoints
 {
@@ -58,7 +59,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints
                 }, statusCode: StatusCodes.Status401Unauthorized);
             }
 
-            var token = jwtTokenGenerator.GenerateToken(user);
+            var token = jwtTokenGenerator.GenerateToken(user.Id.ToString(), user.Email, user.Name, user.Role.ToString());
 
             var userSession = new UserSession
             {

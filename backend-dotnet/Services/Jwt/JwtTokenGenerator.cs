@@ -1,10 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using backend_dotnet.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace backend_dotnet.Services
+namespace backend_dotnet.Services.Jwt
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
@@ -15,7 +14,7 @@ namespace backend_dotnet.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(User user)
+        public string GenerateToken(string id, string email, string name, string role)
         {
             var secret = _configuration["ApiSettings:Secret"]
                          ?? throw new InvalidOperationException("JWT Secret is not configured in ApiSettings:Secret");
@@ -28,10 +27,10 @@ namespace backend_dotnet.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(ClaimTypes.NameIdentifier, id),
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Name, name),
+                new Claim(ClaimTypes.Role, role)
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

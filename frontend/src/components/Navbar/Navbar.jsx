@@ -3,7 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { Menu, X, User as UserIcon, Key } from "lucide-react";
+import { Menu, X, User as UserIcon, Key, LogOut } from "lucide-react";
+import PatientLoginModal from "../PatientLoginModal/PatientLoginModal";
 
 // Clerk
 import { SignedIn, SignedOut, useClerk, UserButton } from "@clerk/clerk-react";
@@ -22,6 +23,16 @@ export default function Navbar() {
       return false;
     }
   });
+
+  const [patientUser, setPatientUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem("patientUser_v1");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isPatientModalOpen, setIsPatientModalOpen] = useState(false);
 
   const location = useLocation();
   const navRef = useRef(null);
@@ -43,16 +54,32 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  /* Sync doctor login state */
+  /* Sync doctor and patient login state */
   useEffect(() => {
-    const onStorage = (e) => {
-      if (e.key === STORAGE_KEY) {
-        setIsDoctorLoggedIn(Boolean(e.newValue));
+    const syncAuth = () => {
+      try {
+        const saved = localStorage.getItem("patientUser_v1");
+        setPatientUser(saved ? JSON.parse(saved) : null);
+        setIsDoctorLoggedIn(Boolean(localStorage.getItem(STORAGE_KEY)));
+      } catch {
+        setPatientUser(null);
+        setIsDoctorLoggedIn(false);
       }
     };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener("patientAuthChange", syncAuth);
+    window.addEventListener("storage", syncAuth);
+    return () => {
+      window.removeEventListener("patientAuthChange", syncAuth);
+      window.removeEventListener("storage", syncAuth);
+    };
   }, []);
+
+  const handlePatientSignOut = () => {
+    localStorage.removeItem("patientToken_v1");
+    localStorage.removeItem("patientUser_v1");
+    setPatientUser(null);
+    window.dispatchEvent(new Event("patientAuthChange"));
+  };
 
   /* Close mobile menu on outside click */
   useEffect(() => {
@@ -137,32 +164,43 @@ export default function Navbar() {
             {/* Right side */}
             <div className={navbarStyles.rightContainer}>
               {/* ================= PATIENT LOGGED OUT ================= */}
-              <SignedOut>
-                {/* Doctor Admin */}
-                <Link
-                  to="/doctor-admin/login"
-                  className={navbarStyles.doctorAdminButton}
-                >
-                  <UserIcon className={navbarStyles.doctorAdminIcon} />
-                  <span className={navbarStyles.doctorAdminText}>
-                    Doctor Admin
-                  </span>
-                </Link>
+              {/* Doctor Admin */}
+              <Link
+                to="/doctor-admin/login"
+                className={navbarStyles.doctorAdminButton}
+              >
+                <UserIcon className={navbarStyles.doctorAdminIcon} />
+                <span className={navbarStyles.doctorAdminText}>
+                  Doctor Admin
+                </span>
+              </Link>
 
-                {/* Patient Login */}
+              {/* Patient Login or Profile */}
+              {!patientUser ? (
                 <button
-                  onClick={() => clerk.openSignIn()}
+                  type="button"
+                  onClick={() => setIsPatientModalOpen(true)}
                   className={navbarStyles.loginButton}
                 >
                   <Key className={navbarStyles.loginIcon} />
                   Login
                 </button>
-              </SignedOut>
-
-              {/* ================= PATIENT LOGGED IN ================= */}
-              <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-medium border border-emerald-200">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="max-w-[120px] truncate">{patientUser.email}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePatientSignOut}
+                    className="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+                    title="Sign Out"
+                  >
+                    <LogOut size={16} />
+                  </button>
+                </div>
+              )}
 
               {/* Mobile/Tablet toggle */}
               <button
@@ -201,32 +239,54 @@ export default function Navbar() {
                 );
               })}
               {/* Patient logged out */}
-              <SignedOut>
-                <Link
-                  to="/doctor-admin/login"
-                  onClick={() => setIsOpen(false)}
-                  className={navbarStyles.mobileDoctorAdminButton}
-                >
-                  Doctor Admin
-                </Link>
-                <div className={navbarStyles.mobileLoginContainer}>
+              <Link
+                to="/doctor-admin/login"
+                onClick={() => setIsOpen(false)}
+                className={navbarStyles.mobileDoctorAdminButton}
+              >
+                Doctor Admin
+              </Link>
+              <div className={navbarStyles.mobileLoginContainer}>
+                {!patientUser ? (
                   <button
+                    type="button"
                     onClick={() => {
                       setIsOpen(false);
-                      clerk.openSignIn();
+                      setIsPatientModalOpen(true);
                     }}
                     className={navbarStyles.mobileLoginButton}
                   >
                     Login
                   </button>
-                </div>
-              </SignedOut>
+                ) : (
+                  <div className="flex flex-col gap-2 w-full">
+                    <div className="px-3 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-xs font-medium text-center">
+                      Logged in as {patientUser.email}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsOpen(false);
+                        handlePatientSignOut();
+                      }}
+                      className="w-full py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
         {/* Animations */}
         <style>{navbarStyles.animationStyles}</style>
       </nav>
+
+      <PatientLoginModal
+        isOpen={isPatientModalOpen}
+        onClose={() => setIsPatientModalOpen(false)}
+      />
     </>
   );
 }
