@@ -76,16 +76,22 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.ErrorMessage?.Contains("already exists", StringComparison.OrdinalIgnoreCase) == true
-                    ? HttpStatusCode.Conflict
-                    : HttpStatusCode.BadRequest;
+                if (result.ErrorMessage?.Contains("already exists", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.Conflict(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
 
-                return Results.Json(new ApiResponse
+                return Results.BadRequest(new ApiResponse
                 {
                     IsSuccess = false,
-                    StatusCode = statusCode,
+                    StatusCode = HttpStatusCode.BadRequest,
                     ErrorMessages = [result.ErrorMessage ?? "Doctor registration failed"]
-                }, statusCode: (int)statusCode);
+                });
             }
 
             return Results.Created("/api/doctors/CreateDoctor", new ApiResponse
@@ -150,7 +156,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }, statusCode: (int)HttpStatusCode.InternalServerError);
             }
 
-            return Results.Json(new ApiResponse
+            return Results.Ok(new ApiResponse
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
@@ -159,7 +165,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                     data = result.Data,
                     meta = new { page = result.Page, limit = result.Limit, total = result.Total }
                 }
-            }, statusCode: (int)HttpStatusCode.OK);
+            });
         }
 
 
@@ -184,12 +190,12 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }, statusCode: (int)statusCode);
             }
 
-            return Results.Json(new ApiResponse
+            return Results.Ok(new ApiResponse
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
                 Result = new { data = result.Data }
-            }, statusCode: (int)HttpStatusCode.OK);
+            });
         }
         //-------------------------------------------UpdateDoctor-----------------------------------------------------
         private static async Task<IResult> UpdateDoctor(
@@ -229,12 +235,12 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }, statusCode: (int)statusCode);
             }
 
-            return Results.Json(new ApiResponse
+            return Results.Ok(new ApiResponse
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
                 Result = new { data = result.Data }
-            }, statusCode: (int)HttpStatusCode.OK);
+            });
         }
 
         //-------------------------------------------DeleteDoctor-----------------------------------------------------
@@ -260,12 +266,12 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }, statusCode: (int)statusCode);
             }
 
-            return Results.Json(new ApiResponse
+            return Results.Ok(new ApiResponse
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
                 Result = new { message = "Doctor removed" }
-            }, statusCode: (int)HttpStatusCode.OK);
+            });
         }
 
         //-------------------------------------------UpdateDoctor-----------------------------------------------------
@@ -302,12 +308,12 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }, statusCode: (int)statusCode);
             }
 
-            return Results.Json(new ApiResponse
+            return Results.Ok(new ApiResponse
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
                 Result = new { data = result.Data }
-            }, statusCode: (int)HttpStatusCode.OK);
+            });
         }
 
 
