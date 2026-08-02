@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace backend_dotnet.Models
+namespace backend_dotnet.Models.Domain
 {
     public class User
     {

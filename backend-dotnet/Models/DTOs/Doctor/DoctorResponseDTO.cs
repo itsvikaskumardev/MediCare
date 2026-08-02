@@ -1,4 +1,5 @@
 using backend_dotnet.Models;
+using backend_dotnet.Models.Domain;
 
 namespace backend_dotnet.Models.DTOs.Doctor
 {
@@ -23,7 +24,9 @@ namespace backend_dotnet.Models.DTOs.Doctor
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public DoctorResponseDTO(backend_dotnet.Models.Doctor doctor)
+        public DoctorResponseDTO() { }
+
+        public DoctorResponseDTO(backend_dotnet.Models.Domain.Doctor doctor)
         {
             Id = doctor.Id;
             Email = doctor.Email;

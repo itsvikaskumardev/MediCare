@@ -1,4 +1,6 @@
 using backend_dotnet.Data;
+using backend_dotnet.Models;
+using backend_dotnet.Models.Domain;
 using backend_dotnet.Models.DTOs.Doctor;
 using backend_dotnet.Services.ImageUpload;
 using backend_dotnet.Services.Jwt;
@@ -26,11 +28,11 @@ namespace backend_dotnet.Services.Doctor
             _imageUploadService = imageUploadService;
         }
 
-        public async Task<DoctorAuthResultDTO> CreateDoctorAsync(CreateDoctorRequestDTO request, IFormFile? image)
+        public async Task<DoctorAuthResultDTO> CreateDoctorAsync(CreateDoctorRequestDTO createDoctorRequestDTO, IFormFile? image)
         {
-            if (string.IsNullOrWhiteSpace(request.Email) ||
-                string.IsNullOrWhiteSpace(request.Password) ||
-                string.IsNullOrWhiteSpace(request.Name))
+            if (string.IsNullOrWhiteSpace(createDoctorRequestDTO.Email) ||
+                string.IsNullOrWhiteSpace(createDoctorRequestDTO.Password) ||
+                string.IsNullOrWhiteSpace(createDoctorRequestDTO.Name))
             {
                 return new DoctorAuthResultDTO
                 {
@@ -39,7 +41,7 @@ namespace backend_dotnet.Services.Doctor
                 };
             }
 
-            var emailLc = request.Email.Trim().ToLowerInvariant();
+            var emailLc = createDoctorRequestDTO.Email.Trim().ToLowerInvariant();
 
             if (await _db.Doctors.AnyAsync(d => d.Email.ToLower() == emailLc))
             {
@@ -50,42 +52,44 @@ namespace backend_dotnet.Services.Doctor
                 };
             }
 
-            string? imageUrl = request.ImageUrl;
-            string? imagePublicId = request.ImagePublicId;
+            string? imageUrl = createDoctorRequestDTO.ImageUrl;
+            string? imagePublicId = createDoctorRequestDTO.ImagePublicId;
 
             if (image is not null && image.Length > 0)
             {
-                var uploadedUrl = await _imageUploadService.UploadImageAsync(image, "doctors");
+                var uploadedUrl = await _imageUploadService.UploadImageAsync(image, "medicare");
                 if (!string.IsNullOrEmpty(uploadedUrl))
                 {
                     imageUrl = uploadedUrl;
                 }
             }
 
-            var availability = Enum.TryParse<Availability>(request.Availability, true, out var parsedAvailability)
+            var availability = Enum.TryParse<Availability>(createDoctorRequestDTO.Availability, true, out var parsedAvailability)
                 ? parsedAvailability
                 : Availability.Available;
 
-            var passwordHash = _passwordHasher.HashPassword(request.Password);
+            var passwordHash = _passwordHasher.HashPassword(createDoctorRequestDTO.Password);
 
-            var doctor = new backend_dotnet.Models.Doctor
+            var doctor = new backend_dotnet.Models.Domain.Doctor
             {
                 Email = emailLc,
                 Password = passwordHash,
-                Name = request.Name,
-                Specialization = request.Specialization ?? "",
+                Name = createDoctorRequestDTO.Name,
+                Specialization = createDoctorRequestDTO.Specialization ?? "",
                 ImageUrl = imageUrl,
                 ImagePublicId = imagePublicId,
                 Availability = availability,
-                Experience = request.Experience ?? "",
-                Qualifications = request.Qualifications ?? "",
-                Location = request.Location ?? "",
-                About = request.About ?? "",
-                Fee = request.Fee ?? 0,
-                Schedule = string.IsNullOrWhiteSpace(request.Schedule) ? "{}" : request.Schedule,
-                Success = request.Success ?? "",
-                Patients = request.Patients ?? "",
-                Rating = request.Rating ?? 0
+                Experience = createDoctorRequestDTO.Experience ?? "",
+                Qualifications = createDoctorRequestDTO.Qualifications ?? "",
+                Location = createDoctorRequestDTO.Location ?? "",
+                About = createDoctorRequestDTO.About ?? "",
+                Fee = createDoctorRequestDTO.Fee ?? 0,
+                Schedule = string.IsNullOrWhiteSpace(createDoctorRequestDTO.Schedule) ? "{}" : createDoctorRequestDTO.Schedule,
+                Success = createDoctorRequestDTO.Success ?? "",
+                Patients = createDoctorRequestDTO.Patients ?? "",
+                Rating = createDoctorRequestDTO.Rating ?? 0,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             _db.Doctors.Add(doctor);

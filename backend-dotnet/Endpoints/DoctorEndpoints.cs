@@ -28,11 +28,11 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         }
 
         private static async Task<IResult> CreateDoctor(
-            [FromForm] CreateDoctorRequestDTO request,
+            [FromForm] CreateDoctorRequestDTO createDoctorRequestDTO,
             IFormFile? image,
             IDoctorService doctorService)
         {
-            var result = await doctorService.CreateDoctorAsync(request, image);
+            var result = await doctorService.CreateDoctorAsync(createDoctorRequestDTO, image);
 
             if (!result.IsSuccess)
             {

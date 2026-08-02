@@ -1,5 +1,6 @@
 using backend_dotnet.Data;
 using backend_dotnet.Models;
+using backend_dotnet.Models.Domain;
 using backend_dotnet.Models.DTOs;
 using backend_dotnet.Services;
 using backend_dotnet.Services.Jwt;
