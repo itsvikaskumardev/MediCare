@@ -155,7 +155,7 @@ export default function DoctorDetail() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_BASE}/api/doctors/${id}`);
+        const res = await fetch(`${API_BASE}/api/doctors/GetDoctorById/${id}`);
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(
@@ -163,7 +163,12 @@ export default function DoctorDetail() {
           );
         }
         const payload = await res.json();
-        const doc = payload?.data || null;
+        const doc =
+          payload?.result?.data ||
+          payload?.result ||
+          payload?.data ||
+          payload ||
+          null;
         if (mounted) setDoctor(doc);
       } catch (err) {
         if (mounted) setError(err.message || "Failed to fetch doctor");

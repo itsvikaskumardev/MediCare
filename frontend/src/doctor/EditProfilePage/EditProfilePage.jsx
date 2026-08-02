@@ -79,7 +79,7 @@ export default function EditProfilePage({ apiBase }) {
         const res = await fetch(`${API_BASE}/${id}`);
         const json = await res.json();
         if (!res.ok) throw new Error(json?.message || "Failed to fetch doctor");
-        const d = json.data || json || {};
+        const d = json.result?.data || json.result || json.data || json || {};
         // Normalize fields (backend may return different keys)
         d.schedule = dedupeAndSortSchedule(d.schedule || {});
         d.imageUrl =

@@ -37,25 +37,42 @@ export default function LoginPage({ apiBase }) {
 
       const json = await res.json().catch(() => null);
 
-      if (!res.ok) {
-        toast.error(json?.message || "Login failed", { duration: 4000 });
+      if (!res.ok || json?.isSuccess === false) {
+        toast.error(
+          json?.errorMessages?.[0] || json?.message || "Login failed",
+          { duration: 4000 }
+        );
         setBusy(false);
         return;
       }
 
       /* ================= IMPORTANT PART ================= */
 
-      // token
-      const token = json?.token || json?.data?.token;
+      // token (supports root, data, and Minimal API result envelope)
+      const token =
+        json?.token ||
+        json?.data?.token ||
+        json?.result?.token ||
+        json?.result?.data?.token;
+
       if (!token) {
         toast.error("Authentication token missing");
         setBusy(false);
         return;
       }
 
-      // doctor id (supports all common API shapes)
+      // doctor id (supports root, data, doctor, and Minimal API result envelope)
       const doctorId =
-        json?.data?._id || json?.doctor?._id || json?.data?.doctor?._id;
+        json?.data?._id ||
+        json?.data?.id ||
+        json?.doctor?._id ||
+        json?.doctor?.id ||
+        json?.data?.doctor?._id ||
+        json?.data?.doctor?.id ||
+        json?.result?.data?._id ||
+        json?.result?.data?.id ||
+        json?.result?._id ||
+        json?.result?.id;
 
       if (!doctorId) {
         toast.error("Doctor ID missing from server response");

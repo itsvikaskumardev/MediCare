@@ -3,6 +3,7 @@ using backend_dotnet.Models.DTOs.Doctor;
 using backend_dotnet.Services.Doctor;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 {
@@ -25,7 +26,30 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                  .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
                  .Produces<ApiResponse>(StatusCodes.Status401Unauthorized)
                  .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            doctorGroup.MapGet("/GetDoctors", GetDoctors)
+                .WithName("GetDoctors")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            doctorGroup.MapGet("/GetDoctorById/{id}", GetDoctorById)
+                .WithName("GetDoctorById")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            doctorGroup.MapPut("/UpdateDoctor/{id}", UpdateDoctor)
+                .RequireAuthorization()
+                .WithName("UpdateDoctor")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status403Forbidden)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status409Conflict)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
         }
+
+        //-------------------------------------------CreateDoctor-----------------------------------------------------
 
         private static async Task<IResult> CreateDoctor(
             [FromForm] CreateDoctorRequestDTO createDoctorRequestDTO,
@@ -60,6 +84,9 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
             });
         }
 
+
+        //-------------------------------------------LoginDoctor-----------------------------------------------------
+
         private static async Task<IResult> LoginDoctor(
             DoctorLoginRequestDTO request,
             IDoctorService doctorService)
@@ -87,5 +114,112 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }
             });
         }
+
+        //-------------------------------------------GetDoctors-----------------------------------------------------
+
+
+        private static async Task<IResult> GetDoctors(
+        [AsParameters] GetDoctorsRequestDTO getDoctorsRequestDTO,
+        IDoctorService doctorService)
+        {
+            var result = await doctorService.GetDoctorsAsync(getDoctorsRequestDTO);
+
+            if (!result.IsSuccess)
+            {
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessages = [result.ErrorMessage ?? "Failed to fetch doctors"]
+                }, statusCode: (int)HttpStatusCode.InternalServerError);
+            }
+
+            return Results.Json(new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Result = new
+                {
+                    data = result.Data,
+                    meta = new { page = result.Page, limit = result.Limit, total = result.Total }
+                }
+            }, statusCode: (int)HttpStatusCode.OK);
+        }
+
+
+        //-------------------------------------------GetDoctorById-----------------------------------------------------
+        private static async Task<IResult> GetDoctorById(
+        string id,
+        IDoctorService doctorService)
+        {
+            var result = await doctorService.GetDoctorByIdAsync(id);
+
+            if (!result.IsSuccess)
+            {
+                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
+                    ? HttpStatusCode.NotFound
+                    : HttpStatusCode.InternalServerError;
+
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = statusCode,
+                    ErrorMessages = [result.ErrorMessage ?? "Failed to fetch doctor"]
+                }, statusCode: (int)statusCode);
+            }
+
+            return Results.Json(new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Result = new { data = result.Data }
+            }, statusCode: (int)HttpStatusCode.OK);
+        }
+        //-------------------------------------------UpdateDoctor-----------------------------------------------------
+        private static async Task<IResult> UpdateDoctor(
+        string id,
+        [FromForm] UpdateDoctorRequestDTO updateDoctorRequestDTO,
+        IFormFile? image,
+        ClaimsPrincipal user,
+        IDoctorService doctorService)
+        {
+            var authenticatedDoctorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
+            {
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ErrorMessages = ["Not authorized to update this doctor"]
+                }, statusCode: (int)HttpStatusCode.Forbidden);
+            }
+
+            var result = await doctorService.UpdateDoctorAsync(id, updateDoctorRequestDTO, image);
+
+            if (!result.IsSuccess)
+            {
+                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
+                    ? HttpStatusCode.NotFound
+                    : result.ErrorMessage?.Contains("already in use", StringComparison.OrdinalIgnoreCase) == true
+                        ? HttpStatusCode.Conflict
+                        : HttpStatusCode.BadRequest;
+
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = statusCode,
+                    ErrorMessages = [result.ErrorMessage ?? "Doctor update failed"]
+                }, statusCode: (int)statusCode);
+            }
+
+            return Results.Json(new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Result = new { data = result.Data }
+            }, statusCode: (int)HttpStatusCode.OK);
+        }
+
     }
 }

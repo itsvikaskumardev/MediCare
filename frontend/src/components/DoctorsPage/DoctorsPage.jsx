@@ -27,7 +27,7 @@ const DoctorsPage = ({ apiBase }) => {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`${API_BASE}/api/doctors`);
+        const res = await fetch(`${API_BASE}/api/doctors/GetDoctors`);
         const json = await res.json().catch(() => null);
 
         if (!res.ok) {
@@ -41,7 +41,10 @@ const DoctorsPage = ({ apiBase }) => {
           return;
         }
 
-        const items = (json && (json.data || json)) || [];
+        const items =
+          (json &&
+            (json.result?.data || json.result || json.data || json)) ||
+          [];
         const normalized = (Array.isArray(items) ? items : []).map((d) => {
           const id = d._id || d.id;
           const image =
@@ -218,19 +221,17 @@ const DoctorsPage = ({ apiBase }) => {
           </div>
         ) : (
           <div
-            className={`${doctorsPageStyles.doctorsGrid} ${
-              filteredDoctors.length === 0 ? "opacity-70" : "opacity-100"
-            }`}
+            className={`${doctorsPageStyles.doctorsGrid} ${filteredDoctors.length === 0 ? "opacity-70" : "opacity-100"
+              }`}
           >
             {displayedDoctors.length > 0 ? (
               displayedDoctors.map((doctor, index) => (
                 <div
                   key={doctor.id || `${doctor.name}-${index}`}
-                  className={`${doctorsPageStyles.doctorCard} ${
-                    !doctor.available
-                      ? doctorsPageStyles.doctorCardUnavailable
-                      : ""
-                  }`}
+                  className={`${doctorsPageStyles.doctorCard} ${!doctor.available
+                    ? doctorsPageStyles.doctorCardUnavailable
+                    : ""
+                    }`}
                   style={{ animationDelay: `${index * 90}ms` }}
                   role="article"
                   aria-label={`${doctor.name} profile`}

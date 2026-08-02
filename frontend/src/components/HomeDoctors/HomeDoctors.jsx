@@ -30,8 +30,11 @@ const HomeDoctors = ({ apiBase, previewCount = 8 }) => {
           return;
         }
 
-        // support both { success: true, data: [...] } and plain array
-        const items = (json && (json.data || json)) || [];
+        // support Minimal API result envelope, { success: true, data: [...] } and plain array
+        const items =
+          (json &&
+            (json.result?.data || json.result || json.data || json)) ||
+          [];
         // normalize each doctor for the UI
         const normalized = (Array.isArray(items) ? items : []).map((d) => {
           const id = d._id || d.id;
