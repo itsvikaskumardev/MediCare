@@ -47,6 +47,22 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 .Produces<ApiResponse>(StatusCodes.Status409Conflict)
                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
+            doctorGroup.MapDelete("/DeleteDoctor/{id}", DeleteDoctor)
+                .RequireAuthorization()
+                .WithName("DeleteDoctor")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            doctorGroup.MapPatch("/ToggleAvailability/{id}", ToggleAvailability)
+                .RequireAuthorization()
+                .WithName("ToggleAvailability")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status403Forbidden)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+
         }
 
         //-------------------------------------------CreateDoctor-----------------------------------------------------
@@ -220,6 +236,81 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 Result = new { data = result.Data }
             }, statusCode: (int)HttpStatusCode.OK);
         }
+
+        //-------------------------------------------DeleteDoctor-----------------------------------------------------
+
+
+        private static async Task<IResult> DeleteDoctor(
+            string id,
+            IDoctorService doctorService)
+        {
+            var result = await doctorService.DeleteDoctorAsync(id);
+
+            if (!result.IsSuccess)
+            {
+                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
+                    ? HttpStatusCode.NotFound
+                    : HttpStatusCode.InternalServerError;
+
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = statusCode,
+                    ErrorMessages = [result.ErrorMessage ?? "Failed to delete doctor"]
+                }, statusCode: (int)statusCode);
+            }
+
+            return Results.Json(new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Result = new { message = "Doctor removed" }
+            }, statusCode: (int)HttpStatusCode.OK);
+        }
+
+        //-------------------------------------------UpdateDoctor-----------------------------------------------------
+        private static async Task<IResult> ToggleAvailability(
+        string id,
+        ClaimsPrincipal user,
+        IDoctorService doctorService)
+        {
+            var authenticatedDoctorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
+            {
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ErrorMessages = ["Not authorized to change availability for this doctor"]
+                }, statusCode: (int)HttpStatusCode.Forbidden);
+            }
+
+            var result = await doctorService.ToggleAvailabilityAsync(id);
+
+            if (!result.IsSuccess)
+            {
+                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
+                    ? HttpStatusCode.NotFound
+                    : HttpStatusCode.InternalServerError;
+
+                return Results.Json(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = statusCode,
+                    ErrorMessages = [result.ErrorMessage ?? "Failed to toggle availability"]
+                }, statusCode: (int)statusCode);
+            }
+
+            return Results.Json(new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Result = new { data = result.Data }
+            }, statusCode: (int)HttpStatusCode.OK);
+        }
+
+
 
     }
 }

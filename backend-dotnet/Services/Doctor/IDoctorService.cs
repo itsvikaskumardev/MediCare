@@ -9,5 +9,7 @@ namespace backend_dotnet.Services.Doctor
         Task<DoctorListResultDTO> GetDoctorsAsync(GetDoctorsRequestDTO request);
         Task<DoctorSingleResultDTO> GetDoctorByIdAsync(string id);
         Task<DoctorUpdateResultDTO> UpdateDoctorAsync(string id, UpdateDoctorRequestDTO request, IFormFile? image);
+        Task<DoctorDeleteResultDTO> DeleteDoctorAsync(string id);
+        Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(string id);
     }
 }

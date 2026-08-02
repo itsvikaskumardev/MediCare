@@ -404,6 +404,90 @@ namespace backend_dotnet.Services.Doctor
                 return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Server error" };
             }
         }
+
+        //-------------------------------------------DeleteDoctor-----------------------------------------------------
+        public async Task<DoctorDeleteResultDTO> DeleteDoctorAsync(string id)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out var doctorId))
+                {
+                    return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
+                }
+
+                var existing = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                if (existing is null)
+                {
+                    return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
+                }
+
+                if (!string.IsNullOrEmpty(existing.ImagePublicId))
+                {
+                    try
+                    {
+                        await _imageUploadService.DeleteImageAsync(existing.ImagePublicId);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogWarning(e, "deleteFromCloudinary warning");
+                    }
+                }
+
+                _db.Doctors.Remove(existing);
+                await _db.SaveChangesAsync();
+
+                return new DoctorDeleteResultDTO { IsSuccess = true };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "DeleteDoctorAsync error");
+                return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Server error" };
+            }
+        }
+
+        //-------------------------------------------ToggleAvailability-----------------------------------------------------
+        public async Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(string id)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out var doctorId))
+                {
+                    return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
+                }
+
+                var doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                if (doctor is null)
+                {
+                    return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
+                }
+
+                doctor.Availability = doctor.Availability == Availability.Available
+                    ? Availability.Unavailable
+                    : Availability.Available;
+
+                doctor.UpdatedAt = DateTime.UtcNow;
+
+                await _db.SaveChangesAsync();
+
+                var doctorResponse = new DoctorResponseDTO(doctor);
+
+                return new DoctorToggleAvailabilityResultDTO
+                {
+                    IsSuccess = true,
+                    Data = doctorResponse
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ToggleAvailabilityAsync error");
+                return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Server error" };
+            }
+        }
+
+        //-------------------------------------------ToggleAvailability-----------------------------------------------------
+
+
+
     }
 }
 
