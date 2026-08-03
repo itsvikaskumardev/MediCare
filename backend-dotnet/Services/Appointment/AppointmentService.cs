@@ -1,6 +1,8 @@
 using backend_dotnet.Data;
 using backend_dotnet.Models.DTOs.Appointment;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using static System.Collections.Specialized.BitVector32;
 
 namespace backend_dotnet.Services.Appointment
 {
@@ -15,6 +17,8 @@ namespace backend_dotnet.Services.Appointment
 
         // Implementation of Appointment service methods will be defined here
 
+        //-------------------------------GetAppointments------------------------------------------------------
+
         public async Task<AppointmentListResultDTO> GetAppointmentsAsync(GetAppointmentsQueryDTO query)
         {
             var limit = Math.Min(200, Math.Max(1, query.Limit ?? 50));
@@ -23,14 +27,14 @@ namespace backend_dotnet.Services.Appointment
 
             var appointmentsQuery = _db.Appointments.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.DoctorId))
-                appointmentsQuery = appointmentsQuery.Where(a => a.DoctorId == query.DoctorId);
+            if (!string.IsNullOrWhiteSpace(query.DoctorId) && Guid.TryParse(query.DoctorId, out var doctorId))
+                appointmentsQuery = appointmentsQuery.Where(a => a.DoctorId == doctorId);
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))
                 appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);
 
-            if (!string.IsNullOrWhiteSpace(query.Status))
-                appointmentsQuery = appointmentsQuery.Where(a => a.Status == query.Status);
+            if (!string.IsNullOrWhiteSpace(query.Status) && Enum.TryParse<AppointmentStatus>(query.Status, true, out var status))
+                appointmentsQuery = appointmentsQuery.Where(a => a.Status == status);
 
             if (!string.IsNullOrWhiteSpace(query.PatientClerkId))
                 appointmentsQuery = appointmentsQuery.Where(a => a.CreatedBy == query.PatientClerkId);
@@ -43,8 +47,7 @@ namespace backend_dotnet.Services.Appointment
                 var search = query.Search;
                 appointmentsQuery = appointmentsQuery.Where(a =>
                     EF.Functions.ILike(a.PatientName, $"%{search}%") ||
-                    EF.Functions.ILike(a.Mobile, $"%{search}%") ||
-                    EF.Functions.ILike(a.Notes, $"%{search}%"));
+                    EF.Functions.ILike(a.Mobile, $"%{search}%"));
             }
 
             var total = await appointmentsQuery.CountAsync();
@@ -63,12 +66,13 @@ namespace backend_dotnet.Services.Appointment
                         a.Doctor.Name,
                         a.Doctor.Specialization,
                         a.Doctor.ImageUrl
-                        // add Owner / Image here if those fields exist on your Doctor model
                     },
                     a.Mobile,
                     a.Status,
                     a.PatientName,
-                    a.Notes,
+                    a.Date,
+                    a.Time,
+                    a.Fees,
                     a.CreatedBy,
                     a.CreatedAt
                 })
@@ -84,5 +88,392 @@ namespace backend_dotnet.Services.Appointment
                 Count = items.Count
             };
         }
+
+        //-------------------------------GetAppointments------------------------------------------------------
+
+        public async Task<AppointmentResultDTO> GetAppointmentByIdAsync(Guid id)
+        {
+            var appt = await _db.Appointments
+                .AsNoTracking()
+                .Include(a => a.Doctor)
+                .Where(a => a.Id == id)
+                .Select(a => new
+                {
+                    a.Id,
+                    a.DoctorId,
+                    Doctor = a.Doctor == null ? null : new
+                    {
+                        a.Doctor.Name,
+                        a.Doctor.Specialization,
+                        a.Doctor.ImageUrl
+                    },
+                    a.Mobile,
+                    a.Status,
+                    a.PatientName,
+                    a.Date,
+                    a.Time,
+                    a.Fees,
+                    a.PaymentMethod,
+                    a.PaymentStatus,
+                    a.PaymentAmount,
+                    a.RescheduledDate,
+                    a.RescheduledTime,
+                    a.CreatedBy,
+                    a.CreatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            if (appt is null)
+            {
+                return new AppointmentResultDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Appointment not found"
+                };
+            }
+
+            return new AppointmentResultDTO
+            {
+                IsSuccess = true,
+                Appointment = appt
+            };
+        }
+
+        //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+        public async Task<AppointmentListByPatientResultDTO> GetAppointmentsByPatientAsync(
+        GetAppointmentsByPatientQueryDTO query,
+        string? authenticatedUserId)
+        {
+            var resolvedCreatedBy = !string.IsNullOrWhiteSpace(query.CreatedBy)
+                ? query.CreatedBy
+                : authenticatedUserId;
+
+            Console.WriteLine($"resolvedCreatedBy (query or authenticated user): {resolvedCreatedBy}");
+
+            if (string.IsNullOrWhiteSpace(resolvedCreatedBy) && string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                return new AppointmentListByPatientResultDTO
+                {
+                    IsSuccess = false,
+                    IsAuthError = true,
+                    ErrorMessage = "Authentication required for /me (no authenticated user detected on server). " +
+                                   "Try passing ?createdBy=<id> to debug or check Authorization header forwarding."
+                };
+            }
+
+            var appointmentsQuery = _db.Appointments.AsNoTracking().Include(a => a.Doctor).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(resolvedCreatedBy))
+                appointmentsQuery = appointmentsQuery.Where(a => a.CreatedBy == resolvedCreatedBy);
+
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+                appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);
+
+            var items = await appointmentsQuery
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.Time)
+                .ToListAsync();
+
+            return new AppointmentListByPatientResultDTO
+            {
+                IsSuccess = true,
+                Appointments = items.Cast<object>().ToList()
+            };
+        }
+
+        //-------------------------------CreateAppointment------------------------------------------------------
+
+
+        public async Task<AppointmentCreateResultDTO> CreateAppointmentAsync(
+            CreateAppointmentRequestDTO request,
+            string? authenticatedUserId,
+            string? frontendOrigin)
+        {
+            if (string.IsNullOrWhiteSpace(authenticatedUserId))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    ErrorMessage = "Authentication required"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(request.DoctorId) ||
+                string.IsNullOrWhiteSpace(request.PatientName) ||
+                string.IsNullOrWhiteSpace(request.Mobile) ||
+                string.IsNullOrWhiteSpace(request.Date) ||
+                string.IsNullOrWhiteSpace(request.Time))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "doctorId, patientName, mobile, date and time are required"
+                };
+            }
+
+            var numericFee = SafeNumber(request.Fee ?? request.Fees ?? 0);
+            if (numericFee is null || numericFee < 0)
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "fee must be a valid number"
+                };
+            }
+
+            // Duplicate booking prevention
+            var existingBooking = await _db.Appointments.FirstOrDefaultAsync(a =>
+                a.DoctorId == request.DoctorId &&
+                a.CreatedBy == authenticatedUserId &&
+                a.Date == request.Date &&
+                a.Time == request.Time &&
+                a.Status != "Canceled");
+
+            if (existingBooking is not null)
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.Conflict,
+                    ErrorMessage = "You already have an appointment with this doctor at the selected date and time."
+                };
+            }
+
+            // Fetch doctor as source-of-truth
+            backend_dotnet.Models.Domain.Doctor? doctor = null;
+            try
+            {
+                doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id.ToString() == request.DoctorId);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Doctor lookup failed: {e.Message}");
+            }
+
+            if (doctor is null)
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Doctor not found"
+                };
+            }
+
+            // Resolve owner, names, images, etc.
+            var resolvedOwner = !string.IsNullOrWhiteSpace(request.Owner)
+                ? request.Owner
+                : (_majorAdminId ?? request.DoctorId);
+
+            var doctorName = !string.IsNullOrWhiteSpace(doctor.Name)
+                ? doctor.Name.Trim()
+                : (request.DoctorName?.Trim() ?? "");
+
+            var speciality = !string.IsNullOrWhiteSpace(doctor.Specialization)
+                ? doctor.Specialization.Trim()
+                : (request.Speciality?.Trim() ?? "");
+
+            var doctorImageUrl = !string.IsNullOrWhiteSpace(doctor.ImageUrl)
+                ? doctor.ImageUrl.Trim()
+                : (request.DoctorImageUrl?.Trim() ?? "");
+
+            var doctorImagePublicId = !string.IsNullOrWhiteSpace(doctor.ImagePublicId)
+                ? doctor.ImagePublicId.Trim()
+                : (request.DoctorImagePublicId?.Trim() ?? "");
+
+            var appointment = new backend_dotnet.Models.Domain.Appointment
+            {
+                DoctorId = doctor.Id.ToString(),
+                DoctorName = doctorName,
+                Speciality = speciality,
+                DoctorImageUrl = doctorImageUrl,
+                DoctorImagePublicId = doctorImagePublicId,
+                PatientName = request.PatientName.Trim(),
+                Mobile = request.Mobile.Trim(),
+                Age = int.TryParse(request.Age, out var parsedAge) ? parsedAge : null,
+                Gender = request.Gender ?? "",
+                Date = request.Date,
+                Time = request.Time,
+                Fees = numericFee.Value,
+                Notes = request.Notes ?? "",
+                CreatedBy = authenticatedUserId,
+                Owner = resolvedOwner ?? "",
+                SessionId = null,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            // Free appointment
+            if (numericFee == 0)
+            {
+                appointment.Status = "Confirmed";
+                appointment.PaymentMethod = request.PaymentMethod == "Cash" ? "Cash" : "Online";
+                appointment.PaymentStatus = "Paid";
+                appointment.PaymentAmount = 0;
+                appointment.PaidAt = DateTime.UtcNow;
+
+                _db.Appointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment,
+                    CheckoutUrl = null
+                };
+            }
+
+            // Cash payment
+            if (request.PaymentMethod == "Cash")
+            {
+                appointment.Status = "Pending";
+                appointment.PaymentMethod = "Cash";
+                appointment.PaymentStatus = "Pending";
+                appointment.PaymentAmount = numericFee.Value;
+
+                _db.Appointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment,
+                    CheckoutUrl = null
+                };
+            }
+
+            // Online: Stripe
+            if (string.IsNullOrWhiteSpace(_stripeSecretKey))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Stripe not configured on server"
+                };
+            }
+
+            var frontBase = BuildFrontendBase(frontendOrigin);
+            if (string.IsNullOrWhiteSpace(frontBase))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Frontend URL could not be determined. Set FRONTEND_URL or send Origin header."
+                };
+            }
+
+            var successUrl = $"{frontBase}/appointment/success?session_id={{CHECKOUT_SESSION_ID}}";
+            var cancelUrl = $"{frontBase}/appointment/cancel";
+
+            Session session;
+            try
+            {
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string> { "card" },
+                    Mode = "payment",
+                    CustomerEmail = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email,
+                    LineItems = new List<SessionLineItemOptions>
+            {
+                new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        Currency = "inr",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = $"Appointment - {request.PatientName.Substring(0, Math.Min(40, request.PatientName.Length))}"
+                        },
+                        UnitAmount = (long)Math.Round(numericFee.Value * 100)
+                    },
+                    Quantity = 1
+                }
+            },
+                    SuccessUrl = successUrl,
+                    CancelUrl = cancelUrl,
+                    Metadata = new Dictionary<string, string>
+            {
+                { "doctorId", request.DoctorId },
+                { "doctorName", doctorName ?? "" },
+                { "speciality", speciality ?? "" },
+                { "patientName", appointment.PatientName },
+                { "mobile", appointment.Mobile },
+                { "clerkUserId", authenticatedUserId ?? "" }
+            }
+                };
+
+                var service = new SessionService();
+                session = await service.CreateAsync(options);
+            }
+            catch (StripeException stripeErr)
+            {
+                Console.Error.WriteLine($"Stripe create session error: {stripeErr.Message}");
+                var message = stripeErr.StripeError?.Message ?? "Stripe error";
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadGateway,
+                    ErrorMessage = $"Payment provider error: {message}"
+                };
+            }
+
+            try
+            {
+                appointment.SessionId = session.Id;
+                appointment.PaymentProviderId = session.PaymentIntentId;
+                appointment.Status = "Pending";
+                appointment.PaymentMethod = "Online";
+                appointment.PaymentStatus = "Pending";
+                appointment.PaymentAmount = numericFee.Value;
+
+                _db.Appointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment,
+                    CheckoutUrl = session.Url
+                };
+            }
+            catch (Exception dbErr)
+            {
+                Console.Error.WriteLine($"DB error saving appointment after stripe session: {dbErr.Message}");
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Failed to create appointment record"
+                };
+            }
+        }
+
+        private static decimal? SafeNumber(decimal? value)
+        {
+            if (value is null) return null;
+            return value;
+        }
+
+        private string? BuildFrontendBase(string? origin)
+        {
+            if (!string.IsNullOrWhiteSpace(_frontendUrl))
+                return _frontendUrl.TrimEnd('/');
+
+            if (!string.IsNullOrWhiteSpace(origin))
+                return origin.TrimEnd('/');
+
+            return null;
+        }
+        //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+
+
     }
 }

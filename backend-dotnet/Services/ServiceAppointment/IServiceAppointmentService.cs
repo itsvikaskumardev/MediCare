@@ -7,4 +7,3 @@ namespace backend_dotnet.Services.ServiceAppointment
         // Service methods for ServiceAppointment module will be defined here
     }
 }
-}
