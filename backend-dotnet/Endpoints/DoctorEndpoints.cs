@@ -148,12 +148,12 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (!result.IsSuccess)
             {
-                return Results.Json(new ApiResponse
+                return Results.InternalServerError(new ApiResponse
                 {
                     IsSuccess = false,
                     StatusCode = HttpStatusCode.InternalServerError,
                     ErrorMessages = [result.ErrorMessage ?? "Failed to fetch doctors"]
-                }, statusCode: (int)HttpStatusCode.InternalServerError);
+                });
             }
 
             return Results.Ok(new ApiResponse
@@ -178,16 +178,22 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
-                    ? HttpStatusCode.NotFound
-                    : HttpStatusCode.InternalServerError;
+                if (result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
 
-                return Results.Json(new ApiResponse
+                return Results.InternalServerError(new ApiResponse
                 {
                     IsSuccess = false,
-                    StatusCode = statusCode,
+                    StatusCode = HttpStatusCode.InternalServerError,
                     ErrorMessages = [result.ErrorMessage ?? "Failed to fetch doctor"]
-                }, statusCode: (int)statusCode);
+                });
             }
 
             return Results.Ok(new ApiResponse
@@ -209,30 +215,39 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
             {
-                return Results.Json(new ApiResponse
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ErrorMessages = ["Not authorized to update this doctor"]
-                }, statusCode: (int)HttpStatusCode.Forbidden);
+                return Results.Forbid();
             }
 
             var result = await doctorService.UpdateDoctorAsync(id, updateDoctorRequestDTO, image);
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
-                    ? HttpStatusCode.NotFound
-                    : result.ErrorMessage?.Contains("already in use", StringComparison.OrdinalIgnoreCase) == true
-                        ? HttpStatusCode.Conflict
-                        : HttpStatusCode.BadRequest;
+                if (result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
 
-                return Results.Json(new ApiResponse
+                if (result.ErrorMessage?.Contains("already in use", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.Conflict(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
+
+                return Results.BadRequest(new ApiResponse
                 {
                     IsSuccess = false,
-                    StatusCode = statusCode,
+                    StatusCode = HttpStatusCode.BadRequest,
                     ErrorMessages = [result.ErrorMessage ?? "Doctor update failed"]
-                }, statusCode: (int)statusCode);
+                });
             }
 
             return Results.Ok(new ApiResponse
@@ -254,16 +269,22 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
-                    ? HttpStatusCode.NotFound
-                    : HttpStatusCode.InternalServerError;
+                if (result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
 
-                return Results.Json(new ApiResponse
+                return Results.InternalServerError(new ApiResponse
                 {
                     IsSuccess = false,
-                    StatusCode = statusCode,
+                    StatusCode = HttpStatusCode.InternalServerError,
                     ErrorMessages = [result.ErrorMessage ?? "Failed to delete doctor"]
-                }, statusCode: (int)statusCode);
+                });
             }
 
             return Results.Ok(new ApiResponse
@@ -274,7 +295,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
             });
         }
 
-        //-------------------------------------------UpdateDoctor-----------------------------------------------------
+        //-------------------------------------------ToggleAvailability-----------------------------------------------------
         private static async Task<IResult> ToggleAvailability(
         string id,
         ClaimsPrincipal user,
@@ -284,28 +305,29 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
             if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
             {
-                return Results.Json(new ApiResponse
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ErrorMessages = ["Not authorized to change availability for this doctor"]
-                }, statusCode: (int)HttpStatusCode.Forbidden);
+                return Results.Forbid();
             }
 
             var result = await doctorService.ToggleAvailabilityAsync(id);
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true
-                    ? HttpStatusCode.NotFound
-                    : HttpStatusCode.InternalServerError;
+                if (result.ErrorMessage?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage]
+                    });
+                }
 
-                return Results.Json(new ApiResponse
+                return Results.InternalServerError(new ApiResponse
                 {
                     IsSuccess = false,
-                    StatusCode = statusCode,
+                    StatusCode = HttpStatusCode.InternalServerError,
                     ErrorMessages = [result.ErrorMessage ?? "Failed to toggle availability"]
-                }, statusCode: (int)statusCode);
+                });
             }
 
             return Results.Ok(new ApiResponse
