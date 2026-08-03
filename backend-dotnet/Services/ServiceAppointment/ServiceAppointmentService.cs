@@ -1,4 +1,6 @@
 using backend_dotnet.Data;
+using backend_dotnet.Models.DTOs.Appointment;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend_dotnet.Services.ServiceAppointment
 {
@@ -10,6 +12,8 @@ namespace backend_dotnet.Services.ServiceAppointment
         {
             _db = db;
         }
+
+      
 
         // Implementation of ServiceAppointment module methods will be defined here
     }

@@ -1,6 +1,7 @@
 using backend_dotnet.Data;
 using backend_dotnet.Models.DTOs.Service;
 using backend_dotnet.Services.ImageUpload;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace backend_dotnet.Services.Service
@@ -17,6 +18,8 @@ namespace backend_dotnet.Services.Service
         }
 
         // Implementation of Service module methods will be defined here
+
+        //-----------------------------------CreateService--------------------------------------------
 
         public async Task<ServiceResultDTO> CreateServiceAsync(CreateServiceRequestDTO createServiceRequestDTO, IFormFile? image)
         {
@@ -80,6 +83,171 @@ namespace backend_dotnet.Services.Service
             };
         }
 
+        //-----------------------------------GetService--------------------------------------------
+
+        public async Task<ServiceResultDTO> GetServicesAsync()
+        {
+            var list = await _db.Services
+                .AsNoTracking()
+                .OrderByDescending(s => s.CreatedAt)
+                .ToListAsync();
+
+            return new ServiceResultDTO
+            {
+                IsSuccess = true,
+                Data = list
+            };
+        }
+
+        //-----------------------------------GetServiceById--------------------------------------------
+
+        public async Task<ServiceResultDTO> GetServiceByIdAsync(Guid id)
+        {
+            var service = await _db.Services
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == id); // dont use findasync 
+
+            if (service is null)
+            {
+                return new ServiceResultDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Service not found"
+                };
+            }
+
+            return new ServiceResultDTO
+            {
+                IsSuccess = true,
+                Data = service
+            };
+        }
+
+        //-----------------------------------UpdateService--------------------------------------------
+        public async Task<ServiceResultDTO> UpdateServiceAsync(Guid id, UpdateServiceRequestDTO updateServiceRequestDTO, IFormFile? image)
+        {
+            var existing = await _db.Services.FindAsync(id);
+
+            if (existing is null)
+            {
+                return new ServiceResultDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Service not found"
+                };
+            }
+
+            if (updateServiceRequestDTO.Name is not null)
+                existing.Name = updateServiceRequestDTO.Name;
+
+            if (updateServiceRequestDTO.About is not null)
+                existing.About = updateServiceRequestDTO.About;
+
+            if (updateServiceRequestDTO.ShortDescription is not null)
+                existing.ShortDescription = updateServiceRequestDTO.ShortDescription;
+
+            if (updateServiceRequestDTO.Price is not null)
+                existing.Price = SanitizePrice(updateServiceRequestDTO.Price);
+
+            if (updateServiceRequestDTO.Availability is not null)
+                existing.Available = ParseAvailability(updateServiceRequestDTO.Availability);
+
+            if (updateServiceRequestDTO.Instructions is not null)
+                existing.Instructions = ParseJsonArrayField(updateServiceRequestDTO.Instructions).ToArray();
+
+            if (updateServiceRequestDTO.Slots is not null)
+            {
+                var rawSlots = ParseJsonArrayField(updateServiceRequestDTO.Slots);
+                existing.Slots = JsonSerializer.Serialize(NormalizeSlotsToMap(rawSlots));
+            }
+
+            if (image is not null && image.Length > 0)
+            {
+                try
+                {
+                    var uploadedUrl = await _imageUploadService.UploadImageAsync(image, "services");
+                    if (!string.IsNullOrEmpty(uploadedUrl))
+                    {
+                        var oldPublicId = existing.ImagePublicId;
+
+                        existing.ImageUrl = uploadedUrl;
+                        existing.ImagePublicId = null; // set this from your upload result if it returns a public id
+
+                        if (!string.IsNullOrEmpty(oldPublicId))
+                        {
+                            try
+                            {
+                                await _imageUploadService.DeleteImageAsync(oldPublicId);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.Error.WriteLine($"Cloudinary delete failed: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Cloudinary upload error: {ex.Message}");
+                }
+            }
+
+            existing.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+
+            return new ServiceResultDTO
+            {
+                IsSuccess = true,
+                Data = existing
+            };
+        }
+
+        //-----------------------------------DeleteService--------------------------------------------
+
+        public async Task<ServiceResultDTO> DeleteServiceAsync(Guid id)
+        {
+            var existing = await _db.Services.FindAsync(id);
+
+            if (existing is null)
+            {
+                return new ServiceResultDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Service not found"
+                };
+            }
+
+            if (!string.IsNullOrEmpty(existing.ImagePublicId))
+            {
+                try
+                {
+                    await _imageUploadService.DeleteImageAsync(existing.ImagePublicId);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"failed to delete cloud image on service delete: {ex.Message}");
+                }
+            }
+
+            _db.Services.Remove(existing);
+            await _db.SaveChangesAsync();
+
+            return new ServiceResultDTO
+            {
+                IsSuccess = true
+            };
+        }
+
+
+
+
+
+
+
+
+        //-----------------------------------Helper Functions --------------------------------------------
+
         private static List<string> ParseJsonArrayField(string? field)
         {
             if (string.IsNullOrWhiteSpace(field))
@@ -130,3 +298,38 @@ namespace backend_dotnet.Services.Service
 }
 
 
+
+/*
+ 
+ 
+ 
+ 
+ 
+ Here is why they are different and why .AsNoTracking().FirstOrDefaultAsync(...) is usually preferred for read-only (GET) requests:
+
+.AsNoTracking() for Better Read-Only Performance:
+
+By calling .AsNoTracking(), Entity Framework Core does not store the fetched entity in its Change Tracker.
+This reduces memory footprint and makes GET queries significantly faster when you don't intend to modify or update the entity in the database.
+Why not FindAsync with .AsNoTracking()?
+
+.FindAsync(...) is a method on DbSet<T> that checks EF Core's in-memory Change Tracker first before querying the database.
+Once you call .AsNoTracking(), the return type becomes an IQueryable<T>, which does not have .FindAsync. Therefore, .FirstOrDefaultAsync(d => d.Id == id) is required.
+When to use FindAsync:
+
+Use FindAsync(id) when you plan to modify/update or delete the entity immediately afterward (e.g., in UpdateDoctor or DeleteService), because EF Core needs to track the entity to save changes.
+For read-only endpoints like GetServiceById, both work, but .AsNoTracking().FirstOrDefaultAsync(s => s.Id == id) is the recommended best practice.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ */

@@ -18,9 +18,33 @@ namespace backend_dotnet.Endpoints
                 .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
+            serviceGroup.MapGet("/GetServices", GetServices)
+                .WithName("GetServices")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            serviceGroup.MapGet("/GetServiceById/{id}", GetServiceById)
+                .WithName("GetServiceById")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            serviceGroup.MapPut("/UpdateService/{id}", UpdateService)
+                .WithName("UpdateService")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            serviceGroup.MapDelete("/DeleteService/{id}", DeleteService)
+                .WithName("DeleteService")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
 
         }
 
+        //-----------------------------------CreateService--------------------------------------------
 
         private static async Task<IResult> CreateService(
         [FromForm] CreateServiceRequestDTO createServiceRequestDTO,
@@ -59,5 +83,129 @@ namespace backend_dotnet.Endpoints
                 });
             }
         }
+
+        //-----------------------------------GetServices--------------------------------------------
+        private static async Task<IResult> GetServices(IServiceModuleService serviceService)
+        {
+            try
+            {
+                var result = await serviceService.GetServicesAsync();
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"GetServices error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-----------------------------------GetServices--------------------------------------------
+        private static async Task<IResult> GetServiceById(
+        Guid id,
+        IServiceModuleService serviceService)
+        {
+            try
+            {
+                var result = await serviceService.GetServiceByIdAsync(id);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage ?? "Service not found"]
+                    });
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"GetServiceById error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-----------------------------------UpdateService--------------------------------------------
+
+        private static async Task<IResult> UpdateService(
+            Guid id,
+            [FromForm] UpdateServiceRequestDTO updateServiceRequestDTO,
+            IFormFile? image,
+            IServiceModuleService serviceService)
+        {
+            try
+            {
+                var result = await serviceService.UpdateServiceAsync(id, updateServiceRequestDTO, image);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage ?? "Service not found"]
+                    });
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"UpdateService error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-----------------------------------UpdateService--------------------------------------------
+        private static async Task<IResult> DeleteService(
+        Guid id,
+        IServiceModuleService serviceService)
+        {
+            try
+            {
+                var result = await serviceService.DeleteServiceAsync(id);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage ?? "Service not found"]
+                    });
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    ErrorMessages = []
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"DeleteService error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
     }
 }
