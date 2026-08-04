@@ -11,6 +11,7 @@ using backend_dotnet.Services.Jwt;
 using backend_dotnet.Services.Password;
 using backend_dotnet.Services.Service;
 using backend_dotnet.Services.ServiceAppointment;
+using backend_dotnet.Services.User;
 using backend_dotnetWebMinimalExample.Endpoints;
 using backend_dotnetWebMinimalExample.Endpoints.Doctor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -112,6 +113,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IServiceModuleService, ServiceModuleService>();
 builder.Services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
+builder.Services.AddHttpClient<IUserService, UserService>();
 
 builder.Services.AddControllers();
 
@@ -142,5 +144,6 @@ app.MapDoctorEndpoints();
 app.MapAppointmentEndpoints();
 app.MapServiceEndpoints();
 app.MapServiceAppointmentEndpoints();
+app.MapUserEndpoints();
 
 app.Run();

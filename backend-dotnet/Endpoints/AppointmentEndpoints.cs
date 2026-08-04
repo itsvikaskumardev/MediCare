@@ -41,6 +41,32 @@ namespace backend_dotnet.Endpoints
                     .Produces<ApiResponse>(StatusCodes.Status502BadGateway)
                     .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
+            appointmentGroup.MapPut("/UpdateAppointment/{id}", UpdateAppointment)
+                    .WithName("UpdateAppointment")
+                    .Produces<ApiResponse>(StatusCodes.Status200OK)
+                    .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                    .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                    .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            appointmentGroup.MapPatch("/CancelAppointment/{id}", CancelAppointment)
+                    .WithName("CancelAppointment")
+                    .Produces<ApiResponse>(StatusCodes.Status200OK)
+                    .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                    .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            appointmentGroup.MapGet("/GetStats", GetStats)
+                    .WithName("GetStats")
+                    .Produces<ApiResponse>(StatusCodes.Status200OK)
+                    .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            appointmentGroup.MapGet("/GetAppointmentsByDoctor/{doctorId}", GetAppointmentsByDoctor)
+                    .WithName("GetAppointmentsByDoctor")
+                    .Produces<ApiResponse>(StatusCodes.Status200OK)
+                    .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                    .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+
+
         }
 
 
@@ -197,7 +223,156 @@ namespace backend_dotnet.Endpoints
                 return Results.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        //-------------------------------UpdateAppointment------------------------------------------------------
+        private static async Task<IResult> UpdateAppointment(
+        Guid id,
+        [FromBody] UpdateAppointmentRequestDTO request,
+        IAppointmentService appointmentService)
+        {
+            try
+            {
+                var result = await appointmentService.UpdateAppointmentAsync(id, request);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.Json(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = result.StatusCode,
+                        ErrorMessages = [result.ErrorMessage ?? "Request failed"]
+                    }, statusCode: (int)result.StatusCode);
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new { appointment = result.Appointment }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"UpdateAppointment error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-------------------------------CancelAppointment------------------------------------------------------
+
+        private static async Task<IResult> CancelAppointment(
+            Guid id,
+            IAppointmentService appointmentService)
+        {
+            try
+            {
+                var result = await appointmentService.CancelAppointmentAsync(id);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.NotFound(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessages = [result.ErrorMessage ?? "Appointment not found"]
+                    });
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new { appointment = result.Appointment }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"CancelAppointment error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-------------------------------GetStats------------------------------------------------------
+
+        private static async Task<IResult> GetStats(IAppointmentService appointmentService)
+        {
+            try
+            {
+                var result = await appointmentService.GetStatsAsync();
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new
+                    {
+                        stats = new
+                        {
+                            total = result.Total,
+                            revenue = result.Revenue,
+                            recentLast7Days = result.RecentLast7Days
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"GetStats error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-------------------------------GetAppointmentsByDoctor------------------------------------------------------
+
+        private static async Task<IResult> GetAppointmentsByDoctor(
+        string doctorId,
+        [AsParameters] GetAppointmentsByDoctorQueryDTO query,
+        IAppointmentService appointmentService)
+        {
+            try
+            {
+                var result = await appointmentService.GetAppointmentsByDoctorAsync(doctorId, query);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.BadRequest(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.BadRequest,
+                        ErrorMessages = [result.ErrorMessage ?? "doctorId required"]
+                    });
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new
+                    {
+                        appointments = result.Appointments,
+                        meta = new
+                        {
+                            page = result.Page,
+                            limit = result.Limit,
+                            total = result.Total,
+                            count = result.Count
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"GetAppointmentsByDoctor error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+
+
+        //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+
+
+
 
 
     }

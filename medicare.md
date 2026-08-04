@@ -152,3 +152,46 @@ public class Appointment {
 ### Summary Recommendation for Your Project
 * **For `Appointment` (The Child):** Always use a **Reference Navigation Property** (`public Doctor? Doctor { get; set; }`) along with its foreign key (`DoctorId`).
 * **For `Doctor` (The Parent):** Adding `ICollection<Appointment> Appointments` is **optional**. In Minimal APIs, many developers leave it out to keep models clean and avoid JSON serialization loops.
+
+---
+
+---
+
+---
+Viewed ServiceAppointmentService.cs:38-70
+
+In line 60 (`services.FirstOrDefault(s => s.Id == a.ServiceId)`), **`FirstOrDefault`** is used because `services` is already an **in-memory C# List**, not a database query.
+
+Here is the breakdown of when to use which and why:
+
+---
+
+### 1. When to use `FirstOrDefaultAsync` (Database Queries)
+Use **`FirstOrDefaultAsync`** when querying Entity Framework (`_db.Table...` / `IQueryable`):
+```csharp
+// Makes a network/database call -> MUST be async
+var doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+```
+* **Why:** Calling a database is an **I/O operation** (network/disk access). Async keeps the server thread free to handle other requests while waiting for the database.
+
+---
+
+### 2. When to use `FirstOrDefault` (In-Memory Lists)
+Use **`FirstOrDefault`** when searching a regular C# collection or `List<T>` that is already loaded in memory:
+```csharp
+// Step 1: Fetch from DB into memory (async)
+var services = await _db.Services.Where(...).ToListAsync();
+
+// Step 2: Search the in-memory list (sync)
+var svc = services.FirstOrDefault(s => s.Id == a.ServiceId);
+```
+* **Why:** 
+  1. **Not I/O bound:** Searching an in-memory list takes microseconds (CPU-bound), so async overhead is unnecessary.
+  2. **Not supported on lists:** LINQ to Objects (`IEnumerable<T>` / `List<T>`) does not have a `.FirstOrDefaultAsync()` extension method—it only exists for Entity Framework (`IQueryable<T>`).
+
+---
+
+### Summary: Which is better?
+Both are best practice **in their respective contexts**:
+* **`FirstOrDefaultAsync`**: Best for **Database (`_db.Table`)** queries.
+* **`FirstOrDefault`**: Best for **In-Memory (`List<T>`)** lookups.

@@ -3,16 +3,25 @@ using backend_dotnet.Models.DTOs.Appointment;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using static System.Collections.Specialized.BitVector32;
+using Stripe;
+using Stripe.Checkout;
+using Microsoft.Extensions.Configuration;
 
 namespace backend_dotnet.Services.Appointment
 {
     public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _db;
+        private readonly string _majorAdminId;
+        private readonly string _stripeSecretKey;
+        private readonly string _frontendUrl;
 
-        public AppointmentService(ApplicationDbContext db)
+        public AppointmentService(ApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
+            _majorAdminId = configuration["App:MajorAdminId"] ?? "";
+            _stripeSecretKey = configuration["Stripe:SecretKey"] ?? "";
+            _frontendUrl = configuration["App:FrontendUrl"] ?? "http://localhost:5173";
         }
 
         // Implementation of Appointment service methods will be defined here
@@ -224,13 +233,23 @@ namespace backend_dotnet.Services.Appointment
                 };
             }
 
+            if (!Guid.TryParse(request.DoctorId, out var doctorId))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "Invalid Doctor ID format"
+                };
+            }
+
             // Duplicate booking prevention
             var existingBooking = await _db.Appointments.FirstOrDefaultAsync(a =>
-                a.DoctorId == request.DoctorId &&
+                a.DoctorId == doctorId &&
                 a.CreatedBy == authenticatedUserId &&
                 a.Date == request.Date &&
                 a.Time == request.Time &&
-                a.Status != "Canceled");
+                a.Status != AppointmentStatus.Canceled);
 
             if (existingBooking is not null)
             {
@@ -246,7 +265,7 @@ namespace backend_dotnet.Services.Appointment
             backend_dotnet.Models.Domain.Doctor? doctor = null;
             try
             {
-                doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id.ToString() == request.DoctorId);
+                doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
             }
             catch (Exception e)
             {
@@ -286,11 +305,11 @@ namespace backend_dotnet.Services.Appointment
 
             var appointment = new backend_dotnet.Models.Domain.Appointment
             {
-                DoctorId = doctor.Id.ToString(),
+                DoctorId = doctor.Id,
                 DoctorName = doctorName,
                 Speciality = speciality,
                 DoctorImageUrl = doctorImageUrl,
-                DoctorImagePublicId = doctorImagePublicId,
+                DoctorImagePubId = doctorImagePublicId,
                 PatientName = request.PatientName.Trim(),
                 Mobile = request.Mobile.Trim(),
                 Age = int.TryParse(request.Age, out var parsedAge) ? parsedAge : null,
@@ -298,7 +317,6 @@ namespace backend_dotnet.Services.Appointment
                 Date = request.Date,
                 Time = request.Time,
                 Fees = numericFee.Value,
-                Notes = request.Notes ?? "",
                 CreatedBy = authenticatedUserId,
                 Owner = resolvedOwner ?? "",
                 SessionId = null,
@@ -309,9 +327,9 @@ namespace backend_dotnet.Services.Appointment
             // Free appointment
             if (numericFee == 0)
             {
-                appointment.Status = "Confirmed";
-                appointment.PaymentMethod = request.PaymentMethod == "Cash" ? "Cash" : "Online";
-                appointment.PaymentStatus = "Paid";
+                appointment.Status = AppointmentStatus.Confirmed;
+                appointment.PaymentMethod = string.Equals(request.PaymentMethod, "Cash", StringComparison.OrdinalIgnoreCase) ? PaymentMethod.Cash : PaymentMethod.Online;
+                appointment.PaymentStatus = PaymentStatus.Paid;
                 appointment.PaymentAmount = 0;
                 appointment.PaidAt = DateTime.UtcNow;
 
@@ -330,9 +348,9 @@ namespace backend_dotnet.Services.Appointment
             // Cash payment
             if (request.PaymentMethod == "Cash")
             {
-                appointment.Status = "Pending";
-                appointment.PaymentMethod = "Cash";
-                appointment.PaymentStatus = "Pending";
+                appointment.Status = AppointmentStatus.Pending;
+                appointment.PaymentMethod = PaymentMethod.Cash;
+                appointment.PaymentStatus = PaymentStatus.Pending;
                 appointment.PaymentAmount = numericFee.Value;
 
                 _db.Appointments.Add(appointment);
@@ -375,6 +393,7 @@ namespace backend_dotnet.Services.Appointment
             Session session;
             try
             {
+                StripeConfiguration.ApiKey = _stripeSecretKey;
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string> { "card" },
@@ -428,9 +447,9 @@ namespace backend_dotnet.Services.Appointment
             {
                 appointment.SessionId = session.Id;
                 appointment.PaymentProviderId = session.PaymentIntentId;
-                appointment.Status = "Pending";
-                appointment.PaymentMethod = "Online";
-                appointment.PaymentStatus = "Pending";
+                appointment.Status = AppointmentStatus.Pending;
+                appointment.PaymentMethod = PaymentMethod.Online;
+                appointment.PaymentStatus = PaymentStatus.Pending;
                 appointment.PaymentAmount = numericFee.Value;
 
                 _db.Appointments.Add(appointment);
@@ -472,7 +491,228 @@ namespace backend_dotnet.Services.Appointment
 
             return null;
         }
+        //-------------------------------UpdateAppointment------------------------------------------------------
+        public async Task<AppointmentUpdateResultDTO> UpdateAppointmentAsync(Guid id, UpdateAppointmentRequestDTO request)
+        {
+            var appt = await _db.Appointments.FindAsync(id);
+
+            if (appt is null)
+            {
+                return new AppointmentUpdateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Appointment not found"
+                };
+            }
+
+            var terminal = appt.Status == AppointmentStatus.Completed || appt.Status == AppointmentStatus.Canceled;
+
+            if (!string.IsNullOrWhiteSpace(request.Status) && Enum.TryParse<AppointmentStatus>(request.Status, true, out var parsedStatus))
+            {
+                if (terminal && parsedStatus != appt.Status)
+                {
+                    return new AppointmentUpdateResultDTO
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.BadRequest,
+                        ErrorMessage = "Cannot change status of a completed/canceled appointment"
+                    };
+                }
+                appt.Status = parsedStatus;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Date) && !string.IsNullOrWhiteSpace(request.Time))
+            {
+                if (appt.Status == AppointmentStatus.Completed || appt.Status == AppointmentStatus.Canceled)
+                {
+                    return new AppointmentUpdateResultDTO
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.BadRequest,
+                        ErrorMessage = "Cannot reschedule completed/canceled appointment"
+                    };
+                }
+
+                appt.Date = request.Date;
+                appt.Time = request.Time;
+                appt.Status = AppointmentStatus.Rescheduled;
+                appt.RescheduledDate = request.Date;
+                appt.RescheduledTime = request.Time;
+            }
+
+            appt.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+
+            var doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == appt.DoctorId);
+
+            var updatedProjection = new
+            {
+                appt.Id,
+                appt.DoctorId,
+                Doctor = doctor == null ? null : new
+                {
+                    doctor.Name,
+                    doctor.ImageUrl
+                },
+                appt.PatientName,
+                appt.Mobile,
+                appt.Age,
+                appt.Gender,
+                appt.Date,
+                appt.Time,
+                appt.Fees,
+                appt.Status,
+                appt.RescheduledDate,
+                appt.RescheduledTime,
+                appt.CreatedBy,
+                appt.Owner,
+                appt.CreatedAt,
+                appt.UpdatedAt
+            };
+
+            return new AppointmentUpdateResultDTO
+            {
+                IsSuccess = true,
+                Appointment = updatedProjection
+            };
+        }
+        //-------------------------------CancelAppointment------------------------------------------------------
+        public async Task<AppointmentUpdateResultDTO> CancelAppointmentAsync(Guid id)
+        {
+            var appt = await _db.Appointments.FindAsync(id);
+
+            if (appt is null)
+            {
+                return new AppointmentUpdateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Appointment not found"
+                };
+            }
+
+            appt.Status = AppointmentStatus.Canceled;
+            appt.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+
+            return new AppointmentUpdateResultDTO
+            {
+                IsSuccess = true,
+                Appointment = appt
+            };
+        }
+
+        //-------------------------------GetStatsAsync------------------------------------------------------
+        public async Task<AppointmentStatsResultDTO> GetStatsAsync()
+        {
+            var total = await _db.Appointments.CountAsync();
+
+            var revenue = await _db.Appointments
+                .Where(a => a.PaymentStatus == PaymentStatus.Paid)
+                .SumAsync(a => (decimal?)a.Fees) ?? 0;
+
+            var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+
+            var recent = await _db.Appointments
+                .Where(a => a.CreatedAt >= sevenDaysAgo)
+                .CountAsync();
+
+            return new AppointmentStatsResultDTO
+            {
+                IsSuccess = true,
+                Total = total,
+                Revenue = revenue,
+                RecentLast7Days = recent
+            };
+        }
+
+        //-------------------------------GetAppointmentsByDoctor------------------------------------------------------
+        public async Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(string doctorId, GetAppointmentsByDoctorQueryDTO query)
+        {
+            if (string.IsNullOrWhiteSpace(doctorId) || !Guid.TryParse(doctorId, out var docGuid))
+            {
+                return new AppointmentListResultDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Valid doctorId required"
+                };
+            }
+
+            var limit = Math.Min(200, Math.Max(1, query.Limit ?? 50));
+            var page = Math.Max(1, query.Page ?? 1);
+            var skip = (page - 1) * limit;
+
+            var appointmentsQuery = _db.Appointments.AsNoTracking().Where(a => a.DoctorId == docGuid);
+
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+                appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);
+
+            if (!string.IsNullOrWhiteSpace(query.Status) && Enum.TryParse<AppointmentStatus>(query.Status, true, out var statusEnum))
+                appointmentsQuery = appointmentsQuery.Where(a => a.Status == statusEnum);
+
+            if (!string.IsNullOrWhiteSpace(query.Search))
+            {
+                var search = query.Search;
+                appointmentsQuery = appointmentsQuery.Where(a =>
+                    EF.Functions.ILike(a.PatientName, $"%{search}%") ||
+                    EF.Functions.ILike(a.Mobile, $"%{search}%"));
+            }
+
+            var total = await appointmentsQuery.CountAsync();
+
+            var items = await appointmentsQuery
+                .OrderBy(a => a.Date)
+                .ThenBy(a => a.Time)
+                .Skip(skip)
+                .Take(limit)
+                .ToListAsync();
+
+            // manual "populate" of doctor summary fields (see FK note below)
+            var doctor = await _db.Doctors.AsNoTracking().FirstOrDefaultAsync(d => d.Id == docGuid);
+
+            var projected = items.Select(a => (object)new
+            {
+                a.Id,
+                a.DoctorId,
+                Doctor = doctor == null ? null : new
+                {
+                    doctor.Name,
+                    doctor.Specialization,
+                    doctor.ImageUrl
+                },
+                a.Mobile,
+                a.Status,
+                a.PatientName,
+                a.Date,
+                a.Time,
+                a.Fees,
+                a.CreatedBy,
+                a.CreatedAt
+            }).ToList();
+
+            return new AppointmentListResultDTO
+            {
+                IsSuccess = true,
+                Appointments = projected,
+                Page = page,
+                Limit = limit,
+                Total = total,
+                Count = projected.Count
+            };
+        }
+
         //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+
+        //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+
+
+
+
+
+
 
 
     }

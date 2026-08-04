@@ -3,8 +3,87 @@
   "WorkspaceRootPath": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\serviceappointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\serviceappointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\doctorendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\doctorendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\userendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\serviceendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\serviceendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\serviceappointment\\serviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\serviceappointment\\serviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\serviceappointment\\iserviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\serviceappointment\\iserviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentlistbypatientresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentlistbypatientresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\getserviceappointmentsbypatientquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\getserviceappointmentsbypatientquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentstatsresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentstatsresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentcancelresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentcancelresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentupdateresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentupdateresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\updateserviceappointmentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\updateserviceappointmentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\appointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\appointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\serviceappointmentlistresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\serviceappointmentlistresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\serviceappointment\\getserviceappointmentsquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\serviceappointment\\getserviceappointmentsquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\authendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\authendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1DD322A6-A28D-2A24-D282-BC0FF6D44EDD}|..\\..\\Dotnet\\WebMinimalExample\\WebMinimalExample.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\dotnet\\webminimalexample\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\user\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\user\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\user\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\user\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\appointment\\appointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,16 +94,32 @@
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\appointment\\iappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\getappointmentsbydoctorquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\getappointmentsbydoctorquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentstatsresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\appointmentstatsresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentupdateresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\appointmentupdateresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\domain\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\domain\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\updateappointmentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\updateappointmentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentlistresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\appointmentlistresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\appointmentdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\domain\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\domain\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentcreateresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -43,14 +138,6 @@
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\getappointmentsbypatientquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\serviceappointment\\serviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\serviceappointment\\serviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\authendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\authendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\appointmentresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\appointmentresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -59,28 +146,12 @@
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\service\\servicemoduleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\serviceappointment\\iserviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\serviceappointment\\iserviceappointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\services\\service\\iservicemoduleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:services\\service\\iservicemoduleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\serviceappointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\serviceappointmentendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\serviceendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\serviceendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\appointment\\getappointmentsquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\appointment\\getappointmentsquerydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\endpoints\\doctorendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:endpoints\\doctorendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\service\\updateservicerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -200,10 +271,6 @@
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:backend-dotnet.csproj.backup (1).tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|c:\\users\\vikaskumar1\\onedrive - supplyit\\documents\\vikas\\medicare\\backend-dotnet\\models\\dtos\\auth\\loginresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A51A7CE4-8A79-3683-109F-BD82E458DE8E}|backend-dotnet.csproj|solutionrelative:models\\dtos\\auth\\loginresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -260,158 +327,204 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AppointmentListResultDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAmAAAAAAAAAA==",
+              "Title": "ServiceEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceEndpoints.cs",
+              "RelativeDocumentMoniker": "Endpoints\\ServiceEndpoints.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceEndpoints.cs",
+              "RelativeToolTip": "Endpoints\\ServiceEndpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALMAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:31:28.216Z",
+              "WhenOpened": "2026-08-01T16:53:10.396Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "IAppointmentService.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\IAppointmentService.cs",
-              "RelativeDocumentMoniker": "Services\\Appointment\\IAppointmentService.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\IAppointmentService.cs",
-              "RelativeToolTip": "Services\\Appointment\\IAppointmentService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAACaAAAAAAAAAA==",
+              "Title": "UserEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\UserEndpoints.cs",
+              "RelativeDocumentMoniker": "Endpoints\\UserEndpoints.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\UserEndpoints.cs",
+              "RelativeToolTip": "Endpoints\\UserEndpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:36:03.889Z",
+              "WhenOpened": "2026-08-03T17:24:31.304Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AppointmentService.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\AppointmentService.cs",
-              "RelativeDocumentMoniker": "Services\\Appointment\\AppointmentService.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\AppointmentService.cs",
-              "RelativeToolTip": "Services\\Appointment\\AppointmentService.cs",
-              "ViewState": "AgIAAMEBAAAAAAAAAAAcwLcAAAA6AAAAAAAAAA==",
+              "Title": "DoctorEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\DoctorEndpoints.cs",
+              "RelativeDocumentMoniker": "Endpoints\\DoctorEndpoints.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\DoctorEndpoints.cs",
+              "RelativeToolTip": "Endpoints\\DoctorEndpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAB2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:36:22.952Z",
+              "WhenOpened": "2026-08-01T16:53:05.296Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AppointmentEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\AppointmentEndpoints.cs",
-              "RelativeDocumentMoniker": "Endpoints\\AppointmentEndpoints.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\AppointmentEndpoints.cs",
-              "RelativeToolTip": "Endpoints\\AppointmentEndpoints.cs",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAmwJ4AAAA8AAAAAAAAAA==",
+              "Title": "ServiceAppointmentEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceAppointmentEndpoints.cs",
+              "RelativeDocumentMoniker": "Endpoints\\ServiceAppointmentEndpoints.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceAppointmentEndpoints.cs",
+              "RelativeToolTip": "Endpoints\\ServiceAppointmentEndpoints.cs",
+              "ViewState": "AgIAAMcAAAAAAAAAAAAUwNQAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:33:28.636Z",
+              "WhenOpened": "2026-08-01T17:02:46.332Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "AppointmentDTOs.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-01T16:57:14.792Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Appointment.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Appointment.cs",
-              "RelativeDocumentMoniker": "Models\\Domain\\Appointment.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Appointment.cs",
-              "RelativeToolTip": "Models\\Domain\\Appointment.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T16:47:43.58Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AppointmentCreateResultDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T16:47:16.551Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CreateAppointmentRequestDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T16:46:49.183Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "AppointmentListByPatientResultDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T13:04:52.194Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "GetAppointmentsByPatientQueryDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T13:04:25.576Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "AppointmentResultDTO.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
-              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
-              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T12:48:03.967Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "ServiceAppointmentService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\ServiceAppointmentService.cs",
               "RelativeDocumentMoniker": "Services\\ServiceAppointment\\ServiceAppointmentService.cs",
               "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\ServiceAppointmentService.cs",
               "RelativeToolTip": "Services\\ServiceAppointment\\ServiceAppointmentService.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAqwA8AAAAGAAAAAAAAAA==",
+              "ViewState": "AgIAAEEBAAAAAAAAAAAcwDQBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:33:04.63Z"
+              "WhenOpened": "2026-08-03T11:33:04.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IServiceAppointmentService.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\IServiceAppointmentService.cs",
+              "RelativeDocumentMoniker": "Services\\ServiceAppointment\\IServiceAppointmentService.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\IServiceAppointmentService.cs",
+              "RelativeToolTip": "Services\\ServiceAppointment\\IServiceAppointmentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T11:32:43.997Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ServiceAppointmentStatsResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentStatsResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentStatsResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentStatsResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentStatsResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:20:29.701Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GetServiceAppointmentsByPatientQueryDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsByPatientQueryDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsByPatientQueryDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsByPatientQueryDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsByPatientQueryDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:29:08.409Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ServiceAppointmentListByPatientResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListByPatientResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListByPatientResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListByPatientResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListByPatientResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:29:32.824Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ServiceAppointmentCancelResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentCancelResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentCancelResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentCancelResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentCancelResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:15:29.895Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ServiceAppointmentUpdateResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentUpdateResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentUpdateResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentUpdateResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentUpdateResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:04:43.584Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
+              "Title": "UpdateServiceAppointmentRequestDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\UpdateServiceAppointmentRequestDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\UpdateServiceAppointmentRequestDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\UpdateServiceAppointmentRequestDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\UpdateServiceAppointmentRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T14:02:51.591Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AppointmentEndpoints.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\AppointmentEndpoints.cs",
+              "RelativeDocumentMoniker": "Endpoints\\AppointmentEndpoints.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\AppointmentEndpoints.cs",
+              "RelativeToolTip": "Endpoints\\AppointmentEndpoints.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAQwEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T11:33:28.636Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ServiceAppointmentResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T13:57:58.142Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ServiceAppointmentListResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\ServiceAppointmentListResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T13:40:58.693Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "GetServiceAppointmentsQueryDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsQueryDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsQueryDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsQueryDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\ServiceAppointment\\GetServiceAppointmentsQueryDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-04T13:40:35.558Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "AuthEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\AuthEndpoints.cs",
               "RelativeDocumentMoniker": "Endpoints\\AuthEndpoints.cs",
@@ -423,7 +536,223 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 17,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAAAHMAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T15:10:13.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\User\\IUserService.cs",
+              "RelativeDocumentMoniker": "Services\\User\\IUserService.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\User\\IUserService.cs",
+              "RelativeToolTip": "Services\\User\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T17:22:53.716Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\User\\UserService.cs",
+              "RelativeDocumentMoniker": "Services\\User\\UserService.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\User\\UserService.cs",
+              "RelativeToolTip": "Services\\User\\UserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T17:23:20.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\Dotnet\\WebMinimalExample\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\Dotnet\\WebMinimalExample\\Program.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\Dotnet\\WebMinimalExample\\Program.cs",
+              "RelativeToolTip": "..\\..\\Dotnet\\WebMinimalExample\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T17:23:47.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "GetAppointmentsByDoctorQueryDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByDoctorQueryDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\GetAppointmentsByDoctorQueryDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByDoctorQueryDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\GetAppointmentsByDoctorQueryDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T17:12:33.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IAppointmentService.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\IAppointmentService.cs",
+              "RelativeDocumentMoniker": "Services\\Appointment\\IAppointmentService.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\IAppointmentService.cs",
+              "RelativeToolTip": "Services\\Appointment\\IAppointmentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAB8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T11:36:03.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AppointmentService.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\AppointmentService.cs",
+              "RelativeDocumentMoniker": "Services\\Appointment\\AppointmentService.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Appointment\\AppointmentService.cs",
+              "RelativeToolTip": "Services\\Appointment\\AppointmentService.cs",
+              "ViewState": "AgIAAFsCAAAAAAAAAAAcwMUCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T11:36:22.952Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AppointmentStatsResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentStatsResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentStatsResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentStatsResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentStatsResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T17:08:45.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "AppointmentUpdateResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentUpdateResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentUpdateResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentUpdateResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentUpdateResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T16:57:47.726Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "UpdateAppointmentRequestDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\UpdateAppointmentRequestDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\UpdateAppointmentRequestDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\UpdateAppointmentRequestDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\UpdateAppointmentRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T16:57:14.526Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Appointment.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Appointment.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Appointment.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Appointment.cs",
+              "RelativeToolTip": "Models\\Domain\\Appointment.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAwwD4AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T16:47:43.58Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AppointmentListResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentListResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T11:31:28.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "AppointmentDTOs.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentDTOs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-01T16:57:14.792Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AppointmentCreateResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentCreateResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T16:47:16.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "CreateAppointmentRequestDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\CreateAppointmentRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T16:46:49.183Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "AppointmentListByPatientResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentListByPatientResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T13:04:52.194Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "GetAppointmentsByPatientQueryDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\GetAppointmentsByPatientQueryDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T13:04:25.576Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AppointmentResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
+              "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
+              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
+              "RelativeToolTip": "Models\\DTOs\\Appointment\\AppointmentResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-03T12:48:03.967Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
               "Title": "ServiceModuleService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Service\\ServiceModuleService.cs",
               "RelativeDocumentMoniker": "Services\\Service\\ServiceModuleService.cs",
@@ -435,7 +764,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 36,
               "Title": "IServiceModuleService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Service\\IServiceModuleService.cs",
               "RelativeDocumentMoniker": "Services\\Service\\IServiceModuleService.cs",
@@ -447,43 +776,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "ServiceAppointmentEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceAppointmentEndpoints.cs",
-              "RelativeDocumentMoniker": "Endpoints\\ServiceAppointmentEndpoints.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceAppointmentEndpoints.cs",
-              "RelativeToolTip": "Endpoints\\ServiceAppointmentEndpoints.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-01T17:02:46.332Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "IServiceAppointmentService.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\IServiceAppointmentService.cs",
-              "RelativeDocumentMoniker": "Services\\ServiceAppointment\\IServiceAppointmentService.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ServiceAppointment\\IServiceAppointmentService.cs",
-              "RelativeToolTip": "Services\\ServiceAppointment\\IServiceAppointmentService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-03T11:32:43.997Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "ServiceEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceEndpoints.cs",
-              "RelativeDocumentMoniker": "Endpoints\\ServiceEndpoints.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\ServiceEndpoints.cs",
-              "RelativeToolTip": "Endpoints\\ServiceEndpoints.cs",
-              "ViewState": "AgIAAKoAAAAAAAAAAAAuwLMAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-01T16:53:10.396Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 37,
               "Title": "GetAppointmentsQueryDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Appointment\\GetAppointmentsQueryDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Appointment\\GetAppointmentsQueryDTO.cs",
@@ -495,19 +788,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "DoctorEndpoints.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\DoctorEndpoints.cs",
-              "RelativeDocumentMoniker": "Endpoints\\DoctorEndpoints.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Endpoints\\DoctorEndpoints.cs",
-              "RelativeToolTip": "Endpoints\\DoctorEndpoints.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAQwEoAAAA+AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-01T16:53:05.296Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 38,
               "Title": "UpdateServiceRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Service\\UpdateServiceRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Service\\UpdateServiceRequestDTO.cs",
@@ -519,7 +800,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 40,
               "Title": "IDoctorService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Doctor\\IDoctorService.cs",
               "RelativeDocumentMoniker": "Services\\Doctor\\IDoctorService.cs",
@@ -531,7 +812,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 39,
               "Title": "DoctorService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Doctor\\DoctorService.cs",
               "RelativeDocumentMoniker": "Services\\Doctor\\DoctorService.cs",
@@ -543,7 +824,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 41,
               "Title": "Service.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Service.cs",
               "RelativeDocumentMoniker": "Models\\Domain\\Service.cs",
@@ -555,7 +836,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 43,
               "Title": "IJwtTokenGenerator.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Jwt\\IJwtTokenGenerator.cs",
               "RelativeDocumentMoniker": "Services\\Jwt\\IJwtTokenGenerator.cs",
@@ -567,7 +848,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 42,
               "Title": "JwtTokenGenerator.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\Jwt\\JwtTokenGenerator.cs",
               "RelativeDocumentMoniker": "Services\\Jwt\\JwtTokenGenerator.cs",
@@ -579,7 +860,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 44,
               "Title": "ServiceResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Service\\ServiceResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Service\\ServiceResultDTO.cs",
@@ -591,7 +872,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 45,
               "Title": "CreateServiceRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Service\\CreateServiceRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Service\\CreateServiceRequestDTO.cs",
@@ -603,7 +884,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 46,
               "Title": "ServiceDTOs.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Service\\ServiceDTOs.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Service\\ServiceDTOs.cs",
@@ -615,7 +896,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 50,
               "Title": "DoctorUpdateResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorUpdateResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorUpdateResultDTO.cs",
@@ -627,7 +908,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 47,
               "Title": "CategoryEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\Dotnet\\WebMinimalExample\\Endpoints\\v1\\CategoryEndpoints.cs",
               "RelativeDocumentMoniker": "..\\..\\Dotnet\\WebMinimalExample\\Endpoints\\v1\\CategoryEndpoints.cs",
@@ -639,7 +920,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 48,
               "Title": "DoctorToggleAvailabilityResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorToggleAvailabilityResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorToggleAvailabilityResultDTO.cs",
@@ -651,7 +932,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 49,
               "Title": "DoctorDeleteResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorDeleteResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorDeleteResultDTO.cs",
@@ -663,7 +944,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 51,
               "Title": "UpdateDoctorRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\UpdateDoctorRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\UpdateDoctorRequestDTO.cs",
@@ -675,7 +956,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 52,
               "Title": "DoctorResponseDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorResponseDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorResponseDTO.cs",
@@ -687,7 +968,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 53,
               "Title": "DoctorSingleResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorSingleResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorSingleResultDTO.cs",
@@ -699,7 +980,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 56,
               "Title": "ICategoryService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\Dotnet\\WebMinimalExample\\Services\\ICategoryService.cs",
               "RelativeDocumentMoniker": "..\\..\\Dotnet\\WebMinimalExample\\Services\\ICategoryService.cs",
@@ -711,7 +992,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 54,
               "Title": "Enum.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Enums\\Enum.cs",
               "RelativeDocumentMoniker": "Models\\Enums\\Enum.cs",
@@ -723,7 +1004,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 55,
               "Title": "CategoryService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\Dotnet\\WebMinimalExample\\Services\\CategoryService.cs",
               "RelativeDocumentMoniker": "..\\..\\Dotnet\\WebMinimalExample\\Services\\CategoryService.cs",
@@ -735,7 +1016,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 57,
               "Title": "DoctorListResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorListResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorListResultDTO.cs",
@@ -747,7 +1028,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 58,
               "Title": "DoctorAuthResultDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorAuthResultDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorAuthResultDTO.cs",
@@ -759,7 +1040,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 59,
               "Title": "DoctorListItemDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorListItemDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorListItemDTO.cs",
@@ -771,7 +1052,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 60,
               "Title": "GetDoctorsRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\GetDoctorsRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\GetDoctorsRequestDTO.cs",
@@ -783,7 +1064,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 62,
               "Title": "ImageUploadService.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Services\\ImageUpload\\ImageUploadService.cs",
               "RelativeDocumentMoniker": "Services\\ImageUpload\\ImageUploadService.cs",
@@ -795,7 +1076,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 64,
               "Title": "CloudinarySettings.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\CloudinarySettings.cs",
               "RelativeDocumentMoniker": "Models\\CloudinarySettings.cs",
@@ -807,7 +1088,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 61,
               "Title": "Doctor.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\Domain\\Doctor.cs",
               "RelativeDocumentMoniker": "Models\\Domain\\Doctor.cs",
@@ -819,7 +1100,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 63,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -831,7 +1112,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 65,
               "Title": "DoctorLoginRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\DoctorLoginRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\DoctorLoginRequestDTO.cs",
@@ -843,7 +1124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 66,
               "Title": "CreateDoctorRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Doctor\\CreateDoctorRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Doctor\\CreateDoctorRequestDTO.cs",
@@ -855,7 +1136,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 67,
               "Title": "backend-dotnet.csproj.Backup (1).tmp",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\backend-dotnet.csproj.Backup (1).tmp",
               "RelativeDocumentMoniker": "backend-dotnet.csproj.Backup (1).tmp",
@@ -867,7 +1148,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 52,
+              "DocumentIndex": 69,
               "Title": "20260801052613_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Migrations\\20260801052613_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20260801052613_InitialCreate.cs",
@@ -879,7 +1160,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 51,
+              "DocumentIndex": 68,
               "Title": "LoginResponseDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Auth\\LoginResponseDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Auth\\LoginResponseDTO.cs",
@@ -891,19 +1172,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 50,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-31T15:10:13.458Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 53,
+              "DocumentIndex": 70,
               "Title": ".gitignore",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\.gitignore",
               "RelativeDocumentMoniker": ".gitignore",
@@ -915,7 +1184,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 56,
+              "DocumentIndex": 73,
               "Title": "LoginRequestDTO.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Auth\\LoginRequestDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Auth\\LoginRequestDTO.cs",
@@ -927,7 +1196,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 54,
+              "DocumentIndex": 71,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -939,7 +1208,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 55,
+              "DocumentIndex": 72,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
@@ -951,7 +1220,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 57,
+              "DocumentIndex": 74,
               "Title": "RegisterationRequestDto.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\DTOs\\Auth\\RegisterationRequestDto.cs",
               "RelativeDocumentMoniker": "Models\\DTOs\\Auth\\RegisterationRequestDto.cs",
@@ -963,7 +1232,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 58,
+              "DocumentIndex": 75,
               "Title": "backend-dotnet.csproj",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\backend-dotnet.csproj",
               "RelativeDocumentMoniker": "backend-dotnet.csproj",
@@ -975,7 +1244,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 59,
+              "DocumentIndex": 76,
               "Title": "ApiResponse.cs",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\Models\\ApiResponse.cs",
               "RelativeDocumentMoniker": "Models\\ApiResponse.cs",
@@ -987,7 +1256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 60,
+              "DocumentIndex": 77,
               "Title": "backend-dotnet.http",
               "DocumentMoniker": "C:\\Users\\VikasKumar1\\OneDrive - SupplyIT\\Documents\\Vikas\\MEDICARE\\backend-dotnet\\backend-dotnet.http",
               "RelativeDocumentMoniker": "backend-dotnet.http",

@@ -9,6 +9,10 @@ namespace backend_dotnet.Services.Appointment
         Task<AppointmentResultDTO> GetAppointmentByIdAsync(Guid id);
         Task<AppointmentListByPatientResultDTO> GetAppointmentsByPatientAsync(GetAppointmentsByPatientQueryDTO query, string? authenticatedUserId);
         Task<AppointmentCreateResultDTO> CreateAppointmentAsync(CreateAppointmentRequestDTO request, string? authenticatedUserId, string? frontendOrigin);
-    }
+        Task<AppointmentUpdateResultDTO> UpdateAppointmentAsync(Guid id, UpdateAppointmentRequestDTO request);
+        Task<AppointmentUpdateResultDTO> CancelAppointmentAsync(Guid id);
 
+        Task<AppointmentStatsResultDTO> GetStatsAsync();
+        Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(string doctorId, GetAppointmentsByDoctorQueryDTO query);
+    }
 }
