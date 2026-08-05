@@ -47,5 +47,6 @@ namespace backend_dotnet.Models.Domain
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();
         public Doctor? DoctorProfile { get; set; }
+        public Patient? PatientProfile { get; set; }
     }
 }

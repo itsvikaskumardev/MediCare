@@ -13,6 +13,7 @@ namespace backend_dotnet.Data
         public DbSet<User> Users { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Patient> Patients { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<ServiceAppointment> ServiceAppointments { get; set; }
@@ -45,10 +46,22 @@ namespace backend_dotnet.Data
             modelBuilder.Entity<Doctor>(entity =>
             {
                 entity.Property(d => d.Availability).HasConversion<string>();
+                entity.HasIndex(d => d.UserId).IsUnique();
 
                 entity.HasOne(d => d.User)
                       .WithOne(u => u.DoctorProfile)
-                      .HasForeignKey<Doctor>(d => d.Id)
+                      .HasForeignKey<Doctor>(d => d.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ---- Patient ----
+            modelBuilder.Entity<Patient>(entity =>
+            {
+                entity.HasIndex(p => p.UserId).IsUnique();
+
+                entity.HasOne(p => p.User)
+                      .WithOne(u => u.PatientProfile)
+                      .HasForeignKey<Patient>(p => p.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
             });
 

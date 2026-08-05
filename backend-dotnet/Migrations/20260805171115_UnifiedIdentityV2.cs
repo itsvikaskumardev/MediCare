@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend_dotnet.Migrations
 {
     /// <inheritdoc />
-    public partial class UnifiedIdentity : Migration
+    public partial class UnifiedIdentityV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,7 @@ namespace backend_dotnet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Specialization = table.Column<string>(type: "text", nullable: true),
                     Experience = table.Column<string>(type: "text", nullable: true),
                     Qualifications = table.Column<string>(type: "text", nullable: true),
@@ -82,8 +83,33 @@ namespace backend_dotnet.Migrations
                 {
                     table.PrimaryKey("PK_Doctors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Doctors_Users_Id",
-                        column: x => x.Id,
+                        name: "FK_Doctors_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patients",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BloodGroup = table.Column<string>(type: "text", nullable: true),
+                    MedicalHistory = table.Column<string>(type: "text", nullable: true),
+                    Allergies = table.Column<string>(type: "text", nullable: true),
+                    EmergencyContactName = table.Column<string>(type: "text", nullable: true),
+                    EmergencyContactNumber = table.Column<string>(type: "text", nullable: true),
+                    InsuranceProvider = table.Column<string>(type: "text", nullable: true),
+                    InsurancePolicyNumber = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patients", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Patients_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -237,6 +263,18 @@ namespace backend_dotnet.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Doctors_UserId",
+                table: "Doctors",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_UserId",
+                table: "Patients",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServiceAppointments_Date_Status",
                 table: "ServiceAppointments",
                 columns: new[] { "Date", "Status" });
@@ -285,6 +323,9 @@ namespace backend_dotnet.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "Patients");
 
             migrationBuilder.DropTable(
                 name: "ServiceAppointments");

@@ -6,9 +6,11 @@ namespace backend_dotnet.Models.Domain
     public class Doctor
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        [ForeignKey(nameof(Id))]
+        public Guid UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
 
         public string? Specialization { get; set; }

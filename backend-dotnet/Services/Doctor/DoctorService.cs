@@ -96,7 +96,7 @@ namespace backend_dotnet.Services.Doctor
             // 2. Create the Doctor profile linked to the User
             var doctor = new backend_dotnet.Models.Domain.Doctor
             {
-                Id = user.Id, // Same ID as user
+                UserId = user.Id, // Link to User
                 Specialization = createDoctorRequestDTO.Specialization ?? "",
                 Availability = availability,
                 Experience = createDoctorRequestDTO.Experience ?? "",
@@ -244,7 +244,7 @@ namespace backend_dotnet.Services.Doctor
                 var doctor = await _db.Doctors
                     .Include(d => d.User)
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(d => d.Id == doctorId);
+                    .FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
 
                 if (doctor is null)
                 {
@@ -276,7 +276,7 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
                 if (existing is null)
                 {
                     return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
@@ -381,7 +381,7 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
                 if (existing is null)
                 {
                     return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
@@ -421,7 +421,7 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
+                var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
                 if (doctor is null)
                 {
                     return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };

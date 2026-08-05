@@ -23,8 +23,14 @@ namespace backend_dotnetWebMinimalExample.Endpoints
                  .Produces<ApiResponse>(StatusCodes.Status401Unauthorized)
                  .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
-            authGroup.MapPost("/register", Register)
-                 .WithName("Register")
+            authGroup.MapPost("/register-patient", RegisterPatient)
+                 .WithName("RegisterPatient")
+                 .Produces<ApiResponse>(StatusCodes.Status201Created)
+                 .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            authGroup.MapPost("/register-admin", RegisterAdmin)
+                 .WithName("RegisterAdmin")
                  .Produces<ApiResponse>(StatusCodes.Status201Created)
                  .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
                  .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
@@ -88,13 +94,13 @@ namespace backend_dotnetWebMinimalExample.Endpoints
             });
         }
 
-        private static async Task<IResult> Register(
-            RegisterationRequestDto registerationRequestDto,
+        private static async Task<IResult> RegisterPatient(
+            backend_dotnet.Models.DTOs.Auth.PatientRegistrationRequestDto requestDto,
             ApplicationDbContext db,
             IPasswordHasher passwordHasher)
         {
-            if (string.IsNullOrWhiteSpace(registerationRequestDto.Email) ||
-                string.IsNullOrWhiteSpace(registerationRequestDto.Password))
+            if (string.IsNullOrWhiteSpace(requestDto.Email) ||
+                string.IsNullOrWhiteSpace(requestDto.Password))
             {
                 return Results.BadRequest(new ApiResponse
                 {
@@ -105,7 +111,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints
             }
 
             var existingUser = await db.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == registerationRequestDto.Email.ToLower());
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == requestDto.Email.ToLower());
 
             if (existingUser is not null)
             {
@@ -117,18 +123,81 @@ namespace backend_dotnetWebMinimalExample.Endpoints
                 });
             }
 
-            // Parse role sent by frontend (ADMIN, DOCTOR, PATIENT, etc.), default to Role.PATIENT if invalid or empty
-            var assignedRole = Enum.TryParse<Role>(registerationRequestDto.Role, true, out var parsedRole)
-                ? parsedRole
-                : Role.PATIENT;
-
-            // Manual mapping: DTO -> Domain Entity
             var newUser = new User
             {
-                Email = registerationRequestDto.Email,
-                PasswordHash = passwordHasher.HashPassword(registerationRequestDto.Password),
-                Name = registerationRequestDto.Name,
-                Role = assignedRole
+                Email = requestDto.Email,
+                PasswordHash = passwordHasher.HashPassword(requestDto.Password),
+                Name = requestDto.Name,
+                Mobile = requestDto.Mobile,
+                Age = requestDto.Age,
+                Gender = requestDto.Gender,
+                Role = Role.PATIENT,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await db.Users.AddAsync(newUser);
+
+            var newPatient = new Patient
+            {
+                UserId = newUser.Id,
+                BloodGroup = requestDto.BloodGroup,
+                MedicalHistory = requestDto.MedicalHistory,
+                Allergies = requestDto.Allergies,
+                EmergencyContactName = requestDto.EmergencyContactName,
+                EmergencyContactNumber = requestDto.EmergencyContactNumber,
+                InsuranceProvider = requestDto.InsuranceProvider,
+                InsurancePolicyNumber = requestDto.InsurancePolicyNumber
+            };
+
+            await db.Patients.AddAsync(newPatient);
+            await db.SaveChangesAsync();
+
+            return Results.Created($"/api/auth/{newUser.Id}", new ApiResponse
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.Created,
+                Result = "A new Patient Registered Successfully"
+            });
+        }
+
+        private static async Task<IResult> RegisterAdmin(
+            backend_dotnet.Models.DTOs.Auth.AdminRegistrationRequestDto requestDto,
+            ApplicationDbContext db,
+            IPasswordHasher passwordHasher)
+        {
+            if (string.IsNullOrWhiteSpace(requestDto.Email) ||
+                string.IsNullOrWhiteSpace(requestDto.Password))
+            {
+                return Results.BadRequest(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessages = ["Email and Password are required"]
+                });
+            }
+
+            var existingUser = await db.Users
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == requestDto.Email.ToLower());
+
+            if (existingUser is not null)
+            {
+                return Results.BadRequest(new ApiResponse
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessages = ["User with this email already exists"]
+                });
+            }
+
+            var newUser = new User
+            {
+                Email = requestDto.Email,
+                PasswordHash = passwordHasher.HashPassword(requestDto.Password),
+                Name = requestDto.Name,
+                Role = Role.ADMIN,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             await db.Users.AddAsync(newUser);
@@ -138,7 +207,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.Created,
-                Result = "A new User Registered Successfully"
+                Result = "A new Admin Registered Successfully"
             });
         }
 

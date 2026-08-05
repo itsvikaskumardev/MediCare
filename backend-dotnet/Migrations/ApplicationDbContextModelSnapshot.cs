@@ -140,6 +140,7 @@ namespace backend_dotnet.Migrations
             modelBuilder.Entity("backend_dotnet.Models.Domain.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("About")
@@ -176,9 +177,53 @@ namespace backend_dotnet.Migrations
                     b.Property<string>("Success")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Doctors");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Patient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Allergies")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BloodGroup")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmergencyContactName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmergencyContactNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("InsurancePolicyNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("InsuranceProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MedicalHistory")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("backend_dotnet.Models.Domain.Service", b =>
@@ -491,7 +536,18 @@ namespace backend_dotnet.Migrations
                 {
                     b.HasOne("backend_dotnet.Models.Domain.User", "User")
                         .WithOne("DoctorProfile")
-                        .HasForeignKey("backend_dotnet.Models.Domain.Doctor", "Id")
+                        .HasForeignKey("backend_dotnet.Models.Domain.Doctor", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Patient", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.Domain.User", "User")
+                        .WithOne("PatientProfile")
+                        .HasForeignKey("backend_dotnet.Models.Domain.Patient", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -542,6 +598,8 @@ namespace backend_dotnet.Migrations
                     b.Navigation("Appointments");
 
                     b.Navigation("DoctorProfile");
+
+                    b.Navigation("PatientProfile");
 
                     b.Navigation("ServiceAppointments");
 
