@@ -63,9 +63,8 @@ export default function AppointmentsPage() {
       setError(null);
       try {
         const q = query.trim();
-        const url = `${API_BASE}/api/appointments?limit=200${
-          q ? `&search=${encodeURIComponent(q)}` : ""
-        }`;
+        const url = `${API_BASE}/api/appointments/GetAppointments?limit=200${q ? `&search=${encodeURIComponent(q)}` : ""
+          }`;
         const res = await fetch(url);
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
@@ -164,8 +163,7 @@ export default function AppointmentsPage() {
     if (isCancelled || isCompleted) return;
 
     const ok = window.confirm(
-      `As admin, mark appointment for ${appt.patientName} with ${
-        appt.doctorName
+      `As admin, mark appointment for ${appt.patientName} with ${appt.doctorName
       } on ${formatDateISO(appt.slot.date)} at ${appt.slot.time} as CANCELLED?`
     );
     if (!ok) return;
@@ -193,14 +191,14 @@ export default function AppointmentsPage() {
           prev.map((p) =>
             p.id === id
               ? {
-                  ...p,
-                  status: updated.status || "Canceled",
-                  slot: {
-                    date: updated.date || p.slot.date,
-                    time: updated.time || p.slot.time,
-                  },
-                  raw: updated,
-                }
+                ...p,
+                status: updated.status || "Canceled",
+                slot: {
+                  date: updated.date || p.slot.date,
+                  time: updated.time || p.slot.time,
+                },
+                raw: updated,
+              }
               : p
           )
         );

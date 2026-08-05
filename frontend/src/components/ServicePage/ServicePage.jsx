@@ -16,9 +16,8 @@ const ServiceCard = ({ service }) => {
   const srcSet =
     service.imageSrcSet ||
     (service.imageSmall || service.image
-      ? `${service.imageSmall || src} 480w, ${
-          service.imageMedium || src
-        } 768w, ${service.imageLarge || src} 1200w`
+      ? `${service.imageSmall || src} 480w, ${service.imageMedium || src
+      } 768w, ${service.imageLarge || src} 1200w`
       : null);
 
   const name = service.name || "Service";
@@ -117,7 +116,7 @@ export default function ServicePage({ apiBase, previewCount = 9999 }) {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/api/services`);
+      const res = await fetch(`${API_BASE}/api/services/GetServices`);
       const json = await res.json().catch(() => null);
 
       if (!res.ok) {

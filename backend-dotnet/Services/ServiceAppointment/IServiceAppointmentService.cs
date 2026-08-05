@@ -8,6 +8,8 @@ namespace backend_dotnet.Services.ServiceAppointment
         // Service methods for ServiceAppointment module will be defined here
         Task<ServiceAppointmentListResultDTO> GetServiceAppointmentsAsync(GetServiceAppointmentsQueryDTO query);
         Task<ServiceAppointmentResultDTO> GetServiceAppointmentByIdAsync(Guid id);
+        Task<ServiceAppointmentCreateResultDTO> CreateServiceAppointmentAsync(CreateServiceAppointmentRequestDTO request, string? authenticatedUserId, string? frontendOrigin);
+        Task<ServiceAppointmentCreateResultDTO> ConfirmServicePaymentAsync(string sessionId);
 
         Task<ServiceAppointmentUpdateResultDTO> UpdateServiceAppointmentAsync(Guid id, UpdateServiceAppointmentRequestDTO request);
         Task<ServiceAppointmentCancelResultDTO> CancelServiceAppointmentAsync(Guid id);

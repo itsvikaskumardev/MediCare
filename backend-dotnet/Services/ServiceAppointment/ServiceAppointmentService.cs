@@ -1,7 +1,11 @@
 using backend_dotnet.Data;
+using backend_dotnet.Models.Domain;
 using backend_dotnet.Models.DTOs.Appointment;
 using backend_dotnet.Models.DTOs.ServiceAppointment;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Stripe;
+using Stripe.Checkout;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -10,10 +14,14 @@ namespace backend_dotnet.Services.ServiceAppointment
     public class ServiceAppointmentService : IServiceAppointmentService
     {
         private readonly ApplicationDbContext _db;
+        private readonly string _stripeSecretKey;
+        private readonly string _frontendUrl;
 
-        public ServiceAppointmentService(ApplicationDbContext db)
+        public ServiceAppointmentService(ApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
+            _stripeSecretKey = configuration["Stripe:SecretKey"] ?? "";
+            _frontendUrl = configuration["App:FrontendUrl"] ?? "http://localhost:5173";
         }
 
         //--------------------------------GetServiceAppointmentsAsync--------------------------------------------------------
@@ -45,49 +53,21 @@ namespace backend_dotnet.Services.ServiceAppointment
 
             var total = await appointmentsQuery.CountAsync();
 
-            var items = await appointmentsQuery
-                .OrderByDescending(a => a.CreatedAt)
+            var list = await appointmentsQuery
+                .OrderByDescending(a => a.Date)
+                .ThenByDescending(a => a.CreatedAt)
                 .Skip(skip)
                 .Take(limit)
                 .ToListAsync();
 
-            // manual "populate" of service summary fields
-            var serviceIds = items.Select(a => a.ServiceId).Distinct().ToList();
-
-            // Step 1: Fetch from DB into memory (async)
-            var services = await _db.Services
-                .Where(s => serviceIds.Contains(s.Id))
-                .ToListAsync();
-
-            var projected = items.Select(a =>
-            {
-                // Step 2: Search the in-memory list (sync)
-                var svc = services.FirstOrDefault(s => s.Id == a.ServiceId);
-
-                return (object)new
-                {
-                    a.Id,
-                    a.ServiceId,
-                    Service = svc == null ? null : new
-                    {
-                        svc.Name,
-                        svc.ImageUrl
-                    },
-                    a.Mobile,
-                    a.Status,
-                    a.PatientName,
-                    a.CreatedAt
-                };
-            }).ToList();
-
             return new ServiceAppointmentListResultDTO
             {
                 IsSuccess = true,
-                Appointments = projected,
+                Appointments = list.Cast<object>().ToList(),
+                Total = total,
                 Page = page,
                 Limit = limit,
-                Total = total,
-                Count = projected.Count
+                Count = list.Count
             };
         }
 
@@ -110,6 +90,400 @@ namespace backend_dotnet.Services.ServiceAppointment
             {
                 IsSuccess = true,
                 Data = appt
+            };
+        }
+
+        //--------------------------------------------------------CreateServiceAppointmentAsync--------------
+
+        public async Task<ServiceAppointmentCreateResultDTO> CreateServiceAppointmentAsync(
+            CreateServiceAppointmentRequestDTO body,
+            string? authenticatedUserId,
+            string? frontendOrigin)
+        {
+            if (string.IsNullOrWhiteSpace(authenticatedUserId))
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    ErrorMessage = "Authentication required to create a service appointment."
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(body.ServiceId))
+                return Bad("serviceId is required");
+
+            if (string.IsNullOrWhiteSpace(body.PatientName))
+                return Bad("patientName is required");
+
+            if (string.IsNullOrWhiteSpace(body.Mobile))
+                return Bad("mobile is required");
+
+            if (string.IsNullOrWhiteSpace(body.Date))
+                return Bad("date is required (YYYY-MM-DD)");
+
+            var numericAmount = body.Amount ?? body.Fees ?? 0;
+            if (numericAmount < 0)
+                return Bad("amount/fees must be a valid number");
+
+            int? finalHour = body.Hour;
+            int? finalMinute = body.Minute;
+            string? finalAmpm = body.AmPm;
+
+            if (!string.IsNullOrWhiteSpace(body.Time) && finalHour is null)
+            {
+                var parsed = ParseTimeString(body.Time);
+                if (parsed is null)
+                    return Bad("time string couldn't be parsed");
+
+                finalHour = parsed.Value.Hour;
+                finalMinute = parsed.Value.Minute;
+                finalAmpm = parsed.Value.AmPm;
+            }
+
+            if (finalHour is null || finalMinute is null || (finalAmpm != "AM" && finalAmpm != "PM"))
+            {
+                return Bad("Time missing or invalid — provide time string or hour, minute and ampm.");
+            }
+
+            if (!Guid.TryParse(body.ServiceId, out var serviceIdGuid))
+            {
+                return Bad("Invalid serviceId GUID");
+            }
+
+            // DUPLICATE BOOKING CHECK
+            try
+            {
+                var existing = await _db.ServiceAppointments.FirstOrDefaultAsync(a =>
+                    a.ServiceId == serviceIdGuid &&
+                    a.CreatedBy == authenticatedUserId &&
+                    a.Date == body.Date &&
+                    a.Hour == finalHour.Value &&
+                    a.Minute == finalMinute.Value &&
+                    a.Ampm == finalAmpm &&
+                    a.Status != AppointmentStatus.Canceled);
+
+                if (existing is not null)
+                {
+                    return new ServiceAppointmentCreateResultDTO
+                    {
+                        IsSuccess = false,
+                        StatusCode = HttpStatusCode.Conflict,
+                        ErrorMessage = "You already have a booking for this service at the selected date and time."
+                    };
+                }
+            }
+            catch (Exception chkErr)
+            {
+                Console.Error.WriteLine($"Duplicate booking check failed: {chkErr.Message}");
+            }
+
+            // Fetch service snapshot (non-fatal)
+            backend_dotnet.Models.Domain.Service? svc = null;
+            try
+            {
+                svc = await _db.Services.FirstOrDefaultAsync(s => s.Id == serviceIdGuid);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Service lookup failed: {e.Message}");
+            }
+
+            var resolvedServiceName = !string.IsNullOrWhiteSpace(body.ServiceName)
+                ? body.ServiceName
+                : (svc?.Name ?? "Service");
+
+            var svcImageUrlFromDb = svc?.ImageUrl?.Trim() ?? "";
+            var svcImagePublicIdFromDb = svc?.ImagePublicId?.Trim() ?? "";
+
+            var finalServiceImageUrl = !string.IsNullOrEmpty(svcImageUrlFromDb)
+                ? svcImageUrlFromDb
+                : (body.ServiceImageUrl?.Trim() ?? "");
+
+            var finalServiceImagePublicId = !string.IsNullOrEmpty(svcImagePublicIdFromDb)
+                ? svcImagePublicIdFromDb
+                : (body.ServiceImagePublicId?.Trim() ?? "");
+
+            var appointment = new backend_dotnet.Models.Domain.ServiceAppointment
+            {
+                ServiceId = serviceIdGuid,
+                ServiceName = resolvedServiceName,
+                ServiceImageUrl = finalServiceImageUrl,
+                ServiceImagePubId = finalServiceImagePublicId,
+                PatientName = body.PatientName.Trim(),
+                Mobile = body.Mobile.Trim(),
+                Age = int.TryParse(body.Age, out var parsedAge) ? parsedAge : null,
+                Gender = body.Gender ?? "",
+                Date = body.Date,
+                Hour = finalHour.Value,
+                Minute = finalMinute.Value,
+                Ampm = finalAmpm ?? "AM",
+                Fees = numericAmount,
+                CreatedBy = authenticatedUserId,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            // Free appointment
+            if (numericAmount == 0)
+            {
+                appointment.Status = AppointmentStatus.Pending;
+                appointment.PaymentMethod = PaymentMethod.Cash;
+                appointment.PaymentStatus = PaymentStatus.Paid;
+                appointment.PaymentAmount = 0;
+                appointment.PaidAt = DateTime.UtcNow;
+
+                _db.ServiceAppointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment
+                };
+            }
+
+            // Cash booking
+            if (body.PaymentMethod == "Cash")
+            {
+                appointment.Status = AppointmentStatus.Pending;
+                appointment.PaymentMethod = PaymentMethod.Cash;
+                appointment.PaymentStatus = PaymentStatus.Pending;
+                appointment.PaymentAmount = numericAmount;
+
+                _db.ServiceAppointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment,
+                    CheckoutUrl = null
+                };
+            }
+
+            // Online booking (Stripe)
+            if (string.IsNullOrWhiteSpace(_stripeSecretKey))
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Stripe not configured on server"
+                };
+            }
+
+            var frontendBase = BuildFrontendBase(frontendOrigin);
+            if (string.IsNullOrWhiteSpace(frontendBase))
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Frontend base URL not available. Set FRONTEND_URL or provide Origin header."
+                };
+            }
+
+            var successUrl = $"{frontendBase}/service-appointment/success?session_id={{CHECKOUT_SESSION_ID}}";
+            var cancelUrl = $"{frontendBase}/service-appointment/cancel";
+
+            Session session;
+            try
+            {
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string> { "card" },
+                    Mode = "payment",
+                    CustomerEmail = string.IsNullOrWhiteSpace(body.Email) ? null : body.Email,
+                    LineItems = new List<SessionLineItemOptions>
+                    {
+                        new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                Currency = "inr",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = $"Service: {resolvedServiceName.Substring(0, Math.Min(60, resolvedServiceName.Length))}",
+                                    Description = $"Appointment on {appointment.Date} {appointment.Hour}:{appointment.Minute:D2} {appointment.Ampm}"
+                                },
+                                UnitAmount = (long)Math.Round(numericAmount * 100)
+                            },
+                            Quantity = 1
+                        }
+                    },
+                    SuccessUrl = successUrl,
+                    CancelUrl = cancelUrl,
+                    Metadata = new Dictionary<string, string>
+                    {
+                        { "appointmentId", appointment.Id.ToString() },
+                        { "serviceId", body.ServiceId },
+                        { "serviceName", resolvedServiceName.Substring(0, Math.Min(200, resolvedServiceName.Length)) },
+                        { "patientName", appointment.PatientName },
+                        { "mobile", appointment.Mobile },
+                        { "clerkUserId", appointment.CreatedBy ?? "" },
+                        { "serviceImageUrl", finalServiceImageUrl.Substring(0, Math.Min(200, finalServiceImageUrl.Length)) }
+                    }
+                };
+
+                var sessionService = new SessionService();
+                session = await sessionService.CreateAsync(options);
+            }
+            catch (StripeException stripeErr)
+            {
+                Console.Error.WriteLine($"Stripe create session error: {stripeErr.Message}");
+                var message = stripeErr.StripeError?.Message ?? "Stripe error";
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadGateway,
+                    ErrorMessage = $"Payment provider error: {message}"
+                };
+            }
+
+            try
+            {
+                appointment.Status = AppointmentStatus.Confirmed;
+                appointment.PaymentMethod = PaymentMethod.Online;
+                appointment.PaymentStatus = PaymentStatus.Pending;
+                appointment.PaymentAmount = numericAmount;
+                appointment.PaymentSessionId = session.Id;
+
+                _db.ServiceAppointments.Add(appointment);
+                await _db.SaveChangesAsync();
+
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Appointment = appointment,
+                    CheckoutUrl = session.Url
+                };
+            }
+            catch (Exception dbErr)
+            {
+                Console.Error.WriteLine($"DB error saving service appointment after stripe session: {dbErr.Message}");
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Failed to create appointment record"
+                };
+            }
+
+            static ServiceAppointmentCreateResultDTO Bad(string msg) => new()
+            {
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.BadRequest,
+                ErrorMessage = msg
+            };
+        }
+
+        private string BuildFrontendBase(string? frontendOrigin)
+        {
+            if (!string.IsNullOrWhiteSpace(_frontendUrl))
+                return _frontendUrl.TrimEnd('/');
+            if (!string.IsNullOrWhiteSpace(frontendOrigin))
+                return frontendOrigin.TrimEnd('/');
+            return "http://localhost:5173";
+        }
+
+        //--------------------------------ConfirmServicePaymentAsync--------------------------------------------------------
+
+        public async Task<ServiceAppointmentCreateResultDTO> ConfirmServicePaymentAsync(string sessionId)
+        {
+            if (string.IsNullOrWhiteSpace(sessionId))
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "session_id is required"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(_stripeSecretKey))
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ErrorMessage = "Stripe not configured"
+                };
+            }
+
+            Session session;
+            try
+            {
+                var sessionService = new SessionService();
+                session = await sessionService.GetAsync(sessionId);
+            }
+            catch (StripeException ex)
+            {
+                Console.Error.WriteLine($"Stripe retrieve session error: {ex.Message}");
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Stripe session not found"
+                };
+            }
+
+            if (session is null)
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Invalid session"
+                };
+            }
+
+            if (session.PaymentStatus != "paid")
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "Payment not completed"
+                };
+            }
+
+            var appt = await _db.ServiceAppointments.FirstOrDefaultAsync(a => a.PaymentSessionId == sessionId);
+
+            if (appt is null && session.Metadata is not null && session.Metadata.TryGetValue("appointmentId", out var appointmentIdStr)
+                && Guid.TryParse(appointmentIdStr, out var appointmentId))
+            {
+                appt = await _db.ServiceAppointments.FirstOrDefaultAsync(a => a.Id == appointmentId);
+            }
+
+            if (appt is null)
+            {
+                return new ServiceAppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Service appointment not found"
+                };
+            }
+
+            if (appt.PaymentStatus != PaymentStatus.Paid)
+            {
+                appt.PaymentStatus = PaymentStatus.Paid;
+                appt.PaymentProviderId = session.PaymentIntentId ?? "";
+                appt.PaidAt = DateTime.UtcNow;
+                appt.Status = AppointmentStatus.Confirmed;
+                appt.UpdatedAt = DateTime.UtcNow;
+
+                await _db.SaveChangesAsync();
+            }
+
+            return new ServiceAppointmentCreateResultDTO
+            {
+                IsSuccess = true,
+                Appointment = appt
             };
         }
 
@@ -217,16 +591,17 @@ namespace backend_dotnet.Services.ServiceAppointment
             return new ServiceAppointmentUpdateResultDTO
             {
                 IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
                 Data = existing
             };
         }
+
         //--------------------------------CancelServiceAppointmentAsync--------------------------------------------------------
 
         public async Task<ServiceAppointmentCancelResultDTO> CancelServiceAppointmentAsync(Guid id)
         {
-            var appt = await _db.ServiceAppointments.FindAsync(id);
-
-            if (appt is null)
+            var appointment = await _db.ServiceAppointments.FindAsync(id);
+            if (appointment is null)
             {
                 return new ServiceAppointmentCancelResultDTO
                 {
@@ -236,7 +611,17 @@ namespace backend_dotnet.Services.ServiceAppointment
                 };
             }
 
-            if (appt.Status == AppointmentStatus.Completed)
+            if (appointment.Status == AppointmentStatus.Canceled)
+            {
+                return new ServiceAppointmentCancelResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "Appointment is already canceled"
+                };
+            }
+
+            if (appointment.Status == AppointmentStatus.Completed)
             {
                 return new ServiceAppointmentCancelResultDTO
                 {
@@ -246,25 +631,15 @@ namespace backend_dotnet.Services.ServiceAppointment
                 };
             }
 
-            appt.Status = AppointmentStatus.Canceled;
-
-            if (appt.PaymentStatus == PaymentStatus.Paid)
-            {
-                appt.PaymentStatus = PaymentStatus.Refunded;
-            }
-            else
-            {
-                appt.PaymentStatus = PaymentStatus.Pending;
-            }
-
-            appt.UpdatedAt = DateTime.UtcNow;
-
+            appointment.Status = AppointmentStatus.Canceled;
+            appointment.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
 
             return new ServiceAppointmentCancelResultDTO
             {
                 IsSuccess = true,
-                Data = appt
+                StatusCode = HttpStatusCode.OK,
+                Data = appointment
             };
         }
 
@@ -272,28 +647,32 @@ namespace backend_dotnet.Services.ServiceAppointment
 
         public async Task<ServiceAppointmentStatsResultDTO> GetServiceAppointmentStatsAsync()
         {
-            var services = await _db.Services.AsNoTracking().ToListAsync();
+            var allServices = await _db.Services.AsNoTracking().ToListAsync();
             var allAppointments = await _db.ServiceAppointments.AsNoTracking().ToListAsync();
 
-            var resultList = services.Select(s =>
-            {
-                var appts = allAppointments.Where(a => a.ServiceId == s.Id).ToList();
-                var totalAppointments = appts.Count;
-                var completed = appts.Count(a => a.Status == AppointmentStatus.Completed);
-                var canceled = appts.Count(a => a.Status == AppointmentStatus.Canceled);
-                var earning = completed * s.Price;
+            var resultList = new List<object>();
 
-                return (object)new
+            foreach (var svc in allServices)
+            {
+                var apptsForSvc = allAppointments.Where(a => a.ServiceId == svc.Id).ToList();
+
+                var total = apptsForSvc.Count;
+                var completed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Completed);
+                var canceled = apptsForSvc.Count(a => a.Status == AppointmentStatus.Canceled);
+                var earning = apptsForSvc
+                    .Where(a => a.PaymentStatus == PaymentStatus.Paid)
+                    .Sum(a => svc.Price);
+
+                resultList.Add(new
                 {
-                    name = s.Name,
-                    price = s.Price,
-                    image = s.ImageUrl,
-                    totalAppointments,
+                    _id = svc.Id,
+                    name = svc.Name,
+                    total,
                     completed,
                     canceled,
                     earning
-                };
-            }).ToList();
+                });
+            }
 
             return new ServiceAppointmentStatsResultDTO
             {

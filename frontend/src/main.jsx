@@ -7,11 +7,11 @@ import "./index.css";
 
 const clerkPublishableKey =
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
-  "pk_test_c3RhdGljLWRlbW8ua2xlcmsuYWNjb3VudHMuZGV2JA";
+  "pk_test_mock_key";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
-  console.warn(
-    "Missing VITE_CLERK_PUBLISHABLE_KEY in .env. Using placeholder key so frontend UI can run locally without crashing."
+  console.info(
+    "Running Frontend UI in Mock Auth mode (no VITE_CLERK_PUBLISHABLE_KEY detected in .env)."
   );
 }
 

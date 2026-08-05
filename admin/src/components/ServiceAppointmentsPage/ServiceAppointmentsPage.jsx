@@ -306,7 +306,7 @@ export default function ServiceAppointmentsPage() {
     setLoading(true);
     setError(null);
     try {
-      const url = `${API_BASE}/api/service-appointments?limit=500`;
+      const url = `${API_BASE}/api/service-appointments/GetServiceAppointments?limit=500`;
       const res = await fetch(url);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -318,24 +318,23 @@ export default function ServiceAppointmentsPage() {
       const list = Array.isArray(body.appointments)
         ? body.appointments
         : body.appointments ??
-          body.items ??
-          body.data ??
-          body.appointments ??
-          [];
+        body.items ??
+        body.data ??
+        body.appointments ??
+        [];
 
       const normalized = (Array.isArray(list) ? list : [])
         .map((a) => {
           const timeStr =
             a.time ||
-            (a.slot && a.slot.time) ||
-            (a.hour !== undefined && a.minute !== undefined)
-              ? `${formatTwo(a.hour || 12)}:${formatTwo(a.minute ?? 0)} ${
-                  a.ampm || "AM"
-                }`
+              (a.slot && a.slot.time) ||
+              (a.hour !== undefined && a.minute !== undefined)
+              ? `${formatTwo(a.hour || 12)}:${formatTwo(a.minute ?? 0)} ${a.ampm || "AM"
+              }`
               : a.rescheduledTo?.time ||
-                (a.slot && a.slot.time) ||
-                a.time ||
-                "";
+              (a.slot && a.slot.time) ||
+              a.time ||
+              "";
           const parsed = parseTimeToParts(timeStr);
           return {
             id: a._id || a.id,
@@ -426,29 +425,29 @@ export default function ServiceAppointmentsPage() {
         prev.map((a) =>
           a.id === id
             ? {
-                ...a,
-                status: updated.status || newStatus,
-                date: updated.date || updated.rescheduledTo?.date || a.date,
-                hour: parseTimeToParts(
-                  updated.time ||
-                    updated.rescheduledTo?.time ||
-                    a.raw?.time ||
-                    `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
-                ).hour,
-                minute: parseTimeToParts(
-                  updated.time ||
-                    updated.rescheduledTo?.time ||
-                    a.raw?.time ||
-                    `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
-                ).minute,
-                ampm: parseTimeToParts(
-                  updated.time ||
-                    updated.rescheduledTo?.time ||
-                    a.raw?.time ||
-                    `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
-                ).ampm,
-                raw: updated || a.raw,
-              }
+              ...a,
+              status: updated.status || newStatus,
+              date: updated.date || updated.rescheduledTo?.date || a.date,
+              hour: parseTimeToParts(
+                updated.time ||
+                updated.rescheduledTo?.time ||
+                a.raw?.time ||
+                `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
+              ).hour,
+              minute: parseTimeToParts(
+                updated.time ||
+                updated.rescheduledTo?.time ||
+                a.raw?.time ||
+                `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
+              ).minute,
+              ampm: parseTimeToParts(
+                updated.time ||
+                updated.rescheduledTo?.time ||
+                a.raw?.time ||
+                `${formatTwo(a.hour)}:${formatTwo(a.minute)} ${a.ampm}`
+              ).ampm,
+              raw: updated || a.raw,
+            }
             : a
         )
       );
@@ -476,13 +475,13 @@ export default function ServiceAppointmentsPage() {
       prev.map((a) =>
         a.id === id
           ? {
-              ...a,
-              date: dateStr,
-              hour: hour12,
-              minute: mm,
-              ampm,
-              status: "Rescheduled",
-            }
+            ...a,
+            date: dateStr,
+            hour: hour12,
+            minute: mm,
+            ampm,
+            status: "Rescheduled",
+          }
           : a
       )
     );
@@ -524,14 +523,14 @@ export default function ServiceAppointmentsPage() {
         prev.map((a) =>
           a.id === id
             ? {
-                ...a,
-                date: finalDate,
-                hour: parsed.hour,
-                minute: parsed.minute,
-                ampm: parsed.ampm,
-                status: updated.status || "Rescheduled",
-                raw: updated || a.raw,
-              }
+              ...a,
+              date: finalDate,
+              hour: parsed.hour,
+              minute: parsed.minute,
+              ampm: parsed.ampm,
+              status: updated.status || "Rescheduled",
+              raw: updated || a.raw,
+            }
             : a
         )
       );
@@ -588,10 +587,10 @@ export default function ServiceAppointmentsPage() {
         prev.map((a) =>
           a.id === id
             ? {
-                ...a,
-                status: updated.status || "Canceled",
-                raw: updated || a.raw,
-              }
+              ...a,
+              status: updated.status || "Canceled",
+              raw: updated || a.raw,
+            }
             : a
         )
       );
@@ -609,7 +608,7 @@ export default function ServiceAppointmentsPage() {
       .filter((a) =>
         q
           ? (a.patientName || "").toLowerCase().includes(q) ||
-            (a.serviceName || "").toLowerCase().includes(q)
+          (a.serviceName || "").toLowerCase().includes(q)
           : true
       )
       .filter((a) => (statusFilter ? a.status === statusFilter : true));

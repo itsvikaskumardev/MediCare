@@ -187,7 +187,7 @@ export default function AppointmentPage() {
     console.log("Outgoing headers for /api/appointments/me:", headers);
 
     try {
-      const resp = await API.get("/api/appointments/me", { headers });
+      const resp = await API.get("/api/appointments/GetAppointments", { headers });
       console.log("Response from /api/appointments/me:", resp?.data);
 
       const fetched =
@@ -271,11 +271,11 @@ export default function AppointmentPage() {
       console.error("Failed to get Clerk token (frontend): err", err);
     }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    console.log("Outgoing headers for /api/service-appointments/me:", headers);
+    console.log("Outgoing headers for /api/service-appointments/GetServiceAppointments:", headers);
 
     try {
-      const resp = await API.get("/api/service-appointments/me", { headers });
-      console.log("Response from /api/service-appointments/me:", resp?.data);
+      const resp = await API.get("/api/service-appointments/GetServiceAppointments", { headers });
+      console.log("Response from /api/service-appointments/GetServiceAppointments:", resp?.data);
 
       const fetched =
         resp?.data?.appointments ?? resp?.data?.data ?? resp?.data ?? [];

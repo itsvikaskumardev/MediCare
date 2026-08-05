@@ -124,7 +124,7 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
   async function fetchDoctors() {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/doctors`);
+      const res = await fetch(`${API_BASE}/api/doctors/GetDoctors`);
       const body = await res.json().catch(() => null);
 
       if (res.ok && body && body.success) {
@@ -132,8 +132,8 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
         const list = Array.isArray(body.data)
           ? body.data
           : Array.isArray(body.doctors)
-          ? body.doctors
-          : [];
+            ? body.doctors
+            : [];
 
         // normalize schedule to plain object and ensure keys normalized
         const normalized = list.map((d) => {

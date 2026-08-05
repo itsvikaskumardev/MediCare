@@ -17,7 +17,7 @@ const HomeDoctors = ({ apiBase, previewCount = 8 }) => {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`${API_BASE}/api/doctors`);
+        const res = await fetch(`${API_BASE}/api/doctors/GetDoctors`);
         const json = await res.json().catch(() => null);
 
         if (!res.ok) {
@@ -179,13 +179,15 @@ const HomeDoctors = ({ apiBase, previewCount = 8 }) => {
                   >
                     <div className={homeDoctorsStyles.imageContainerAvailable}>
                       <img
-                        src={doctor.image || "/placeholder-doctor.jpg"}
+                        src={doctor.image || "https://ui-avatars.com/api/?name=Doctor&background=random"}
                         alt={doctor.name}
                         loading="lazy"
                         className={homeDoctorsStyles.image}
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/placeholder-doctor.jpg";
+                          if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                            e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                          }
                         }}
                       />
                     </div>
@@ -193,13 +195,15 @@ const HomeDoctors = ({ apiBase, previewCount = 8 }) => {
                 ) : (
                   <div className={homeDoctorsStyles.imageContainerUnavailable}>
                     <img
-                      src={doctor.image || "/placeholder-doctor.jpg"}
+                      src={doctor.image || "https://ui-avatars.com/api/?name=Doctor&background=random"}
                       alt={doctor.name}
                       loading="lazy"
                       className={homeDoctorsStyles.image}
                       onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/placeholder-doctor.jpg";
+                        if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                          e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                        }
                       }}
                     />
                     {/* optional small badge */}

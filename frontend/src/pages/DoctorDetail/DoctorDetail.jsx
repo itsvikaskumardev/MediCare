@@ -421,11 +421,17 @@ export default function DoctorDetail() {
 
                 <img
                   src={
-                    doctor.imageUrl || doctor.image || "/placeholder-doctor.jpg"
+                    doctor.imageUrl || doctor.image || "https://ui-avatars.com/api/?name=Doctor&background=random"
                   }
                   alt={doctor.name}
                   className={doctorDetailStyles.avatarImage}
                   style={{ objectPosition: "center" }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                      e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                    }
+                  }}
                 />
               </div>
 

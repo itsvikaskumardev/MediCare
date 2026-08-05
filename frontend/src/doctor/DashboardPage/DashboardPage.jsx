@@ -122,9 +122,9 @@ function normalizeAppointment(a) {
     (a.slot && a.slot.time) ||
     (a.hour != null && a.minute != null
       ? `${String(a.hour).padStart(2, "0")}:${String(a.minute).padStart(
-          2,
-          "0",
-        )}`
+        2,
+        "0",
+      )}`
       : "");
   const time24 = to24Hour(rawTime);
   const status = backendToFrontendStatus(
@@ -174,7 +174,7 @@ export default function DashboardPage({ apiBase }) {
     try {
       // If doctorId present, call the doctor-specific endpoint.
       // Backend route: GET /api/appointments/doctor/:doctorId
-      const basePath = `${API}/api/appointments/doctor/${encodeURIComponent(
+      const basePath = `${API}/api/appointments/GetAppointmentsByDoctor/${encodeURIComponent(
         doctorId,
       )}`;
 
@@ -624,11 +624,10 @@ function StatusSelect({ appointment, onChange }) {
       <select
         value={appointment.status}
         onChange={(e) => onChange(e.target.value)}
-        className={`${dashboardStyles.statusSelect} ${
-          terminal
-            ? dashboardStyles.statusSelectDisabled
-            : dashboardStyles.statusSelectEnabled
-        }`}
+        className={`${dashboardStyles.statusSelect} ${terminal
+          ? dashboardStyles.statusSelectDisabled
+          : dashboardStyles.statusSelectEnabled
+          }`}
         title="Change status (only Completed or Cancelled allowed after reschedule)"
       >
         <option value="rescheduled" disabled>
@@ -652,11 +651,10 @@ function StatusSelect({ appointment, onChange }) {
       value={appointment.status}
       onChange={(e) => onChange(e.target.value)}
       disabled={terminal}
-      className={`${dashboardStyles.statusSelect} ${
-        terminal
-          ? dashboardStyles.statusSelectDisabled
-          : dashboardStyles.statusSelectEnabled
-      }`}
+      className={`${dashboardStyles.statusSelect} ${terminal
+        ? dashboardStyles.statusSelectDisabled
+        : dashboardStyles.statusSelectEnabled
+        }`}
       title={terminal ? "Status cannot be changed" : "Change status"}
     >
       {options.map((opt) => (
@@ -723,11 +721,10 @@ function RescheduleButton({ appointment, onReschedule }) {
             title={
               terminal ? "Cannot reschedule completed/cancelled" : "Reschedule"
             }
-            className={`${dashboardStyles.rescheduleButton} ${
-              terminal
-                ? dashboardStyles.rescheduleButtonDisabled
-                : dashboardStyles.rescheduleButtonEnabled
-            }`}
+            className={`${dashboardStyles.rescheduleButton} ${terminal
+              ? dashboardStyles.rescheduleButtonDisabled
+              : dashboardStyles.rescheduleButtonEnabled
+              }`}
           >
             Reschedule
           </button>

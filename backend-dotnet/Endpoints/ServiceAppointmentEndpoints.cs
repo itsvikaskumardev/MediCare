@@ -24,8 +24,24 @@ namespace backend_dotnet.Endpoints
                 .Produces<ApiResponse>(StatusCodes.Status404NotFound)
                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
+            serviceAppointmentGroup.MapPost("/CreateServiceAppointment", CreateServiceAppointment)
+                .WithName("CreateServiceAppointment")
+                .Produces<ApiResponse>(StatusCodes.Status201Created)
+                .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                .Produces<ApiResponse>(StatusCodes.Status401Unauthorized)
+                .Produces<ApiResponse>(StatusCodes.Status409Conflict)
+                .Produces<ApiResponse>(StatusCodes.Status502BadGateway)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
             serviceAppointmentGroup.MapPut("/UpdateServiceAppointment/{id}", UpdateServiceAppointment)
                 .WithName("UpdateServiceAppointment")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
+            serviceAppointmentGroup.MapGet("/ConfirmServicePayment", ConfirmServicePayment)
+                .WithName("ConfirmServicePayment")
                 .Produces<ApiResponse>(StatusCodes.Status200OK)
                 .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
                 .Produces<ApiResponse>(StatusCodes.Status404NotFound)
@@ -118,6 +134,49 @@ namespace backend_dotnet.Endpoints
                 return Results.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        //-------------------------------------------CancelServiceAppointment-----------------------------------------------------
+
+        private static async Task<IResult> CreateServiceAppointment(
+        [FromBody] CreateServiceAppointmentRequestDTO request,
+        HttpContext httpContext,
+        IServiceAppointmentService serviceAppointmentService)
+        {
+            try
+            {
+                var authenticatedUserId = httpContext.User?.FindFirst("sub")?.Value
+                    ?? httpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                var origin = httpContext.Request.Headers["Origin"].FirstOrDefault();
+
+                var result = await serviceAppointmentService.CreateServiceAppointmentAsync(request, authenticatedUserId, origin);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.Json(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = result.StatusCode,
+                        ErrorMessages = [result.ErrorMessage ?? "Request failed"]
+                    }, statusCode: (int)result.StatusCode);
+                }
+
+                return Results.Created("/api/service-appointments/CreateServiceAppointment", new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.Created,
+                    Result = new
+                    {
+                        appointment = result.Appointment,
+                        checkoutUrl = result.CheckoutUrl
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"CreateServiceAppointment unexpected: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         //-------------------------------------------UpdateServiceAppointment-----------------------------------------------------
 
         private static async Task<IResult> UpdateServiceAppointment(
@@ -149,6 +208,41 @@ namespace backend_dotnet.Endpoints
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"UpdateServiceAppointment error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        //-------------------------------------------ConfirmServicePayment-----------------------------------------------------
+
+
+        private static async Task<IResult> ConfirmServicePayment(
+        [FromQuery] string session_id,
+        IServiceAppointmentService serviceAppointmentService)
+        {
+            try
+            {
+                var result = await serviceAppointmentService.ConfirmServicePaymentAsync(session_id);
+
+                if (!result.IsSuccess)
+                {
+                    return Results.Json(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = result.StatusCode,
+                        ErrorMessages = [result.ErrorMessage ?? "Request failed"]
+                    }, statusCode: (int)result.StatusCode);
+                }
+
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new { appointment = result.Appointment }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"ConfirmServicePayment error: {ex.Message}");
                 return Results.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

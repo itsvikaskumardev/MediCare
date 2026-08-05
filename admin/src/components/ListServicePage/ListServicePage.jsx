@@ -62,66 +62,66 @@ export default function ListServicePage({ apiBase }) {
   })();
 
   // ---------- ADDED: sortSlotsForDisplay ----------
-function sortSlotsForDisplay(slots = []) {
-  if (!Array.isArray(slots)) return [];
+  function sortSlotsForDisplay(slots = []) {
+    if (!Array.isArray(slots)) return [];
 
-  const today = new Date();
-  const todayVal = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  );
+    const today = new Date();
+    const todayVal = Date.UTC(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
 
-  const dateOnlyVal = (dateStr) => {
-    if (!dateStr || typeof dateStr !== "string") return Number.POSITIVE_INFINITY;
-    const parts = dateStr.split("-");
-    if (parts.length !== 3) return Number.POSITIVE_INFINITY;
-    const y = Number(parts[0]),
-      m = Number(parts[1]) - 1,
-      d = Number(parts[2]);
-    if (Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d))
-      return Number.POSITIVE_INFINITY;
-    return Date.UTC(y, m, d);
-  };
+    const dateOnlyVal = (dateStr) => {
+      if (!dateStr || typeof dateStr !== "string") return Number.POSITIVE_INFINITY;
+      const parts = dateStr.split("-");
+      if (parts.length !== 3) return Number.POSITIVE_INFINITY;
+      const y = Number(parts[0]),
+        m = Number(parts[1]) - 1,
+        d = Number(parts[2]);
+      if (Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d))
+        return Number.POSITIVE_INFINITY;
+      return Date.UTC(y, m, d);
+    };
 
-  // clone so we don't mutate original
-  const arr = slots.slice();
+    // clone so we don't mutate original
+    const arr = slots.slice();
 
-  arr.sort((a, b) => {
-    const aDateVal = dateOnlyVal(a.date);
-    const bDateVal = dateOnlyVal(b.date);
+    arr.sort((a, b) => {
+      const aDateVal = dateOnlyVal(a.date);
+      const bDateVal = dateOnlyVal(b.date);
 
-    const aIsPast = aDateVal < todayVal;
-    const bIsPast = bDateVal < todayVal;
+      const aIsPast = aDateVal < todayVal;
+      const bIsPast = bDateVal < todayVal;
 
-    // Past dates come first
-    if (aIsPast !== bIsPast) return aIsPast ? -1 : 1;
+      // Past dates come first
+      if (aIsPast !== bIsPast) return aIsPast ? -1 : 1;
 
-    // If both past: nearest past date first (descending date)
-    if (aIsPast && bIsPast && aDateVal !== bDateVal) {
-      return bDateVal - aDateVal;
-    }
+      // If both past: nearest past date first (descending date)
+      if (aIsPast && bIsPast && aDateVal !== bDateVal) {
+        return bDateVal - aDateVal;
+      }
 
-    // If both today/future: earliest date first (ascending)
-    if (!aIsPast && !bIsPast && aDateVal !== bDateVal) {
-      return aDateVal - bDateVal;
-    }
+      // If both today/future: earliest date first (ascending)
+      if (!aIsPast && !bIsPast && aDateVal !== bDateVal) {
+        return aDateVal - bDateVal;
+      }
 
-    // Same date (or date missing) -> sort by time-of-day ascending
-    const aTs = slotDateTimeToMs(a) || Number.POSITIVE_INFINITY;
-    const bTs = slotDateTimeToMs(b) || Number.POSITIVE_INFINITY;
-    return aTs - bTs;
-  });
+      // Same date (or date missing) -> sort by time-of-day ascending
+      const aTs = slotDateTimeToMs(a) || Number.POSITIVE_INFINITY;
+      const bTs = slotDateTimeToMs(b) || Number.POSITIVE_INFINITY;
+      return aTs - bTs;
+    });
 
-  return arr;
-}
-// ---------- END ADDED ----------
+    return arr;
+  }
+  // ---------- END ADDED ----------
 
 
   // Load services from backend
   async function fetchServices() {
     try {
-      const res = await fetch(`${API_BASE}/api/services`);
+      const res = await fetch(`${API_BASE}/api/services/GetServices`);
       const body = await res.json().catch(() => null);
       if (!res.ok) {
         console.error("Failed to fetch services", body);
@@ -148,8 +148,8 @@ function sortSlotsForDisplay(slots = []) {
         slots: Array.isArray(s.slots)
           ? convertSlotsForUI(s.slots)
           : s.slots && typeof s.slots === "object"
-          ? convertSlotsMapToArray(s.slots)
-          : [],
+            ? convertSlotsMapToArray(s.slots)
+            : [],
         // keep original raw for potential debug
         _raw: s,
       }));
@@ -437,9 +437,8 @@ function sortSlotsForDisplay(slots = []) {
   function findDuplicateInSlots(slots = []) {
     const seen = new Set();
     for (let s of slots) {
-      const key = `${s.date}|${s.hour}|${String(s.minute).padStart(2, "0")}|${
-        s.ampm
-      }`;
+      const key = `${s.date}|${s.hour}|${String(s.minute).padStart(2, "0")}|${s.ampm
+        }`;
       if (seen.has(key)) return key;
       seen.add(key);
     }
@@ -559,24 +558,24 @@ function sortSlotsForDisplay(slots = []) {
         list.map((s) =>
           s.id === id
             ? {
-                id,
-                name: editForm.name,
-                about: editForm.about,
-                instructions: instructions,
-                instructionsText: instructions.join("\n"),
-                price: Number(editForm.price) || 0,
-                available: !!editForm.available,
-                image:
-                  updatedRaw?.imageUrl ||
-                  updatedRaw?.image ||
-                  editForm.imagePreview ||
-                  s.image,
-                slots:
-                  updatedRaw?.slots && Array.isArray(updatedRaw.slots)
-                    ? convertSlotsForUI(updatedRaw.slots)
-                    : editForm.slots || s.slots,
-                _raw: updatedRaw || s._raw,
-              }
+              id,
+              name: editForm.name,
+              about: editForm.about,
+              instructions: instructions,
+              instructionsText: instructions.join("\n"),
+              price: Number(editForm.price) || 0,
+              available: !!editForm.available,
+              image:
+                updatedRaw?.imageUrl ||
+                updatedRaw?.image ||
+                editForm.imagePreview ||
+                s.image,
+              slots:
+                updatedRaw?.slots && Array.isArray(updatedRaw.slots)
+                  ? convertSlotsForUI(updatedRaw.slots)
+                  : editForm.slots || s.slots,
+              _raw: updatedRaw || s._raw,
+            }
             : s
         )
       );
@@ -620,7 +619,7 @@ function sortSlotsForDisplay(slots = []) {
     if (editForm?.imagePreview && editForm.imagePreview.startsWith("blob:")) {
       try {
         URL.revokeObjectURL(editForm.imagePreview);
-      } catch (err) {}
+      } catch (err) { }
     }
     const url = URL.createObjectURL(f);
     setEditForm((prev) => ({ ...prev, imagePreview: url, imageFile: f }));
@@ -726,33 +725,30 @@ function sortSlotsForDisplay(slots = []) {
           <div className={s.filterButtonsContainer}>
             <button
               onClick={() => setFilterMode("all")}
-              className={`${s.filterButton} ${
-                filterMode === "all"
-                  ? s.filterButtonActive
-                  : s.filterButtonInactive
-              } ${s.cursorPointer}`}
+              className={`${s.filterButton} ${filterMode === "all"
+                ? s.filterButtonActive
+                : s.filterButtonInactive
+                } ${s.cursorPointer}`}
               type="button"
             >
               All
             </button>
             <button
               onClick={() => setFilterMode("available")}
-              className={`${s.filterButton} ${
-                filterMode === "available"
-                  ? s.filterButtonActive
-                  : s.filterButtonInactive
-              } ${s.cursorPointer}`}
+              className={`${s.filterButton} ${filterMode === "available"
+                ? s.filterButtonActive
+                : s.filterButtonInactive
+                } ${s.cursorPointer}`}
               type="button"
             >
               Available
             </button>
             <button
               onClick={() => setFilterMode("unavailable")}
-              className={`${s.filterButton} ${
-                filterMode === "unavailable"
-                  ? s.filterButtonActive
-                  : s.filterButtonInactive
-              } ${s.cursorPointer}`}
+              className={`${s.filterButton} ${filterMode === "unavailable"
+                ? s.filterButtonActive
+                : s.filterButtonInactive
+                } ${s.cursorPointer}`}
               type="button"
             >
               Unavailable
@@ -809,11 +805,10 @@ function sortSlotsForDisplay(slots = []) {
                     <div className={s.servicePriceContainer}>
                       <div className={s.servicePrice}>₹{svc.price}</div>
                       <div
-                        className={`${s.availabilityBadge} ${
-                          svc.available
-                            ? s.availabilityAvailable
-                            : s.availabilityUnavailable
-                        }`}
+                        className={`${s.availabilityBadge} ${svc.available
+                          ? s.availabilityAvailable
+                          : s.availabilityUnavailable
+                          }`}
                       >
                         {svc.available ? (
                           <>
@@ -838,17 +833,15 @@ function sortSlotsForDisplay(slots = []) {
 
                 <div className={s.chevronContainer}>
                   <ChevronDown
-                    className={`${s.chevronIcon} ${
-                      isOpen ? s.chevronOpen : s.chevronClosed
-                    }`}
+                    className={`${s.chevronIcon} ${isOpen ? s.chevronOpen : s.chevronClosed
+                      }`}
                   />
                 </div>
               </div>
 
               <div
-                className={`${s.detailsContainer} ${
-                  isOpen ? s.block : s.hidden
-                }`}
+                className={`${s.detailsContainer} ${isOpen ? s.block : s.hidden
+                  }`}
               >
                 {isEditing ? (
                   <div className={s.editForm}>
@@ -1128,9 +1121,8 @@ function sortSlotsForDisplay(slots = []) {
               className={`${s.toast} ${t.animated ? s.toastAnimated : ""}`}
             >
               <div
-                className={`${s.toastInner} ${
-                  t.type === "success" ? s.toastSuccess : s.toastError
-                }`}
+                className={`${s.toastInner} ${t.type === "success" ? s.toastSuccess : s.toastError
+                  }`}
               >
                 <div className={s.toastContent}>
                   <div
@@ -1163,9 +1155,8 @@ function sortSlotsForDisplay(slots = []) {
           .map((t) => (
             <div key={t.id} className={s.toast}>
               <div
-                className={`${s.toastInner} ${
-                  t.type === "success" ? s.toastSuccess : s.toastError
-                }`}
+                className={`${s.toastInner} ${t.type === "success" ? s.toastSuccess : s.toastError
+                  }`}
               >
                 <div className={s.toastContent}>
                   <div

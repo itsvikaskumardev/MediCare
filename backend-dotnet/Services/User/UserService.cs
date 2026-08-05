@@ -16,6 +16,15 @@ namespace backend_dotnet.Services.User
 
         public async Task<UserCountResultDTO> GetRegisteredUserCountAsync()
         {
+            if (string.IsNullOrEmpty(_clerkSecretKey))
+            {
+                return new UserCountResultDTO
+                {
+                    IsSuccess = true,
+                    TotalUsers = 15 // Mock user count for local development
+                };
+            }
+
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.clerk.com/v1/users/count");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _clerkSecretKey);
 

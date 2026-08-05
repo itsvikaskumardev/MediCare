@@ -59,7 +59,7 @@ function dedupeAndSortSchedule(schedule = {}) {
 export default function EditProfilePage({ apiBase }) {
   const { id } = useParams(); // expects route like /doctor-edit/:id
   const navigate = useNavigate();
-  const API_BASE = `${import.meta.env.BACKEND_URL || "http://localhost:4000"}/api/doctors`;
+  const API_BASE = `${import.meta.env.BACKEND_URL || "http://localhost:4000"}/api/doctors/GetDoctorById`;
 
   const [doc, setDoc] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -276,71 +276,71 @@ export default function EditProfilePage({ apiBase }) {
   /* ---------- UI field configs ---------- */
   const fieldConfigs = doc
     ? [
-        {
-          icon: User,
-          label: "Name",
-          value: doc.name || "",
-          onChange: (v) => setDoc((d) => ({ ...d, name: v })),
-        },
-        {
-          icon: Briefcase,
-          label: "Specialization",
-          value: doc.specialization || "",
-          onChange: (v) => setDoc((d) => ({ ...d, specialization: v })),
-        },
-        {
-          icon: Clock,
-          label: "Experience",
-          value: doc.experience || "",
-          onChange: (v) => setDoc((d) => ({ ...d, experience: v })),
-        },
-        {
-          icon: GraduationCap,
-          label: "Qualifications",
-          value: doc.qualifications || "",
-          onChange: (v) => setDoc((d) => ({ ...d, qualifications: v })),
-        },
-        {
-          icon: MapPin,
-          label: "Location",
-          value: doc.location || "",
-          onChange: (v) => setDoc((d) => ({ ...d, location: v })),
-        },
-        // NEW: Patients
-        {
-          icon: User,
-          label: "Patients",
-          value: doc.patients ?? "",
-          onChange: (v) =>
-            setDoc((d) => ({ ...d, patients: v === "" ? "" : Number(v) || 0 })),
-        },
-        // NEW: Success (percent or count depending on your model)
-        {
-          icon: CheckCircle,
-          label: "Success",
-          value: doc.success ?? "",
-          onChange: (v) =>
-            setDoc((d) => ({ ...d, success: v === "" ? "" : Number(v) || 0 })),
-        },
-        // NEW: Rating (0.0 - 5.0)
-        {
-          icon: Star,
-          label: "Rating (out of 5)",
-          value: doc.rating ?? "",
-          onChange: (v) =>
-            setDoc((d) => ({
-              ...d,
-              rating: v === "" ? "" : parseFloat(v) || 0,
-            })),
-        },
-        {
-          icon: DollarSign,
-          label: "Fee (INR)",
-          value: doc.fee ?? "",
-          onChange: (v) =>
-            setDoc((d) => ({ ...d, fee: v === "" ? "" : Number(v) || 0 })),
-        },
-      ]
+      {
+        icon: User,
+        label: "Name",
+        value: doc.name || "",
+        onChange: (v) => setDoc((d) => ({ ...d, name: v })),
+      },
+      {
+        icon: Briefcase,
+        label: "Specialization",
+        value: doc.specialization || "",
+        onChange: (v) => setDoc((d) => ({ ...d, specialization: v })),
+      },
+      {
+        icon: Clock,
+        label: "Experience",
+        value: doc.experience || "",
+        onChange: (v) => setDoc((d) => ({ ...d, experience: v })),
+      },
+      {
+        icon: GraduationCap,
+        label: "Qualifications",
+        value: doc.qualifications || "",
+        onChange: (v) => setDoc((d) => ({ ...d, qualifications: v })),
+      },
+      {
+        icon: MapPin,
+        label: "Location",
+        value: doc.location || "",
+        onChange: (v) => setDoc((d) => ({ ...d, location: v })),
+      },
+      // NEW: Patients
+      {
+        icon: User,
+        label: "Patients",
+        value: doc.patients ?? "",
+        onChange: (v) =>
+          setDoc((d) => ({ ...d, patients: v === "" ? "" : Number(v) || 0 })),
+      },
+      // NEW: Success (percent or count depending on your model)
+      {
+        icon: CheckCircle,
+        label: "Success",
+        value: doc.success ?? "",
+        onChange: (v) =>
+          setDoc((d) => ({ ...d, success: v === "" ? "" : Number(v) || 0 })),
+      },
+      // NEW: Rating (0.0 - 5.0)
+      {
+        icon: Star,
+        label: "Rating (out of 5)",
+        value: doc.rating ?? "",
+        onChange: (v) =>
+          setDoc((d) => ({
+            ...d,
+            rating: v === "" ? "" : parseFloat(v) || 0,
+          })),
+      },
+      {
+        icon: DollarSign,
+        label: "Fee (INR)",
+        value: doc.fee ?? "",
+        onChange: (v) =>
+          setDoc((d) => ({ ...d, fee: v === "" ? "" : Number(v) || 0 })),
+      },
+    ]
     : [];
 
   /* ---------- render ---------- */
@@ -373,13 +373,12 @@ export default function EditProfilePage({ apiBase }) {
           {toasts.map((t) => (
             <div
               key={t.id}
-              className={`${styles.toastBase} ${
-                t.type === "error"
-                  ? styles.toastError
-                  : t.type === "info"
-                    ? styles.toastInfo
-                    : styles.toastSuccess
-              }`}
+              className={`${styles.toastBase} ${t.type === "error"
+                ? styles.toastError
+                : t.type === "info"
+                  ? styles.toastInfo
+                  : styles.toastSuccess
+                }`}
             >
               {t.type === "error" ? (
                 <AlertCircle
@@ -400,9 +399,15 @@ export default function EditProfilePage({ apiBase }) {
             <div className={styles.imageContainer}>
               <div className={styles.imageWrapper}>
                 <img
-                  src={imagePreview || ""}
+                  src={imagePreview || "https://ui-avatars.com/api/?name=Doctor&background=random"}
                   alt={doc.name}
                   className={styles.profileImage}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                      e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                    }
+                  }}
                 />
                 <label className={styles.imageEditButton(editing)}>
                   <input

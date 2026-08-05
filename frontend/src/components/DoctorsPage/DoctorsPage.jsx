@@ -244,13 +244,15 @@ const DoctorsPage = ({ apiBase }) => {
                     >
                       <div className={doctorsPageStyles.imageContainer}>
                         <img
-                          src={doctor.image || "/placeholder-doctor.jpg"}
+                          src={doctor.image || "https://ui-avatars.com/api/?name=Doctor&background=random"}
                           alt={doctor.name}
                           loading="lazy"
                           className={doctorsPageStyles.doctorImage}
                           onError={(e) => {
                             e.currentTarget.onerror = null;
-                            e.currentTarget.src = "/placeholder-doctor.jpg";
+                            if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                              e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                            }
                           }}
                         />
                       </div>
@@ -260,13 +262,15 @@ const DoctorsPage = ({ apiBase }) => {
                       className={`${doctorsPageStyles.imageContainer} ${doctorsPageStyles.imageContainerUnavailable}`}
                     >
                       <img
-                        src={doctor.image || "/placeholder-doctor.jpg"}
+                        src={doctor.image || "https://ui-avatars.com/api/?name=Doctor&background=random"}
                         alt={doctor.name}
                         loading="lazy"
                         className={doctorsPageStyles.doctorImageUnavailable}
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/placeholder-doctor.jpg";
+                          if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                            e.currentTarget.src = "https://ui-avatars.com/api/?name=Doctor&background=random";
+                          }
                         }}
                       />
                     </div>

@@ -15,7 +15,7 @@ import { dashboardStyles as s } from "../../assets/dummyStyles";
 ------------------------ */
 const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
 // Endpoint that returns JSON { count: <number> }
-const PATIENT_COUNT_API = `${API_BASE}/api/appointments/paitents/count`;
+const PATIENT_COUNT_API = `${API_BASE}/api/user/GetRegisteredUserCount`;
 
 /* ----------------------
   Helpers
@@ -109,7 +109,7 @@ export default function DashboardPage() {
       setLoading(true);
       setError(null);
       try {
-        const url = `${API_BASE}/api/doctors?limit=200`;
+        const url = `${API_BASE}/api/doctors/GetDoctors?limit=200`;
         const res = await fetch(url);
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
@@ -348,7 +348,7 @@ export default function DashboardPage() {
                 {visibleDoctors.map((d, idx) => (
                   <tr
                     key={d.id}
-                    className={s.tableRow + " " + 
+                    className={s.tableRow + " " +
                       (idx % 2 === 0 ? s.tableRowEven : s.tableRowOdd)}
                   >
                     <td className={s.tableCell + " " + s.tableCellFlex}>

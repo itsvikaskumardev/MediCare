@@ -88,7 +88,6 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
   function buildFetchOptions() {
     const opts = {
       method: "GET",
-      credentials: "include", // IMPORTANT: include cookies for authenticated APIs
       headers: {
         "Content-Type": "application/json",
       },
@@ -108,7 +107,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
         setError(null);
       }
 
-      const url = `${API_BASE}/api/service-appointments/stats/summary`;
+      const url = `${API_BASE}/api/service-appointments/GetServiceAppointmentStats`;
       const res = await fetch(url, buildFetchOptions());
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -190,7 +189,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
       }
     }
 
-    startPolling();
+    // startPolling(); // DISABLED: user requested to stop continuous interval polling
 
     // refresh on focus
     function onFocus() {
