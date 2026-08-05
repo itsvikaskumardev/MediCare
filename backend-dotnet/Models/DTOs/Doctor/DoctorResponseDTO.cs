@@ -29,11 +29,11 @@ namespace backend_dotnet.Models.DTOs.Doctor
         public DoctorResponseDTO(backend_dotnet.Models.Domain.Doctor doctor)
         {
             Id = doctor.Id;
-            Email = doctor.Email;
-            Name = doctor.Name;
+            Email = doctor.User?.Email ?? string.Empty;
+            Name = doctor.User?.Name ?? string.Empty;
             Specialization = doctor.Specialization;
-            ImageUrl = doctor.ImageUrl;
-            ImagePublicId = doctor.ImagePublicId;
+            ImageUrl = doctor.User?.ImageUrl;
+            ImagePublicId = null;
             Availability = doctor.Availability;
             Experience = doctor.Experience;
             Qualifications = doctor.Qualifications;
@@ -44,8 +44,8 @@ namespace backend_dotnet.Models.DTOs.Doctor
             Success = doctor.Success;
             Patients = doctor.Patients;
             Rating = doctor.Rating;
-            CreatedAt = doctor.CreatedAt;
-            UpdatedAt = doctor.UpdatedAt;
+            CreatedAt = doctor.User?.CreatedAt ?? DateTime.UtcNow;
+            UpdatedAt = doctor.User?.UpdatedAt ?? DateTime.UtcNow;
         }
     }
 }

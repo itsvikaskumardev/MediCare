@@ -44,8 +44,12 @@ namespace backend_dotnet.Data
             // ---- Doctor ----
             modelBuilder.Entity<Doctor>(entity =>
             {
-                entity.HasIndex(d => d.Email).IsUnique();
                 entity.Property(d => d.Availability).HasConversion<string>();
+
+                entity.HasOne(d => d.User)
+                      .WithOne(u => u.DoctorProfile)
+                      .HasForeignKey<Doctor>(d => d.Id)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             // ---- Appointment ----

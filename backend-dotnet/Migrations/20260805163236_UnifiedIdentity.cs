@@ -1,44 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace backend_dotnet.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UnifiedIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Doctors",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Specialization = table.Column<string>(type: "text", nullable: true),
-                    ImageUrl = table.Column<string>(type: "text", nullable: true),
-                    ImagePublicId = table.Column<string>(type: "text", nullable: true),
-                    Experience = table.Column<string>(type: "text", nullable: true),
-                    Qualifications = table.Column<string>(type: "text", nullable: true),
-                    Location = table.Column<string>(type: "text", nullable: true),
-                    About = table.Column<string>(type: "text", nullable: true),
-                    Fee = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    Availability = table.Column<string>(type: "text", nullable: false),
-                    Schedule = table.Column<string>(type: "jsonb", nullable: true),
-                    Success = table.Column<string>(type: "text", nullable: true),
-                    Patients = table.Column<string>(type: "text", nullable: true),
-                    Rating = table.Column<decimal>(type: "numeric(3,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doctors", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Services",
                 columns: table => new
@@ -79,6 +51,7 @@ namespace backend_dotnet.Migrations
                     Gender = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     Role = table.Column<string>(type: "text", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
+                    ImagePublicId = table.Column<string>(type: "text", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -89,53 +62,31 @@ namespace backend_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
+                name: "Doctors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Owner = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    PatientName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    Mobile = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Age = table.Column<int>(type: "integer", nullable: true),
-                    Gender = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
-                    DoctorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DoctorName = table.Column<string>(type: "text", nullable: true),
-                    Speciality = table.Column<string>(type: "text", nullable: true),
-                    DoctorImageUrl = table.Column<string>(type: "text", nullable: true),
-                    DoctorImagePubId = table.Column<string>(type: "text", nullable: true),
-                    Date = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Time = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    Fees = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    RescheduledDate = table.Column<string>(type: "text", nullable: true),
-                    RescheduledTime = table.Column<string>(type: "text", nullable: true),
-                    PaymentMethod = table.Column<string>(type: "text", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "text", nullable: false),
-                    PaymentAmount = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    PaymentProviderId = table.Column<string>(type: "text", nullable: true),
-                    PaymentMeta = table.Column<string>(type: "jsonb", nullable: true),
-                    SessionId = table.Column<string>(type: "text", nullable: true),
-                    PaidAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Specialization = table.Column<string>(type: "text", nullable: true),
+                    Experience = table.Column<string>(type: "text", nullable: true),
+                    Qualifications = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    About = table.Column<string>(type: "text", nullable: true),
+                    Fee = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    Availability = table.Column<string>(type: "text", nullable: false),
+                    Schedule = table.Column<string>(type: "jsonb", nullable: true),
+                    Success = table.Column<string>(type: "text", nullable: true),
+                    Patients = table.Column<string>(type: "text", nullable: true),
+                    Rating = table.Column<decimal>(type: "numeric(3,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.PrimaryKey("PK_Doctors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointments_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Doctors_Users_Id",
+                        column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,6 +166,56 @@ namespace backend_dotnet.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Owner = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    CreatedBy = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    PatientName = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Mobile = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Age = table.Column<int>(type: "integer", nullable: true),
+                    Gender = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    DoctorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DoctorName = table.Column<string>(type: "text", nullable: true),
+                    Speciality = table.Column<string>(type: "text", nullable: true),
+                    DoctorImageUrl = table.Column<string>(type: "text", nullable: true),
+                    DoctorImagePubId = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    Time = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    Fees = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    RescheduledDate = table.Column<string>(type: "text", nullable: true),
+                    RescheduledTime = table.Column<string>(type: "text", nullable: true),
+                    PaymentMethod = table.Column<string>(type: "text", nullable: false),
+                    PaymentStatus = table.Column<string>(type: "text", nullable: false),
+                    PaymentAmount = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    PaymentProviderId = table.Column<string>(type: "text", nullable: true),
+                    PaymentMeta = table.Column<string>(type: "jsonb", nullable: true),
+                    SessionId = table.Column<string>(type: "text", nullable: true),
+                    PaidAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_DoctorId",
                 table: "Appointments",
@@ -234,12 +235,6 @@ namespace backend_dotnet.Migrations
                 name: "IX_Appointments_UserId",
                 table: "Appointments",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Doctors_Email",
-                table: "Doctors",
-                column: "Email",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServiceAppointments_Date_Status",

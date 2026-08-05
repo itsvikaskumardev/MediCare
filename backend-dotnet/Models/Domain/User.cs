@@ -34,6 +34,8 @@ namespace backend_dotnet.Models.Domain
 
         public string? ImageUrl { get; set; }
 
+        public string? ImagePublicId { get; set; }
+
         public bool IsActive { get; set; } = true;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -44,5 +46,6 @@ namespace backend_dotnet.Models.Domain
         public ICollection<UserSession> Sessions { get; set; } = new List<UserSession>();
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();
+        public Doctor? DoctorProfile { get; set; }
     }
 }

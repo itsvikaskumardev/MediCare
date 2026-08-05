@@ -5,7 +5,6 @@ namespace backend_dotnet.Services.Doctor
     public interface IDoctorService
     {
         Task<DoctorAuthResultDTO> CreateDoctorAsync(CreateDoctorRequestDTO request, IFormFile? image);
-        Task<DoctorAuthResultDTO> LoginDoctorAsync(DoctorLoginRequestDTO request);
         Task<DoctorListResultDTO> GetDoctorsAsync(GetDoctorsRequestDTO request);
         Task<DoctorSingleResultDTO> GetDoctorByIdAsync(string id);
         Task<DoctorUpdateResultDTO> UpdateDoctorAsync(string id, UpdateDoctorRequestDTO request, IFormFile? image);

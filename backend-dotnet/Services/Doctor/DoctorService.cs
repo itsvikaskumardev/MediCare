@@ -51,12 +51,12 @@ namespace backend_dotnet.Services.Doctor
 
             var emailLc = createDoctorRequestDTO.Email.Trim().ToLowerInvariant();
 
-            if (await _db.Doctors.AnyAsync(d => d.Email.ToLower() == emailLc))
+            if (await _db.Users.AnyAsync(u => u.Email.ToLower() == emailLc))
             {
                 return new DoctorAuthResultDTO
                 {
                     IsSuccess = false,
-                    ErrorMessage = "A doctor with this email already exists"
+                    ErrorMessage = "A user with this email already exists"
                 };
             }
 
@@ -78,14 +78,26 @@ namespace backend_dotnet.Services.Doctor
 
             var passwordHash = _passwordHasher.HashPassword(createDoctorRequestDTO.Password);
 
-            var doctor = new backend_dotnet.Models.Domain.Doctor
+            // 1. Create the User identity
+            var user = new backend_dotnet.Models.Domain.User
             {
                 Email = emailLc,
-                Password = passwordHash,
+                PasswordHash = passwordHash,
                 Name = createDoctorRequestDTO.Name,
-                Specialization = createDoctorRequestDTO.Specialization ?? "",
                 ImageUrl = imageUrl,
                 ImagePublicId = imagePublicId,
+                Role = Role.DOCTOR,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            
+            _db.Users.Add(user);
+
+            // 2. Create the Doctor profile linked to the User
+            var doctor = new backend_dotnet.Models.Domain.Doctor
+            {
+                Id = user.Id, // Same ID as user
+                Specialization = createDoctorRequestDTO.Specialization ?? "",
                 Availability = availability,
                 Experience = createDoctorRequestDTO.Experience ?? "",
                 Qualifications = createDoctorRequestDTO.Qualifications ?? "",
@@ -96,61 +108,13 @@ namespace backend_dotnet.Services.Doctor
                 Success = createDoctorRequestDTO.Success ?? "",
                 Patients = createDoctorRequestDTO.Patients ?? "",
                 Rating = createDoctorRequestDTO.Rating ?? 0,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                User = user
             };
 
             _db.Doctors.Add(doctor);
             await _db.SaveChangesAsync();
 
-            var token = _jwtTokenGenerator.GenerateToken(doctor.Id.ToString(), doctor.Email, doctor.Name, "DOCTOR");
-            var doctorResponse = new DoctorResponseDTO(doctor);
-
-            return new DoctorAuthResultDTO
-            {
-                IsSuccess = true,
-                Token = token,
-                Data = new
-                {
-                    _id = doctorResponse.Id,
-                    id = doctorResponse.Id,
-                    email = doctorResponse.Email,
-                    name = doctorResponse.Name,
-                    specialization = doctorResponse.Specialization,
-                    imageUrl = doctorResponse.ImageUrl,
-                    availability = doctorResponse.Availability,
-                    fee = doctorResponse.Fee
-                }
-            };
-        }
-
-        //-------------------------------------------LoginDoctor-----------------------------------------------------
-
-        public async Task<DoctorAuthResultDTO> LoginDoctorAsync(DoctorLoginRequestDTO request)
-        {
-            if (string.IsNullOrWhiteSpace(request.Email) ||
-                string.IsNullOrWhiteSpace(request.Password))
-            {
-                return new DoctorAuthResultDTO
-                {
-                    IsSuccess = false,
-                    ErrorMessage = "Email and Password are required"
-                };
-            }
-
-            var doctor = await _db.Doctors
-                .FirstOrDefaultAsync(d => d.Email.ToLower() == request.Email.Trim().ToLower());
-
-            if (doctor == null || !_passwordHasher.VerifyPassword(request.Password, doctor.Password))
-            {
-                return new DoctorAuthResultDTO
-                {
-                    IsSuccess = false,
-                    ErrorMessage = "Invalid Email or Password"
-                };
-            }
-
-            var token = _jwtTokenGenerator.GenerateToken(doctor.Id.ToString(), doctor.Email, doctor.Name, "DOCTOR");
+            var token = _jwtTokenGenerator.GenerateToken(user.Id.ToString(), user.Email, user.Name, "DOCTOR");
             var doctorResponse = new DoctorResponseDTO(doctor);
 
             return new DoctorAuthResultDTO
@@ -182,30 +146,31 @@ namespace backend_dotnet.Services.Doctor
                 var page = Math.Max(1, getDoctorsRequestDTO.Page ?? 1);
                 var skip = (page - 1) * limit;
 
-                var query = _db.Doctors.AsQueryable();
+                var query = _db.Doctors.Include(d => d.User).AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(getDoctorsRequestDTO.Q))
                 {
                     var q = getDoctorsRequestDTO.Q.Trim();
                     query = query.Where(d =>
-                        EF.Functions.ILike(d.Name, $"%{q}%") ||
+                        EF.Functions.ILike(d.User.Name, $"%{q}%") ||
                         (d.Specialization != null && EF.Functions.ILike(d.Specialization, $"%{q}%")) ||
-                        EF.Functions.ILike(d.Email, $"%{q}%"));
+                        EF.Functions.ILike(d.User.Email, $"%{q}%"));
                 }
 
                 var total = await query.CountAsync();
 
                 var docs = await query
-                    .OrderBy(d => d.Name)
+                    .OrderBy(d => d.User.Name)
                     .Skip(skip)
                     .Take(limit)
                     .Select(d => new
                     {
                         d.Id,
-                        d.Name,
+                        Name = d.User.Name,
+                        Email = d.User.Email,
                         d.Specialization,
                         d.Fee,
-                        d.ImageUrl,
+                        ImageUrl = d.User.ImageUrl,
                         d.Availability,
                         d.Schedule,
                         d.Patients,
@@ -277,6 +242,7 @@ namespace backend_dotnet.Services.Doctor
                 }
 
                 var doctor = await _db.Doctors
+                    .Include(d => d.User)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(d => d.Id == doctorId);
 
@@ -310,22 +276,22 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var existing = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
                 if (existing is null)
                 {
                     return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                // Image handling
+                // Image handling on User
                 if (image is not null && image.Length > 0)
                 {
                     var uploaded = await _imageUploadService.UploadImageAsync(image, "medicare");
                     if (!string.IsNullOrEmpty(uploaded))
                     {
-                        var previousPublicId = existing.ImagePublicId;
-                        existing.ImageUrl = uploaded;
+                        var previousPublicId = existing.User.ImagePublicId;
+                        existing.User.ImageUrl = uploaded;
 
-                        if (!string.IsNullOrEmpty(previousPublicId) && previousPublicId != existing.ImagePublicId)
+                        if (!string.IsNullOrEmpty(previousPublicId) && previousPublicId != existing.User.ImagePublicId)
                         {
                             _ = _imageUploadService.DeleteImageAsync(previousPublicId)
                                 .ContinueWith(t =>
@@ -338,7 +304,7 @@ namespace backend_dotnet.Services.Doctor
                 }
                 else if (!string.IsNullOrWhiteSpace(updateDoctorRequestDTO.ImageUrl))
                 {
-                    existing.ImageUrl = updateDoctorRequestDTO.ImageUrl;
+                    existing.User.ImageUrl = updateDoctorRequestDTO.ImageUrl;
                 }
 
                 // Schedule
@@ -347,8 +313,8 @@ namespace backend_dotnet.Services.Doctor
                     existing.Schedule = updateDoctorRequestDTO.Schedule;
                 }
 
-                // Simple updatable fields
-                if (updateDoctorRequestDTO.Name is not null) existing.Name = updateDoctorRequestDTO.Name;
+                // Updatable fields
+                if (updateDoctorRequestDTO.Name is not null) existing.User.Name = updateDoctorRequestDTO.Name;
                 if (updateDoctorRequestDTO.Specialization is not null) existing.Specialization = updateDoctorRequestDTO.Specialization;
                 if (updateDoctorRequestDTO.Experience is not null) existing.Experience = updateDoctorRequestDTO.Experience;
                 if (updateDoctorRequestDTO.Qualifications is not null) existing.Qualifications = updateDoctorRequestDTO.Qualifications;
@@ -369,24 +335,24 @@ namespace backend_dotnet.Services.Doctor
                 if (!string.IsNullOrWhiteSpace(updateDoctorRequestDTO.Email))
                 {
                     var emailLc = updateDoctorRequestDTO.Email.Trim().ToLowerInvariant();
-                    if (emailLc != existing.Email)
+                    if (emailLc != existing.User.Email)
                     {
-                        var other = await _db.Doctors.FirstOrDefaultAsync(d => d.Email.ToLower() == emailLc);
-                        if (other is not null && other.Id != doctorId)
+                        var other = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == emailLc);
+                        if (other is not null && other.Id != existing.User.Id)
                         {
                             return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Email already in use" };
                         }
-                        existing.Email = emailLc;
+                        existing.User.Email = emailLc;
                     }
                 }
 
                 // Password
                 if (!string.IsNullOrWhiteSpace(updateDoctorRequestDTO.Password))
                 {
-                    existing.Password = _passwordHasher.HashPassword(updateDoctorRequestDTO.Password);
+                    existing.User.PasswordHash = _passwordHasher.HashPassword(updateDoctorRequestDTO.Password);
                 }
 
-                existing.UpdatedAt = DateTime.UtcNow;
+                existing.User.UpdatedAt = DateTime.UtcNow;
 
                 await _db.SaveChangesAsync();
 
@@ -415,17 +381,17 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var existing = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
                 if (existing is null)
                 {
                     return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                if (!string.IsNullOrEmpty(existing.ImagePublicId))
+                if (!string.IsNullOrEmpty(existing.User.ImagePublicId))
                 {
                     try
                     {
-                        await _imageUploadService.DeleteImageAsync(existing.ImagePublicId);
+                        await _imageUploadService.DeleteImageAsync(existing.User.ImagePublicId);
                     }
                     catch (Exception e)
                     {
@@ -433,7 +399,7 @@ namespace backend_dotnet.Services.Doctor
                     }
                 }
 
-                _db.Doctors.Remove(existing);
+                _db.Users.Remove(existing.User); // Deleting the user will cascade delete the doctor
                 await _db.SaveChangesAsync();
 
                 return new DoctorDeleteResultDTO { IsSuccess = true };
@@ -455,7 +421,7 @@ namespace backend_dotnet.Services.Doctor
                     return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
                 }
 
-                var doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
                 if (doctor is null)
                 {
                     return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
@@ -465,7 +431,7 @@ namespace backend_dotnet.Services.Doctor
                     ? Availability.Unavailable
                     : Availability.Available;
 
-                doctor.UpdatedAt = DateTime.UtcNow;
+                doctor.User.UpdatedAt = DateTime.UtcNow;
 
                 await _db.SaveChangesAsync();
 
@@ -483,68 +449,5 @@ namespace backend_dotnet.Services.Doctor
                 return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Server error" };
             }
         }
-
-        //-------------------------------------------ToggleAvailability-----------------------------------------------------
-
-
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*
- --------------------------------------------------------------------------------------------------------------------
-
-`AnyAsync()` and `FirstOrDefaultAsync()` are both asynchronous, but they are used for different purposes.
-
----------------------------------
-In your code:await _db.Doctors.AnyAsync(d => d.Email.ToLower() == emailLc
-
-AnyAsync(): You only want to know **whether a doctor with that email exists**.
-
-`AnyAsync()` returns a `bool`:
-
-* `true` → a matching record exists.
-* `false` → no matching record exists.
-* * ✅ Less data transferred.
-* ✅ Expresses your intent clearly: "Does a record exist?"
-
-It does **not** retrieve the full doctor object, making it more efficient.
-
----------------------------------
-
-
-FirstOrDefaultAsync():
-
-var doctor = await _db.Doctors
-    .FirstOrDefaultAsync(d => d.Email.ToLower() == emailLc);
-
-if (doctor != null){    // Email already exists}
-
-This also works, but it fetches the entire `Doctor` entity from the database, even though you only need to know if it exists.
-
-* Retrieves the first matching `Doctor` entity.
-* Uses more memory and transfers more data than necessary.
-* Better when you actually need to use the doctor's properties.
-
-
- 
- --------------------------------------------------------------------------------------------------------------------
- 
- 
- 
- 
- 
- 
- 
- 
- 
- */

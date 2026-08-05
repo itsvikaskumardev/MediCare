@@ -66,15 +66,16 @@ namespace backend_dotnet.Services.Appointment
                 .Skip(skip)
                 .Take(limit)
                 .Include(a => a.Doctor)
+                .ThenInclude(d => d.User)
                 .Select(a => new
                 {
                     a.Id,
                     a.DoctorId,
                     Doctor = a.Doctor == null ? null : new
                     {
-                        a.Doctor.Name,
+                        a.Doctor.User.Name,
                         a.Doctor.Specialization,
-                        a.Doctor.ImageUrl
+                        a.Doctor.User.ImageUrl
                     },
                     a.Mobile,
                     a.Status,
@@ -105,6 +106,7 @@ namespace backend_dotnet.Services.Appointment
             var appt = await _db.Appointments
                 .AsNoTracking()
                 .Include(a => a.Doctor)
+                .ThenInclude(d => d.User)
                 .Where(a => a.Id == id)
                 .Select(a => new
                 {
@@ -112,9 +114,9 @@ namespace backend_dotnet.Services.Appointment
                     a.DoctorId,
                     Doctor = a.Doctor == null ? null : new
                     {
-                        a.Doctor.Name,
+                        a.Doctor.User.Name,
                         a.Doctor.Specialization,
-                        a.Doctor.ImageUrl
+                        a.Doctor.User.ImageUrl
                     },
                     a.Mobile,
                     a.Status,
@@ -170,7 +172,7 @@ namespace backend_dotnet.Services.Appointment
                 };
             }
 
-            var appointmentsQuery = _db.Appointments.AsNoTracking().Include(a => a.Doctor).AsQueryable();
+            var appointmentsQuery = _db.Appointments.AsNoTracking().Include(a => a.Doctor).ThenInclude(d => d.User).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(resolvedCreatedBy))
                 appointmentsQuery = appointmentsQuery.Where(a => a.CreatedBy == resolvedCreatedBy);
@@ -265,7 +267,7 @@ namespace backend_dotnet.Services.Appointment
             backend_dotnet.Models.Domain.Doctor? doctor = null;
             try
             {
-                doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == doctorId);
+                doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId);
             }
             catch (Exception e)
             {
@@ -287,21 +289,19 @@ namespace backend_dotnet.Services.Appointment
                 ? request.Owner
                 : (_majorAdminId ?? request.DoctorId);
 
-            var doctorName = !string.IsNullOrWhiteSpace(doctor.Name)
-                ? doctor.Name.Trim()
+            var doctorName = !string.IsNullOrWhiteSpace(doctor.User?.Name)
+                ? doctor.User.Name.Trim()
                 : (request.DoctorName?.Trim() ?? "");
 
             var speciality = !string.IsNullOrWhiteSpace(doctor.Specialization)
                 ? doctor.Specialization.Trim()
                 : (request.Speciality?.Trim() ?? "");
 
-            var doctorImageUrl = !string.IsNullOrWhiteSpace(doctor.ImageUrl)
-                ? doctor.ImageUrl.Trim()
+            var doctorImageUrl = !string.IsNullOrWhiteSpace(doctor.User?.ImageUrl)
+                ? doctor.User.ImageUrl.Trim()
                 : (request.DoctorImageUrl?.Trim() ?? "");
 
-            var doctorImagePublicId = !string.IsNullOrWhiteSpace(doctor.ImagePublicId)
-                ? doctor.ImagePublicId.Trim()
-                : (request.DoctorImagePublicId?.Trim() ?? "");
+            var doctorImagePublicId = (request.DoctorImagePublicId?.Trim() ?? "");
 
             var appointment = new backend_dotnet.Models.Domain.Appointment
             {
@@ -545,7 +545,7 @@ namespace backend_dotnet.Services.Appointment
 
             await _db.SaveChangesAsync();
 
-            var doctor = await _db.Doctors.FirstOrDefaultAsync(d => d.Id == appt.DoctorId);
+            var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == appt.DoctorId);
 
             var updatedProjection = new
             {
@@ -553,8 +553,8 @@ namespace backend_dotnet.Services.Appointment
                 appt.DoctorId,
                 Doctor = doctor == null ? null : new
                 {
-                    doctor.Name,
-                    doctor.ImageUrl
+                    doctor.User?.Name,
+                    doctor.User?.ImageUrl
                 },
                 appt.PatientName,
                 appt.Mobile,
@@ -671,7 +671,7 @@ namespace backend_dotnet.Services.Appointment
                 .ToListAsync();
 
             // manual "populate" of doctor summary fields (see FK note below)
-            var doctor = await _db.Doctors.AsNoTracking().FirstOrDefaultAsync(d => d.Id == docGuid);
+            var doctor = await _db.Doctors.Include(d => d.User).AsNoTracking().FirstOrDefaultAsync(d => d.Id == docGuid);
 
             var projected = items.Select(a => (object)new
             {
@@ -679,9 +679,9 @@ namespace backend_dotnet.Services.Appointment
                 a.DoctorId,
                 Doctor = doctor == null ? null : new
                 {
-                    doctor.Name,
+                    doctor.User?.Name,
                     doctor.Specialization,
-                    doctor.ImageUrl
+                    doctor.User?.ImageUrl
                 },
                 a.Mobile,
                 a.Status,

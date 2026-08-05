@@ -6,24 +6,12 @@ namespace backend_dotnet.Models.Domain
     public class Doctor
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
 
-        [Required]
-        [MaxLength(255)]
-        public string Email { get; set; } = string.Empty;
-
-        [Required]
-        public string Password { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(255)]
-        public string Name { get; set; } = string.Empty;
+        [ForeignKey(nameof(Id))]
+        public User User { get; set; } = null!;
 
         public string? Specialization { get; set; }
-
-        public string? ImageUrl { get; set; }
-
-        public string? ImagePublicId { get; set; }
 
         public string? Experience { get; set; }
 
@@ -48,10 +36,6 @@ namespace backend_dotnet.Models.Domain
 
         [Column(TypeName = "decimal(3,2)")]
         public decimal Rating { get; set; } = 0;
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();

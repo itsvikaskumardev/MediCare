@@ -20,12 +20,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                  .Produces<ApiResponse>(StatusCodes.Status409Conflict)
                  .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
-            doctorGroup.MapPost("/login", LoginDoctor)
-                 .WithName("LoginDoctor")
-                 .Produces<ApiResponse>(StatusCodes.Status200OK)
-                 .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
-                 .Produces<ApiResponse>(StatusCodes.Status401Unauthorized)
-                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
 
             doctorGroup.MapGet("/GetDoctors", GetDoctors)
                 .WithName("GetDoctors")
@@ -107,35 +102,6 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         }
 
 
-        //-------------------------------------------LoginDoctor-----------------------------------------------------
-
-        private static async Task<IResult> LoginDoctor(
-            DoctorLoginRequestDTO request,
-            IDoctorService doctorService)
-        {
-            var result = await doctorService.LoginDoctorAsync(request);
-
-            if (!result.IsSuccess)
-            {
-                return Results.BadRequest(new ApiResponse
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.BadRequest,
-                    ErrorMessages = [result.ErrorMessage ?? "Login failed"]
-                });
-            }
-
-            return Results.Ok(new ApiResponse
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Result = new
-                {
-                    token = result.Token,
-                    data = result.Data
-                }
-            });
-        }
 
         //-------------------------------------------GetDoctors-----------------------------------------------------
 

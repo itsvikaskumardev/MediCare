@@ -22,7 +22,7 @@ namespace backend_dotnet.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("backend_dotnet.Models.Appointment", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,10 +137,9 @@ namespace backend_dotnet.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.Doctor", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("About")
@@ -150,36 +149,13 @@ namespace backend_dotnet.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
                     b.Property<string>("Experience")
                         .HasColumnType("text");
 
                     b.Property<decimal>("Fee")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<string>("ImagePublicId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
-
                     b.Property<string>("Location")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Patients")
@@ -200,18 +176,12 @@ namespace backend_dotnet.Migrations
                     b.Property<string>("Success")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.Service", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Service", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -271,7 +241,7 @@ namespace backend_dotnet.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.ServiceAppointment", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.ServiceAppointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -392,7 +362,7 @@ namespace backend_dotnet.Migrations
                     b.ToTable("ServiceAppointments");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.User", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -416,6 +386,9 @@ namespace backend_dotnet.Migrations
                     b.Property<string>("Gender")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<string>("ImagePublicId")
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
@@ -453,7 +426,7 @@ namespace backend_dotnet.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.UserSession", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.UserSession", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -496,15 +469,15 @@ namespace backend_dotnet.Migrations
                     b.ToTable("UserSessions");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.Appointment", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Appointment", b =>
                 {
-                    b.HasOne("backend_dotnet.Models.Doctor", "Doctor")
+                    b.HasOne("backend_dotnet.Models.Domain.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("backend_dotnet.Models.User", "User")
+                    b.HasOne("backend_dotnet.Models.Domain.User", "User")
                         .WithMany("Appointments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -514,15 +487,26 @@ namespace backend_dotnet.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.ServiceAppointment", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Doctor", b =>
                 {
-                    b.HasOne("backend_dotnet.Models.Service", "Service")
+                    b.HasOne("backend_dotnet.Models.Domain.User", "User")
+                        .WithOne("DoctorProfile")
+                        .HasForeignKey("backend_dotnet.Models.Domain.Doctor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.Domain.ServiceAppointment", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.Domain.Service", "Service")
                         .WithMany("ServiceAppointments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("backend_dotnet.Models.User", "User")
+                    b.HasOne("backend_dotnet.Models.Domain.User", "User")
                         .WithMany("ServiceAppointments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -532,9 +516,9 @@ namespace backend_dotnet.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.UserSession", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.UserSession", b =>
                 {
-                    b.HasOne("backend_dotnet.Models.User", "User")
+                    b.HasOne("backend_dotnet.Models.Domain.User", "User")
                         .WithMany("Sessions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -543,19 +527,21 @@ namespace backend_dotnet.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.Doctor", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Doctor", b =>
                 {
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.Service", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.Service", b =>
                 {
                     b.Navigation("ServiceAppointments");
                 });
 
-            modelBuilder.Entity("backend_dotnet.Models.User", b =>
+            modelBuilder.Entity("backend_dotnet.Models.Domain.User", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("DoctorProfile");
 
                     b.Navigation("ServiceAppointments");
 
