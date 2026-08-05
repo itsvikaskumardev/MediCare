@@ -4,11 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 import logo from "../../assets/logo.png";
 import { ArrowLeft } from "lucide-react";
 import { loginPageStyles, toastStyles } from "../../assets/dummyStyles";
-
-const STORAGE_KEY = "doctorToken_v1";
+import { useAuth } from "../../context/AuthContext";
 
 export default function LoginPage({ apiBase }) {
-  const API_BASE = apiBase || import.meta.env.BACKEND_URL || "http://localhost:4000";
+  const { login } = useAuth();
+  const API_BASE = apiBase || import.meta.env.BACKEND_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
@@ -46,14 +46,7 @@ export default function LoginPage({ apiBase }) {
         return;
       }
 
-      /* ================= IMPORTANT PART ================= */
-
-      // token (supports root, data, and Minimal API result envelope)
-      const token =
-        json?.token ||
-        json?.data?.token ||
-        json?.result?.token ||
-        json?.result?.data?.token;
+      const token = json?.result?.token || json?.token;
 
       if (!token) {
         toast.error("Authentication token missing");
@@ -61,30 +54,21 @@ export default function LoginPage({ apiBase }) {
         return;
       }
 
-      // doctor id (supports root, data, doctor, and Minimal API result envelope)
-      const doctorId =
-        json?.data?._id ||
-        json?.data?.id ||
-        json?.doctor?._id ||
-        json?.doctor?.id ||
-        json?.data?.doctor?._id ||
-        json?.data?.doctor?.id ||
-        json?.result?.data?._id ||
-        json?.result?.data?.id ||
-        json?.result?._id ||
-        json?.result?.id;
+      // decode token to find ID for routing
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(atob(base64).split("").map(function (c) { return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2); }).join(""));
+      const decoded = JSON.parse(jsonPayload);
+      
+      const doctorId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || decoded.nameid || decoded.id || decoded.sub;
 
       if (!doctorId) {
-        toast.error("Doctor ID missing from server response");
+        toast.error("Doctor ID missing from token");
         setBusy(false);
         return;
       }
 
-      // store token
-      localStorage.setItem(STORAGE_KEY, token);
-      window.dispatchEvent(
-        new StorageEvent("storage", { key: STORAGE_KEY, newValue: token }),
-      );
+      login(token);
 
       toast.success("Login successful — redirecting...", {
         style: toastStyles.successToast,

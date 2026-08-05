@@ -113,7 +113,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IServiceModuleService, ServiceModuleService>();
 builder.Services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
-builder.Services.AddHttpClient<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 

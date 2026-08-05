@@ -5,38 +5,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Menu, X, User as UserIcon, Key, LogOut } from "lucide-react";
 import PatientLoginModal from "../PatientLoginModal/PatientLoginModal";
-
-// Clerk
-import { SignedIn, SignedOut, useClerk, UserButton } from "@clerk/clerk-react";
+import { useAuth } from "../../context/AuthContext";
 import { navbarStyles } from "../../assets/dummyStyles";
-
-const STORAGE_KEY = "doctorToken_v1";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isDoctorLoggedIn, setIsDoctorLoggedIn] = useState(() => {
-    try {
-      return Boolean(localStorage.getItem(STORAGE_KEY));
-    } catch {
-      return false;
-    }
-  });
-
-  const [patientUser, setPatientUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem("patientUser_v1");
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
   const [isPatientModalOpen, setIsPatientModalOpen] = useState(false);
+
+  const { user, logout } = useAuth();
 
   const location = useLocation();
   const navRef = useRef(null);
-  const clerk = useClerk();
   const navigate = useNavigate();
 
   /* Hide / show navbar on scroll */
@@ -53,33 +34,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
-
-  /* Sync doctor and patient login state */
-  useEffect(() => {
-    const syncAuth = () => {
-      try {
-        const saved = localStorage.getItem("patientUser_v1");
-        setPatientUser(saved ? JSON.parse(saved) : null);
-        setIsDoctorLoggedIn(Boolean(localStorage.getItem(STORAGE_KEY)));
-      } catch {
-        setPatientUser(null);
-        setIsDoctorLoggedIn(false);
-      }
-    };
-    window.addEventListener("patientAuthChange", syncAuth);
-    window.addEventListener("storage", syncAuth);
-    return () => {
-      window.removeEventListener("patientAuthChange", syncAuth);
-      window.removeEventListener("storage", syncAuth);
-    };
-  }, []);
-
-  const handlePatientSignOut = () => {
-    localStorage.removeItem("patientToken_v1");
-    localStorage.removeItem("patientUser_v1");
-    setPatientUser(null);
-    window.dispatchEvent(new Event("patientAuthChange"));
-  };
 
   /* Close mobile menu on outside click */
   useEffect(() => {
@@ -99,12 +53,6 @@ export default function Navbar() {
     { label: "Appointments", href: "/appointments" },
     { label: "Contact", href: "/contact" },
   ];
-
-  function doctorLogout() {
-    localStorage.removeItem(STORAGE_KEY);
-    setIsDoctorLoggedIn(false);
-    navigate("/");
-  }
 
   return (
     <>
@@ -166,17 +114,17 @@ export default function Navbar() {
               {/* ================= PATIENT LOGGED OUT ================= */}
               {/* Doctor Admin */}
               <Link
-                to="/doctor-admin/login"
+                to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
                 className={navbarStyles.doctorAdminButton}
               >
                 <UserIcon className={navbarStyles.doctorAdminIcon} />
                 <span className={navbarStyles.doctorAdminText}>
-                  Doctor Admin
+                  {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
                 </span>
               </Link>
 
               {/* Patient Login or Profile */}
-              {!patientUser ? (
+              {!user ? (
                 <button
                   type="button"
                   onClick={() => setIsPatientModalOpen(true)}
@@ -189,11 +137,11 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-medium border border-emerald-200">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="max-w-[120px] truncate">{patientUser.email}</span>
+                    <span className="max-w-[120px] truncate">{user.email}</span>
                   </div>
                   <button
                     type="button"
-                    onClick={handlePatientSignOut}
+                    onClick={logout}
                     className="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
                     title="Sign Out"
                   >
@@ -240,14 +188,14 @@ export default function Navbar() {
               })}
               {/* Patient logged out */}
               <Link
-                to="/doctor-admin/login"
+                to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
                 onClick={() => setIsOpen(false)}
                 className={navbarStyles.mobileDoctorAdminButton}
               >
-                Doctor Admin
+                {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
               </Link>
               <div className={navbarStyles.mobileLoginContainer}>
-                {!patientUser ? (
+                {!user ? (
                   <button
                     type="button"
                     onClick={() => {
@@ -261,13 +209,13 @@ export default function Navbar() {
                 ) : (
                   <div className="flex flex-col gap-2 w-full">
                     <div className="px-3 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-xs font-medium text-center">
-                      Logged in as {patientUser.email}
+                      Logged in as {user.email}
                     </div>
                     <button
                       type="button"
                       onClick={() => {
                         setIsOpen(false);
-                        handlePatientSignOut();
+                        logout();
                       }}
                       className="w-full py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold"
                     >

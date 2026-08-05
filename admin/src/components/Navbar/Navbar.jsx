@@ -19,8 +19,8 @@ import {
 } from "lucide-react";
 import logoImg from "../../assets/logo.png";
 
-// Clerk hooks
-import { useClerk, useAuth, useUser } from "@clerk/clerk-react";
+// Custom Auth Context
+import { useAuth } from "../../context/AuthContext";
 import { navbarStyles as ns } from "../../assets/dummyStyles";
 
 export default function AnimatedNavbar() {
@@ -30,10 +30,11 @@ export default function AnimatedNavbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Clerk
-  const clerk = useClerk?.();
-  const { getToken, isLoaded: authLoaded } = useAuth();
-  const { isSignedIn, user, isLoaded: userLoaded } = useUser();
+  // Auth
+  const { getToken, user, logout, isLoaded } = useAuth();
+  const isSignedIn = !!user;
+  const authLoaded = isLoaded;
+  const userLoaded = isLoaded;
 
   /* ---------------- Sliding Active Indicator ---------------- */
   const moveIndicator = useCallback(() => {
@@ -139,29 +140,17 @@ export default function AnimatedNavbar() {
   }, [isSignedIn, authLoaded, userLoaded, getToken]);
 
   const handleOpenSignIn = () => {
-    if (!clerk || !clerk.openSignIn) {
-      console.warn("Clerk is not available to open sign-in.");
-      return;
-    }
-    clerk.openSignIn();
-    navigate('/h')
+    navigate('/'); // Admin login is usually at root
   };
 
   const handleSignOut = async () => {
-    if (!clerk || !clerk.signOut) {
-      console.warn("Clerk signOut not available.");
-      return;
-    }
     try {
-      await clerk.signOut();
+      if (logout) {
+        logout();
+      }
     } catch (err) {
       console.error("Sign out failed:", err);
     } finally {
-      try {
-        localStorage.removeItem("clerk_token");
-      } catch (e) {
-        /* ignore */
-      }
       // redirect to home after sign out
       navigate("/");
     }

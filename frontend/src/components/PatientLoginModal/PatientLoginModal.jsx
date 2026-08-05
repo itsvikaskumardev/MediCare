@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { X, Mail, Lock, User, ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
+  const { login } = useAuth();
   const API_BASE =
     import.meta.env.BACKEND_URL ||
     import.meta.env.VITE_BACKEND_URL ||
@@ -64,15 +66,9 @@ export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
         return;
       }
 
-      // Store in localStorage
-      localStorage.setItem("patientToken_v1", token);
-      localStorage.setItem(
-        "patientUser_v1",
-        JSON.stringify({ email, role, token })
-      );
+      // Use central auth context
+      login(token);
 
-      // Trigger update for Navbar
-      window.dispatchEvent(new Event("patientAuthChange"));
       toast.success("Login successful!");
       setBusy(false);
 

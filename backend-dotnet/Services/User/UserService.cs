@@ -5,49 +5,33 @@ namespace backend_dotnet.Services.User
 {
     public class UserService : IUserService
     {
-        private readonly HttpClient _httpClient;
-        private readonly string? _clerkSecretKey;
+        private readonly backend_dotnet.Data.ApplicationDbContext _db;
 
-        public UserService(HttpClient httpClient, IConfiguration config)
+        public UserService(backend_dotnet.Data.ApplicationDbContext db)
         {
-            _httpClient = httpClient;
-            _clerkSecretKey = config["Clerk:SecretKey"];
+            _db = db;
         }
 
         public async Task<UserCountResultDTO> GetRegisteredUserCountAsync()
         {
-            if (string.IsNullOrEmpty(_clerkSecretKey))
+            try
             {
+                var totalCount = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync(_db.Users);
+
                 return new UserCountResultDTO
                 {
                     IsSuccess = true,
-                    TotalUsers = 15 // Mock user count for local development
+                    TotalUsers = totalCount
                 };
             }
-
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.clerk.com/v1/users/count");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _clerkSecretKey);
-
-            var response = await _httpClient.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
                 return new UserCountResultDTO
                 {
                     IsSuccess = false,
-                    ErrorMessage = $"Clerk API returned {(int)response.StatusCode}"
+                    ErrorMessage = ex.Message
                 };
             }
-
-            var body = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(body);
-            var totalCount = doc.RootElement.GetProperty("total_count").GetInt32();
-
-            return new UserCountResultDTO
-            {
-                IsSuccess = true,
-                TotalUsers = totalCount
-            };
         }
     }
 }

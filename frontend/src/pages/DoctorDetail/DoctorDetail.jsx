@@ -19,8 +19,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Clerk client hooks
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../context/AuthContext";
 import { doctorDetailStyles } from "../../assets/dummyStyles";
 
 const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
@@ -111,9 +110,10 @@ export default function DoctorDetail() {
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Clerk hooks
-  const { getToken, isLoaded: authLoaded } = useAuth();
-  const { isSignedIn, user, isLoaded: userLoaded } = useUser();
+  // Auth hooks
+  const { getToken, isLoaded: authLoaded, user } = useAuth();
+  const isSignedIn = !!user;
+  const userLoaded = authLoaded;
 
   useEffect(() => {
     setIsVisible(true);

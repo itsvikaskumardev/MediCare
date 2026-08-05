@@ -1,7 +1,6 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
 // Import your pages
 import Home from "./pages/Home/Home";
@@ -13,30 +12,31 @@ import AddSer from "./pages/AddSer/AddSer";
 import ListService from "./pages/ListService/ListService";
 import ServiceAppointments from "./pages/ServiceAppointments/ServiceAppointments";
 import Hero from "./components/Hero/Hero";
+import Login from "./pages/Login/Login";
 
 function RequireAuth({ children }) {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, user } = useAuth();
 
   if (!isLoaded) return null; // prevent flicker
-  if (!isSignedIn)
+  if (!user || user.role !== "ADMIN")
     return (
       <div className="min-h-screen font-mono flex items-center justify-center bg-linear-to-b from-emerald-50 via-green-50 to-emerald-100 px-4">
         <div className="text-center">
           {/* Animated text */}
           <p className="text-emerald-800 font-semibold text-lg sm:text-2xl mb-4 animate-fade-in">
-            Please sign in to view this page
+            Admin access required. Please sign in as an administrator.
           </p>
 
           {/* Button on new line */}
           <div className="flex justify-center">
             <Link
-              to="/"
+              to="/login"
               className="px-4 py-2 text-sm rounded-full bg-emerald-600 text-white shadow-sm
                        hover:bg-emerald-700 hover:shadow-md
                        transition-all duration-300 ease-in-out
                        animate-bounce-subtle"
             >
-              HOME
+              LOGIN
             </Link>
           </div>
         </div>
@@ -49,6 +49,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Hero />} />
+      <Route path="/login" element={<Login />} />
       <Route
         path="/h"
         element={

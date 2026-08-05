@@ -10,7 +10,7 @@ import {
   XCircle,
   Bell,
 } from "lucide-react";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "../../context/AuthContext";
 import {
   appointmentPageStyles,
   cardStyles,
@@ -151,8 +151,8 @@ const StatusBadge = ({ itemStatus }) => {
 
 /* -------------------- Component -------------------- */
 export default function AppointmentPage() {
-  const { isLoaded, isSignedIn, getToken } = useAuth();
-  const { user } = useUser();
+  const { isLoaded, user, getToken } = useAuth();
+  const isSignedIn = !!user;
 
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingServices, setLoadingServices] = useState(false);
