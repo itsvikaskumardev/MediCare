@@ -115,7 +115,7 @@ export default function Navbar() {
               {/* Doctor Admin */}
               {(!user || user.role !== "PATIENT") && (
                 <Link
-                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
+                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? `/doctor-admin/${user.id}` : "/doctor-admin/login"}
                   className={navbarStyles.doctorAdminButton}
                 >
                   <UserIcon className={navbarStyles.doctorAdminIcon} />
@@ -191,7 +191,7 @@ export default function Navbar() {
               {/* Patient logged out */}
               {(!user || user.role !== "PATIENT") && (
                 <Link
-                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
+                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? `/doctor-admin/${user.id}` : "/doctor-admin/login"}
                   onClick={() => setIsOpen(false)}
                   className={navbarStyles.mobileDoctorAdminButton}
                 >

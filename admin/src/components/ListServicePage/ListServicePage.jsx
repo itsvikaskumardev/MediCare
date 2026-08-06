@@ -129,30 +129,42 @@ export default function ListServicePage({ apiBase }) {
         setServices([]);
         return;
       }
-      // support both { success:true, data: [...] } and older shape
-      const items = (body && (body.data || body.services || body.items)) || [];
+      // support both { success:true, data: [...] } and .NET { result: [...] } or { result: { services: [...] } }
+      const items = (body && (
+        Array.isArray(body.result) ? body.result :
+        body.result?.services || body.result?.data || body.data || body.services || body.items
+      )) || [];
       // normalize id field for UI
-      const normalized = items.map((s) => ({
-        id: s._id || s.id,
-        name: s.name,
-        about: s.about || "",
-        instructions: s.instructions || s.preInstructions || [],
-        instructionsText: (s.instructions || s.preInstructions || []).join(
-          "\n"
-        ),
-        price: s.price ?? s.fee ?? 0,
-        available: s.available ?? s.availability === "Available",
-        image: s.image || s.imageUrl || s.imageSrc || s.imageSmall || "",
-        // slots: if stored as strings -> convert to array of slot objects for display,
-        // if stored as map/object -> convert using convertSlotsMapToArray
-        slots: Array.isArray(s.slots)
-          ? convertSlotsForUI(s.slots)
-          : s.slots && typeof s.slots === "object"
-            ? convertSlotsMapToArray(s.slots)
-            : [],
-        // keep original raw for potential debug
-        _raw: s,
-      }));
+      const normalized = items.map((s) => {
+        let parsedSlots = s.slots;
+        if (typeof parsedSlots === "string") {
+          try {
+            parsedSlots = JSON.parse(parsedSlots);
+          } catch (e) {}
+        }
+
+        return {
+          id: s._id || s.id,
+          name: s.name,
+          about: s.about || "",
+          instructions: s.instructions || s.preInstructions || [],
+          instructionsText: (s.instructions || s.preInstructions || []).join(
+            "\n"
+          ),
+          price: s.price ?? s.fee ?? 0,
+          available: s.available ?? s.availability === "Available",
+          image: s.image || s.imageUrl || s.imageSrc || s.imageSmall || "",
+          // slots: if stored as strings -> convert to array of slot objects for display,
+          // if stored as map/object -> convert using convertSlotsMapToArray
+          slots: Array.isArray(parsedSlots)
+            ? convertSlotsForUI(parsedSlots)
+            : parsedSlots && typeof parsedSlots === "object"
+              ? convertSlotsMapToArray(parsedSlots)
+              : [],
+          // keep original raw for potential debug
+          _raw: s,
+        };
+      });
       setServices(normalized);
     } catch (err) {
       console.error("fetchServices error", err);

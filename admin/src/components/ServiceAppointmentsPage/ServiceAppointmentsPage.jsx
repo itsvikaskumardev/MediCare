@@ -315,13 +315,14 @@ export default function ServiceAppointmentsPage() {
         );
       }
       const body = await res.json();
-      const list = Array.isArray(body.appointments)
-        ? body.appointments
-        : body.appointments ??
-        body.items ??
-        body.data ??
-        body.appointments ??
-        [];
+      const fetchedAppointments =
+        body?.result?.appointments ||
+        body?.result?.data ||
+        body?.appointments ||
+        body?.items ||
+        body?.data ||
+        body;
+      const list = Array.isArray(fetchedAppointments) ? fetchedAppointments : [];
 
       const normalized = (Array.isArray(list) ? list : [])
         .map((a) => {

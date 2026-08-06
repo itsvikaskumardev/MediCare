@@ -71,7 +71,8 @@ export default function AppointmentsPage() {
           throw new Error(body?.message || `Failed to fetch (${res.status})`);
         }
         const data = await res.json();
-        const items = (data?.appointments || []).map((a) => {
+        const fetchedAppointments = data?.result?.appointments || data?.appointments || [];
+        const items = fetchedAppointments.map((a) => {
           const doctorName =
             (a.doctorId && a.doctorId.name) || a.doctorName || "";
           const speciality =
@@ -211,7 +212,8 @@ export default function AppointmentsPage() {
         const reload = await fetch(`${API_BASE}/api/appointments?limit=200`);
         if (reload.ok) {
           const body = await reload.json();
-          const items = (body?.appointments || []).map((a) => ({
+          const fetchedAppointments = body?.result?.appointments || body?.appointments || [];
+          const items = fetchedAppointments.map((a) => ({
             id: a._id || a.id,
             patientName: a.patientName || "",
             age: a.age || "",

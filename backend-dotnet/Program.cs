@@ -1,6 +1,7 @@
 using backend_dotnet.Data;
 using backend_dotnet.Endpoints;
 using backend_dotnet.Models;
+
 using backend_dotnet.Models.Domain;
 using backend_dotnet.Models.DTOs.Doctor;
 using backend_dotnet.Services;
@@ -116,6 +117,7 @@ builder.Services.AddScoped<IServiceAppointmentService, ServiceAppointmentService
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
+builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
@@ -137,6 +139,7 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
 
 //-----------------------------Endpoints-----------------------------------------------------------------------
 app.MapAuthEndpoints();
@@ -145,5 +148,7 @@ app.MapAppointmentEndpoints();
 app.MapServiceEndpoints();
 app.MapServiceAppointmentEndpoints();
 app.MapUserEndpoints();
+
+
 
 app.Run();

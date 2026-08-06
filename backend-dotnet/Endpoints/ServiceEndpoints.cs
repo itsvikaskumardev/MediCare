@@ -16,7 +16,8 @@ namespace backend_dotnet.Endpoints
                 .WithName("CreateService")
                 .Produces<ApiResponse>(StatusCodes.Status201Created)
                 .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
-                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError)
+                .DisableAntiforgery();/// Disables CSRF validation on that endpoint. It does not change how multipart/form-data is handled.
 
             serviceGroup.MapGet("/GetServices", GetServices)
                 .WithName("GetServices")

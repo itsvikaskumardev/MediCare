@@ -111,7 +111,7 @@ export default function DoctorDetail() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Auth hooks
-  const { getToken, isLoaded: authLoaded, user } = useAuth();
+  const { token, isLoaded: authLoaded, user } = useAuth();
   const isSignedIn = !!user;
   const userLoaded = authLoaded;
 
@@ -169,6 +169,15 @@ export default function DoctorDetail() {
           payload?.data ||
           payload ||
           null;
+
+        if (doc && typeof doc.schedule === "string") {
+          try {
+            doc.schedule = JSON.parse(doc.schedule);
+          } catch (e) {
+            console.error("Failed to parse schedule:", e);
+          }
+        }
+
         if (mounted) setDoctor(doc);
       } catch (err) {
         if (mounted) setError(err.message || "Failed to fetch doctor");
@@ -292,12 +301,11 @@ export default function DoctorDetail() {
     };
 
     try {
-      const token = await getToken();
       if (!token) {
         throw new Error("Failed to obtain authentication token.");
       }
 
-      const res = await fetch(`${API_BASE}/api/appointments`, {
+      const res = await fetch(`${API_BASE}/api/appointments/CreateAppointment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -309,16 +317,18 @@ export default function DoctorDetail() {
       const body = await res.json().catch(() => null);
       if (!res.ok) {
         const message =
-          body?.message || body?.error || `Booking failed (${res.status})`;
+          body?.errorMessages?.[0] || body?.message || body?.error || `Booking failed (${res.status})`;
         toast.error(message, { position: "top-center" });
         setIsSubmitting(false);
         return;
       }
 
+      const checkoutUrl = body?.result?.checkoutUrl || body?.checkoutUrl;
+
       // If checkoutUrl is returned -> redirect to Stripe Checkout
-      if (body.checkoutUrl) {
+      if (checkoutUrl) {
         // redirect user to Stripe Checkout
-        window.location.href = body.checkoutUrl;
+        window.location.href = checkoutUrl;
         return;
       }
 
@@ -406,11 +416,10 @@ export default function DoctorDetail() {
         </div>
       </div>
       <div
-        className={`${doctorDetailStyles.mainContent} ${
-          isVisible
-            ? doctorDetailStyles.visibleState
-            : doctorDetailStyles.hiddenState
-        }`}
+        className={`${doctorDetailStyles.mainContent} ${isVisible
+          ? doctorDetailStyles.visibleState
+          : doctorDetailStyles.hiddenState
+          }`}
       >
         {/* profile card */}
         <div className={doctorDetailStyles.profileCard}>
@@ -568,11 +577,10 @@ export default function DoctorDetail() {
                         <button
                           key={date.toISOString()}
                           onClick={() => setSelectedDate(date)}
-                          className={`${doctorDetailStyles.dateButton} ${
-                            isSelected
-                              ? doctorDetailStyles.dateButtonSelected
-                              : doctorDetailStyles.dateButtonUnselected
-                          }`}
+                          className={`${doctorDetailStyles.dateButton} ${isSelected
+                            ? doctorDetailStyles.dateButtonSelected
+                            : doctorDetailStyles.dateButtonUnselected
+                            }`}
                         >
                           <div className={doctorDetailStyles.dateContent}>
                             <div className={doctorDetailStyles.dateWeekday}>
@@ -678,11 +686,10 @@ export default function DoctorDetail() {
                     <button
                       key={slot}
                       onClick={() => setSelectedSlot(slot)}
-                      className={`${doctorDetailStyles.timeSlotButton} ${
-                        selectedSlot === slot
-                          ? doctorDetailStyles.timeSlotButtonSelected
-                          : doctorDetailStyles.timeSlotButtonUnselected
-                      }`}
+                      className={`${doctorDetailStyles.timeSlotButton} ${selectedSlot === slot
+                        ? doctorDetailStyles.timeSlotButtonSelected
+                        : doctorDetailStyles.timeSlotButtonUnselected
+                        }`}
                     >
                       <div className={doctorDetailStyles.timeSlotContent}>
                         <Clock className={doctorDetailStyles.timeSlotIcon} />
@@ -720,11 +727,11 @@ export default function DoctorDetail() {
                       <span className={doctorDetailStyles.summaryValue}>
                         {selectedDate
                           ? selectedDate.toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
                           : "Not selected"}
                       </span>
                     </div>
@@ -755,11 +762,10 @@ export default function DoctorDetail() {
                     </label>
                     <div className={doctorDetailStyles.paymentOptions}>
                       <label
-                        className={`${doctorDetailStyles.paymentOption} ${
-                          paymentMethod === "Cash"
-                            ? doctorDetailStyles.paymentOptionSelected
-                            : doctorDetailStyles.paymentOptionUnselected
-                        }`}
+                        className={`${doctorDetailStyles.paymentOption} ${paymentMethod === "Cash"
+                          ? doctorDetailStyles.paymentOptionSelected
+                          : doctorDetailStyles.paymentOptionUnselected
+                          }`}
                       >
                         <input
                           type="radio"
@@ -772,11 +778,10 @@ export default function DoctorDetail() {
                         Cash
                       </label>
                       <label
-                        className={`${doctorDetailStyles.paymentOption} ${
-                          paymentMethod === "Online"
-                            ? doctorDetailStyles.paymentOptionSelected
-                            : doctorDetailStyles.paymentOptionUnselected
-                        }`}
+                        className={`${doctorDetailStyles.paymentOption} ${paymentMethod === "Online"
+                          ? doctorDetailStyles.paymentOptionSelected
+                          : doctorDetailStyles.paymentOptionUnselected
+                          }`}
                       >
                         <input
                           type="radio"
@@ -794,11 +799,10 @@ export default function DoctorDetail() {
                   <button
                     onClick={handleBooking}
                     disabled={!selectedDate || !selectedSlot || isSubmitting}
-                    className={`${doctorDetailStyles.bookingButton} ${
-                      !selectedDate || !selectedSlot || isSubmitting
-                        ? doctorDetailStyles.bookingButtonDisabled
-                        : doctorDetailStyles.bookingButtonEnabled
-                    }`}
+                    className={`${doctorDetailStyles.bookingButton} ${!selectedDate || !selectedSlot || isSubmitting
+                      ? doctorDetailStyles.bookingButtonDisabled
+                      : doctorDetailStyles.bookingButtonEnabled
+                      }`}
                   >
                     <div className={doctorDetailStyles.bookingButtonContent}>
                       <Phone className={doctorDetailStyles.bookingIcon} />

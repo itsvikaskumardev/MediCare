@@ -337,11 +337,14 @@ export default function ListPage() {
         );
       }
       const body = await res.json();
-      const list = Array.isArray(body.appointments)
-        ? body.appointments
-        : Array.isArray(body)
-          ? body
-          : (body.items ?? body.data ?? []);
+      const fetchedAppointments =
+        body?.result?.appointments ||
+        body?.result?.data ||
+        body?.appointments ||
+        body?.items ||
+        body?.data ||
+        body;
+      const list = Array.isArray(fetchedAppointments) ? fetchedAppointments : [];
       const normalized = (Array.isArray(list) ? list : [])
         .map(normalizeAppointment)
         .filter(Boolean);

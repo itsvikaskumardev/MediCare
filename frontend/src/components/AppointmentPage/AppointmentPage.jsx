@@ -191,7 +191,12 @@ export default function AppointmentPage() {
       console.log("Response from /api/appointments/me:", resp?.data);
 
       const fetched =
-        resp?.data?.appointments ?? resp?.data?.data ?? resp?.data ?? [];
+        resp?.data?.result?.appointments ??
+        resp?.data?.result?.data ??
+        resp?.data?.appointments ?? 
+        resp?.data?.data ?? 
+        resp?.data ?? 
+        [];
       const arr = Array.isArray(fetched) ? fetched : [];
 
       const doctors = arr.filter((a) => {
@@ -220,6 +225,8 @@ export default function AppointmentPage() {
           console.log("Debug fallback response:", debugResp?.data);
 
           const fetched =
+            debugResp?.data?.result?.appointments ??
+            debugResp?.data?.result?.data ??
             debugResp?.data?.appointments ??
             debugResp?.data?.data ??
             debugResp?.data ??
@@ -278,7 +285,12 @@ export default function AppointmentPage() {
       console.log("Response from /api/service-appointments/GetServiceAppointments:", resp?.data);
 
       const fetched =
-        resp?.data?.appointments ?? resp?.data?.data ?? resp?.data ?? [];
+        resp?.data?.result?.appointments ??
+        resp?.data?.result?.data ??
+        resp?.data?.appointments ?? 
+        resp?.data?.data ?? 
+        resp?.data ?? 
+        [];
       const arr = Array.isArray(fetched) ? fetched : [];
       console.log(arr);
 
@@ -300,6 +312,8 @@ export default function AppointmentPage() {
           console.log("Debug fallback response (services):", debugResp?.data);
 
           const fetched =
+            debugResp?.data?.result?.appointments ??
+            debugResp?.data?.result?.data ??
             debugResp?.data?.appointments ??
             debugResp?.data?.data ??
             debugResp?.data ??
@@ -372,18 +386,24 @@ export default function AppointmentPage() {
       .map((a) => {
         const id = a._id || a.id || String(a._id || "");
         const doctorObj =
-          typeof a.doctorId === "object" && a.doctorId ? a.doctorId : {};
+          typeof a.doctorId === "object" && a.doctorId 
+            ? a.doctorId 
+            : (typeof a.doctor === "object" && a.doctor ? a.doctor : {});
+            
         const image =
           doctorObj.imageUrl ||
           doctorObj.image ||
           doctorObj.avatar ||
+          a.doctorImageUrl ||
           a.doctorImage?.url ||
           a.doctorImage ||
           "";
+          
         const doctorName =
           (doctorObj.name && String(doctorObj.name).trim()) ||
+          (doctorObj.user?.name && String(doctorObj.user.name).trim()) ||
           (a.doctorName && String(a.doctorName).trim()) ||
-          (a.doctor && String(a.doctor).trim()) ||
+          (typeof a.doctor === "string" ? String(a.doctor).trim() : null) ||
           (a.patientName && String(a.patientName).trim()) ||
           "Doctor";
 
@@ -506,10 +526,17 @@ export default function AppointmentPage() {
             <div key={item.id} className={cardStyles.doctorCard}>
               <div className={cardStyles.doctorImageContainer}>
                 <img
-                  src={item.image || "/placeholder-doctor.png"}
+                  src={item.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.doctor || "Doctor")}&background=random`}
                   alt={item.doctor}
                   className={cardStyles.image}
+                  style={{ objectPosition: "center" }}
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.doctor || "Doctor")}&background=random`;
+                    }
+                  }}
                 />
               </div>
 
@@ -567,10 +594,17 @@ export default function AppointmentPage() {
             <div key={srv.id} className={cardStyles.serviceCard}>
               <div className={cardStyles.serviceImageContainer}>
                 <img
-                  src={srv.image || "/placeholder-service.png"}
+                  src={srv.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(srv.name || "Service")}&background=random`}
                   alt={srv.name}
                   className={cardStyles.image}
+                  style={{ objectPosition: "center" }}
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(srv.name || "Service")}&background=random`;
+                    }
+                  }}
                 />
               </div>
 

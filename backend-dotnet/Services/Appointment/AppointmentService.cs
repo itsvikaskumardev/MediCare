@@ -637,7 +637,16 @@ namespace backend_dotnet.Services.Appointment
             var page = Math.Max(1, query.Page ?? 1);
             var skip = (page - 1) * limit;
 
-            var appointmentsQuery = _db.Appointments.AsNoTracking().Where(a => a.DoctorId == doctorId);
+            // The frontend passes user.id (UserId) in the URL. If this is a UserId, resolve it to the DoctorId.
+            var actualDoctorId = doctorId;
+            var doctorByUserId = await _db.Doctors.AsNoTracking().FirstOrDefaultAsync(d => d.UserId == doctorId);
+            if (doctorByUserId != null)
+            {
+                actualDoctorId = doctorByUserId.Id;
+            }
+
+            var appointmentsQuery = _db.Appointments.AsNoTracking()
+                .Where(a => a.DoctorId == actualDoctorId);
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))
                 appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);

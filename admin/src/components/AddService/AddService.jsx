@@ -113,7 +113,7 @@ export default function AddService({ apiBase, serviceId }) {
           return;
         }
         const payload = await res.json().catch(() => null);
-        const data = payload?.data || payload;
+        const data = payload?.result || payload?.data || payload;
         if (!data) return;
         if (!mounted) return;
 
@@ -126,7 +126,14 @@ export default function AddService({ apiBase, serviceId }) {
             ? data.instructions
             : [""]
         );
-        setSlots(Array.isArray(data.slots) ? data.slots : []);
+        let parsedSlots = data.slots;
+        if (typeof parsedSlots === "string") {
+          try { parsedSlots = JSON.parse(parsedSlots); } catch(e) {}
+        }
+        if (parsedSlots && typeof parsedSlots === "object" && !Array.isArray(parsedSlots)) {
+          parsedSlots = Object.values(parsedSlots);
+        }
+        setSlots(Array.isArray(parsedSlots) ? parsedSlots : []);
         // image: show remote image URL as preview
         if (data.imageUrl) {
           setImagePreview(data.imageUrl);
@@ -155,7 +162,7 @@ export default function AddService({ apiBase, serviceId }) {
     if (imagePreview && imagePreview.startsWith("blob:")) {
       try {
         URL.revokeObjectURL(imagePreview);
-      } catch (err) {}
+      } catch (err) { }
     }
     setImageFile(f);
     setImagePreview(URL.createObjectURL(f));
@@ -180,7 +187,7 @@ export default function AddService({ apiBase, serviceId }) {
     if (imagePreview && imagePreview.startsWith("blob:")) {
       try {
         URL.revokeObjectURL(imagePreview);
-      } catch (err) {}
+      } catch (err) { }
     }
     setImagePreview(null);
     setImageFile(null);
@@ -318,7 +325,7 @@ export default function AddService({ apiBase, serviceId }) {
 
       const url = serviceId
         ? `${API_BASE}/api/services/${serviceId}`
-        : `${API_BASE}/api/services`;
+        : `${API_BASE}/api/services/CreateService`;
       const method = serviceId ? "PUT" : "POST";
 
       const res = await fetch(url, { method, body: fd });
@@ -366,13 +373,12 @@ export default function AddService({ apiBase, serviceId }) {
       <div className={addServiceStyles.toast.container}>
         {toast && (
           <div
-            className={`${addServiceStyles.toast.toastBase} ${
-              toast.type === "error"
-                ? addServiceStyles.toast.toastError
-                : toast.type === "info"
+            className={`${addServiceStyles.toast.toastBase} ${toast.type === "error"
+              ? addServiceStyles.toast.toastError
+              : toast.type === "info"
                 ? addServiceStyles.toast.toastInfo
                 : addServiceStyles.toast.toastSuccess
-            } animate-slideIn`}
+              } animate-slideIn`}
           >
             <div className={addServiceStyles.toast.iconContainer(toast.type)}>
               {toast.type === "error" ? (
@@ -489,7 +495,7 @@ export default function AddService({ apiBase, serviceId }) {
                       if (imagePreview && imagePreview.startsWith("blob:")) {
                         try {
                           URL.revokeObjectURL(imagePreview);
-                        } catch (err) {}
+                        } catch (err) { }
                       }
                       setImagePreview(null);
                       setImageFile(null);
