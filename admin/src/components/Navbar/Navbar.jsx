@@ -140,7 +140,7 @@ export default function AnimatedNavbar() {
   }, [isSignedIn, authLoaded, userLoaded, getToken]);
 
   const handleOpenSignIn = () => {
-    navigate('/'); // Admin login is usually at root
+    navigate('/login'); 
   };
 
   const handleSignOut = async () => {

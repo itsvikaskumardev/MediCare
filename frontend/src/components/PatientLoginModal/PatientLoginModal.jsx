@@ -19,6 +19,14 @@ export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
     name: "",
     email: "",
     password: "",
+    mobile: "",
+    age: "",
+    gender: "",
+    bloodGroup: "",
+    medicalHistory: "",
+    allergies: "",
+    emergencyContactName: "",
+    emergencyContactNumber: ""
   });
 
   if (!isOpen) return null;
@@ -90,14 +98,21 @@ export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
 
     setBusy(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/register`, {
+      const res = await fetch(`${API_BASE}/api/auth/register-patient`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           password: formData.password,
-          role: "PATIENT",
+          mobile: formData.mobile || undefined,
+          age: formData.age ? parseInt(formData.age, 10) : undefined,
+          gender: formData.gender || undefined,
+          bloodGroup: formData.bloodGroup || undefined,
+          medicalHistory: formData.medicalHistory || undefined,
+          allergies: formData.allergies || undefined,
+          emergencyContactName: formData.emergencyContactName || undefined,
+          emergencyContactNumber: formData.emergencyContactNumber || undefined
         }),
       });
 
@@ -124,7 +139,9 @@ export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
       <div
-        className="relative w-full max-w-md overflow-hidden bg-white rounded-2xl shadow-2xl border border-gray-100"
+        className={`relative w-full max-h-[95vh] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-gray-100 transition-all duration-300 ${
+          activeTab === "signup" ? "max-w-3xl" : "max-w-md"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header decoration */}
@@ -243,77 +260,89 @@ export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
             </form>
           ) : (
             <form onSubmit={handleSignUp} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User
-                    size={18}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="John Doe"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-                  />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Name */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Full Name *</label>
+                  <input type="text" name="name" required placeholder="John Doe" value={formData.name} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Email */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Email Address *</label>
+                  <input type="email" name="email" required placeholder="you@example.com" value={formData.email} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Password */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Password *</label>
+                  <input type="password" name="password" required placeholder="Create a password" value={formData.password} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Mobile */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Mobile</label>
+                  <input type="text" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Age */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Age</label>
+                  <input type="number" name="age" min="0" placeholder="Age" value={formData.age} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Gender */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Gender</label>
+                  <select name="gender" value={formData.gender} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {/* Blood Group */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Blood Group</label>
+                  <select name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+                {/* Emergency Contact Name */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Emergency Contact Name</label>
+                  <input type="text" name="emergencyContactName" placeholder="Name" value={formData.emergencyContactName} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Emergency Contact Number */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Emergency Contact Number</label>
+                  <input type="text" name="emergencyContactNumber" placeholder="Number" value={formData.emergencyContactNumber} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all" />
+                </div>
+                {/* Medical History */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Medical History</label>
+                  <textarea name="medicalHistory" rows="2" placeholder="Any past medical conditions..." value={formData.medicalHistory} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"></textarea>
+                </div>
+                {/* Allergies */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">Allergies</label>
+                  <textarea name="allergies" rows="2" placeholder="Any known allergies..." value={formData.allergies} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"></textarea>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail
-                    size={18}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-                  />
-                </div>
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={busy}
+                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-lg shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                >
+                  {busy ? "Creating Account..." : "Create Account"}
+                  {!busy && <ArrowRight size={16} />}
+                </button>
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock
-                    size={18}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    required
-                    placeholder="Create a password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={busy}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-lg shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
-              >
-                {busy ? "Creating Account..." : "Create Account"}
-                {!busy && <ArrowRight size={16} />}
-              </button>
             </form>
           )}
         </div>

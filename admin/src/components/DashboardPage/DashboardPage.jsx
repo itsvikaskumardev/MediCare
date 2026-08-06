@@ -120,6 +120,7 @@ export default function DashboardPage() {
         const body = await res.json();
         let list = [];
         if (Array.isArray(body)) list = body;
+        else if (body?.result?.data && Array.isArray(body.result.data)) list = body.result.data;
         else if (Array.isArray(body.doctors)) list = body.doctors;
         else if (Array.isArray(body.data)) list = body.data;
         else if (Array.isArray(body.items)) list = body.items;
@@ -160,7 +161,7 @@ export default function DashboardPage() {
 
         const body = await res.json().catch(() => ({}));
         const count = Number(
-          body?.count ?? body?.totalUsers ?? body?.data ?? 0
+          body?.result?.totalUsers ?? body?.count ?? body?.totalUsers ?? body?.data ?? 0
         );
         if (mounted) setPatientCount(isNaN(count) ? 0 : count);
       } catch (err) {
