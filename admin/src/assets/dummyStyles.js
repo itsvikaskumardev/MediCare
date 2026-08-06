@@ -490,82 +490,57 @@ export const doctorListStyles = {
 // Add to the existing dummyStyles.js file
 export const navbarStyles = {
   // Layout styles
-  header: "relative font-serif",
-  navContainer: "mx-auto max-w-7xl lg:px-7 xl:px-2 px-4 py-5",
-  flexContainer: "flex items-center justify-between",
+  header: "relative font-serif sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/50",
+  navContainer: "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4",
+  flexContainer: "flex items-center justify-between gap-4",
   
   // Logo section styles
-  logoContainer: "flex items-center gap-2",
-  logoImage: "w-18 h-18 rounded-full",
-  logoLink: "text-3xl xl:block lg:text-xs xl:text-xl font-bold text-green-700",
-  logoSubtext: "text-xs xl:block text-gray-500",
+  logoContainer: "flex items-center gap-3 flex-shrink-0",
+  logoImage: "w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-sm object-cover",
+  logoLink: "text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-emerald-700 to-teal-600 leading-none",
+  logoSubtext: "text-xs sm:text-sm text-emerald-600 font-medium",
   
   // Center navigation (desktop)
-  centerNavContainer: "hidden lg:flex items-center justify-center relative",
-  glowEffect: "glow relative rounded-3xl p-1 bg-linear-to-r from-emerald-100 via-emerald-200 to-emerald-100",
-  centerNavInner: "relative flex items-center",
-  centerNavScrollContainer: "center-inner relative whitespace-nowrap rounded-3xl bg-white/95 lg:px-2 px-4 py-2 flex items-center gap-2 shadow-lg border border-gray-100 overflow-x-auto",
+  centerNavContainer: "hidden md:flex flex-1 items-center justify-center relative min-w-0 px-2 lg:px-4",
+  glowEffect: "relative rounded-full p-1 bg-linear-to-r from-emerald-50 via-emerald-100 to-emerald-50 shadow-sm min-w-0",
+  centerNavInner: "relative flex items-center min-w-0 max-w-full overflow-hidden",
+  centerNavScrollContainer: "relative rounded-full bg-white px-2 py-1 flex items-center gap-1 shadow-inner overflow-x-auto hide-scrollbar min-w-0 max-w-full",
   
   // Center nav items
-  centerNavItemBase: "relative flex flex-col lg:text-xs lg:-mx-2 xl:text-md items-center gap-1 px-3 py-2 rounded-lg transition-all text-sm",
-  centerNavItemActive: "text-emerald-400 font-semibold",
-  centerNavItemInactive: "text-gray-700 hover:text-emerald-600",
+  centerNavItemBase: "relative flex items-center gap-2 px-3 lg:px-4 py-2 rounded-full transition-all text-sm font-medium whitespace-nowrap",
+  centerNavItemActive: "bg-emerald-50 text-emerald-700 shadow-sm",
+  centerNavItemInactive: "text-gray-600 hover:text-emerald-600 hover:bg-emerald-50/50",
   
   // Right section styles
-  rightContainer: "flex items-center gap-3",
-  signOutButton: "hidden lg:mx-1 lg:text-xs whitespace-nowrap xl:mx-1 lg:-mr-6 xl:mr-5 lg:flex px-4 py-2 cursor-pointer rounded-full bg-amber-500 text-white text-sm items-center gap-2 shadow-sm",
-  loginButton: "px-3 py-2 cursor-pointer rounded-full border bg-white text-emerald-600 text-sm shadow-sm",
+  rightContainer: "flex items-center gap-3 sm:gap-4 flex-shrink-0",
+  signOutButton: "inline-flex px-5 py-2.5 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 text-sm font-semibold items-center gap-2 transition-all shadow-sm",
+  loginButton: "inline-flex px-6 py-2.5 rounded-full bg-linear-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg text-sm font-semibold items-center transition-all",
   
   // Mobile menu button
-  mobileMenuButton: "lg:hidden p-2 rounded-full bg-white shadow",
+  mobileMenuButton: "md:hidden p-2 rounded-xl text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors shadow-sm",
   
   // Mobile menu overlay
-  mobileOverlay: "fixed inset-0 z-10 lg:hidden",
+  mobileOverlay: "fixed inset-0 bg-emerald-900/20 z-40 md:hidden backdrop-blur-sm",
   
   // Mobile menu container
-  mobileMenuContainer: "mt-3 lg:hidden z-20 relative",
-  mobileMenuInner: "rounded-xl bg-white shadow-md p-3 space-y-2 border",
+  mobileMenuContainer: "absolute top-full left-0 right-0 z-50 bg-white border-b border-emerald-100 shadow-xl md:hidden max-h-[85vh] overflow-y-auto",
+  mobileMenuInner: "px-4 py-4 space-y-1",
   
   // Mobile menu items
-  mobileItemBase: "flex items-center gap-3 px-2 py-2 rounded-md",
-  mobileItemActive: "bg-emerald-50 text-emerald-600",
-  mobileItemInactive: "hover:bg-gray-50",
+  mobileItemBase: "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
+  mobileItemActive: "bg-emerald-50 text-emerald-700 font-semibold",
+  mobileItemInactive: "text-gray-600 hover:bg-emerald-50/50",
   
   // Mobile auth section
-  mobileAuthContainer: "pt-2 border-t mt-2",
-  mobileSignOutButton: "w-full py-2 rounded-full border bg-amber-500 text-white font-medium",
-  mobileLoginButton: "w-full cursor-pointer py-2 rounded-full border bg-white text-emerald-600 font-medium",
+  mobileAuthContainer: "pt-4 pb-2 mt-4 border-t border-emerald-100 space-y-3",
+  mobileSignOutButton: "w-full flex items-center justify-center px-4 py-3.5 rounded-xl bg-rose-50 text-rose-600 font-semibold hover:bg-rose-100 transition-colors",
+  mobileLoginButton: "w-full flex items-center justify-center px-4 py-3.5 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow-md transition-all",
   
   // Indicator (for active navigation)
-  indicator: "absolute bottom-0 left-0 h-0.5 bg-emerald-400 transition-all duration-300 ease-out rounded-full",
+  indicator: "absolute bottom-0 left-0 h-full bg-emerald-50 transition-all duration-300 ease-out rounded-full -z-10",
   
   // Cursor utilities
   cursorPointer: "cursor-pointer",
-  
-  // Text colors
-  textGreen700: "text-green-700",
-  textGray500: "text-gray-500",
-  textGray700: "text-gray-700",
-  textEmerald600: "text-emerald-600",
-  textEmerald400: "text-emerald-400",
-  textWhite: "text-white",
-  
-  // Background colors
-  bgWhite: "bg-white",
-  bgAmber500: "bg-amber-500",
-  bgEmerald50: "bg-emerald-50",
-  bgEmerald100: "bg-emerald-100",
-  bgEmerald200: "bg-emerald-200",
-  
-  // Border colors
-  borderGray100: "border-gray-100",
-  borderEmerald100: "border-emerald-100",
-  
-  // Shadow
-  shadow: "shadow",
-  shadowMd: "shadow-md",
-  shadowLg: "shadow-lg",
-  shadowSm: "shadow-sm",
 };
 
 

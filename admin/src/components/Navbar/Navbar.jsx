@@ -234,24 +234,24 @@ export default function AnimatedNavbar() {
 
           {/* RIGHT */}
           <div className={ns.rightContainer}>
-            {/* Auth buttons */}
-            {isSignedIn ? (
-              <button
-                onClick={handleSignOut}
-                className={ns.signOutButton + " " + ns.cursorPointer}
-              >
-                Sign Out
-              </button>
-            ) : (
-              <div className="hidden lg:flex items-center gap-2">
+            {/* Auth buttons (Desktop) */}
+            <div className="hidden md:flex items-center gap-2">
+              {isSignedIn ? (
+                <button
+                  onClick={handleSignOut}
+                  className={ns.signOutButton + " " + ns.cursorPointer}
+                >
+                  Sign Out
+                </button>
+              ) : (
                 <button
                   onClick={handleOpenSignIn}
                   className={ns.loginButton + " " + ns.cursorPointer}
                 >
                   Login
                 </button>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* MOBILE MENU ICON */}
             <button

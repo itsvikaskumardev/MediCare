@@ -113,15 +113,17 @@ export default function Navbar() {
             <div className={navbarStyles.rightContainer}>
               {/* ================= PATIENT LOGGED OUT ================= */}
               {/* Doctor Admin */}
-              <Link
-                to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
-                className={navbarStyles.doctorAdminButton}
-              >
-                <UserIcon className={navbarStyles.doctorAdminIcon} />
-                <span className={navbarStyles.doctorAdminText}>
-                  {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
-                </span>
-              </Link>
+              {(!user || user.role !== "PATIENT") && (
+                <Link
+                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
+                  className={navbarStyles.doctorAdminButton}
+                >
+                  <UserIcon className={navbarStyles.doctorAdminIcon} />
+                  <span className={navbarStyles.doctorAdminText}>
+                    {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
+                  </span>
+                </Link>
+              )}
 
               {/* Patient Login or Profile */}
               {!user ? (
@@ -187,13 +189,15 @@ export default function Navbar() {
                 );
               })}
               {/* Patient logged out */}
-              <Link
-                to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
-                onClick={() => setIsOpen(false)}
-                className={navbarStyles.mobileDoctorAdminButton}
-              >
-                {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
-              </Link>
+              {(!user || user.role !== "PATIENT") && (
+                <Link
+                  to={user?.role === "DOCTOR" || user?.role === "ADMIN" ? "/doctor-admin/dashboard" : "/doctor-admin/login"}
+                  onClick={() => setIsOpen(false)}
+                  className={navbarStyles.mobileDoctorAdminButton}
+                >
+                  {user?.role === "DOCTOR" || user?.role === "ADMIN" ? "Dashboard" : "Doctor Admin"}
+                </Link>
+              )}
               <div className={navbarStyles.mobileLoginContainer}>
                 {!user ? (
                   <button

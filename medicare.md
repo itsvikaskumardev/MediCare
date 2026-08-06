@@ -195,3 +195,30 @@ var svc = services.FirstOrDefault(s => s.Id == a.ServiceId);
 Both are best practice **in their respective contexts**:
 * **`FirstOrDefaultAsync`**: Best for **Database (`_db.Table`)** queries.
 * **`FirstOrDefault`**: Best for **In-Memory (`List<T>`)** lookups.
+
+---
+---
+---
+In DoctorService.cs
+
+There are two different C# rules at play here that are causing this behavior. 
+
+### 1. Why we use `=` instead of just `using`
+In C#, a standard `using` statement (like `using backend_dotnet.Models.Domain;`) can **only import namespaces**, not individual classes. 
+
+If you try to write `using backend_dotnet.Models.Domain.User;`, the C# compiler will throw an error because `User` is a class, not a namespace. To target a specific class to resolve a conflict, C# requires you to create an alias using the `=` sign: 
+`using User = backend_dotnet.Models.Domain.User;`
+
+### 2. Why it had to be *inside* the namespace block
+Normally, you *can* put `using User = ...` at the very top of the file! However, your project has a specific naming collision. 
+
+You have a folder/namespace in your project called `backend_dotnet.Services.User`. 
+Your doctor service is inside `backend_dotnet.Services.Doctor`. 
+
+Because they share the same parent (`backend_dotnet.Services`), they are "sibling" namespaces. The C# compiler has a quirky rule: **it gives priority to sibling namespaces over global `using` aliases at the top of the file.** 
+
+So, if you put the alias at the top of the file, the compiler ignores it, looks at the word `User` in your code, and says *"Ah, you must mean your sibling namespace `backend_dotnet.Services.User`!"* (which causes the "used like a type" error).
+
+By moving the alias **inside** the `namespace { ... }` block, you flip the priority. You are explicitly telling the compiler: *"Whenever you see `User` inside this specific block of code, I don't care about the sibling namespace, I want you to use the Domain Model."*
+
+*(Note: I noticed you removed the inner alias in your last file edit! If you try to run `dotnet build` right now, that exact same error will pop up again. You'll need to put `using User = backend_dotnet.Models.Domain.User;` back inside the namespace block to make it compile).*

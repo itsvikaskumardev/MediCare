@@ -127,9 +127,11 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
       const res = await fetch(`${API_BASE}/api/doctors/GetDoctors`);
       const body = await res.json().catch(() => null);
 
-      if (res.ok && body && body.success) {
-        // accept either body.data (new) or body.doctors (older)
-        const list = Array.isArray(body.data)
+      if (res.ok && body && (body.success || body.isSuccess)) {
+        // accept either body.result.data (new .NET format), body.data (older), or body.doctors
+        const list = (body.result && Array.isArray(body.result.data)) 
+          ? body.result.data 
+          : Array.isArray(body.data)
           ? body.data
           : Array.isArray(body.doctors)
             ? body.doctors

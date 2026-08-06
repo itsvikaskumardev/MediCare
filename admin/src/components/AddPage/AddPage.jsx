@@ -104,7 +104,7 @@ export default function DoctorDetailPage() {
     if (form.imagePreview && form.imageFile) {
       try {
         URL.revokeObjectURL(form.imagePreview);
-      } catch (err) {}
+      } catch (err) { }
     }
 
     setForm((p) => ({
@@ -119,7 +119,7 @@ export default function DoctorDetailPage() {
     if (form.imagePreview && form.imageFile) {
       try {
         URL.revokeObjectURL(form.imagePreview);
-      } catch (err) {}
+      } catch (err) { }
     }
 
     setForm((p) => ({ ...p, imageFile: null, imagePreview: "" }));
@@ -127,7 +127,7 @@ export default function DoctorDetailPage() {
     if (fileInputRef.current) {
       try {
         fileInputRef.current.value = "";
-      } catch (err) {}
+      } catch (err) { }
     }
   }
 
@@ -250,7 +250,7 @@ export default function DoctorDetailPage() {
 
       const API_BASE = `${import.meta.env.BACKEND_URL || "http://localhost:4000"}/api`;
 
-      const res = await fetch(`${API_BASE}/doctors`, {
+      const res = await fetch(`${API_BASE}/doctors/CreateDoctor`, {
         method: "POST",
         body: fd,
       });
@@ -269,7 +269,7 @@ export default function DoctorDetailPage() {
       if (data?.token) {
         try {
           localStorage.setItem("token", data.token);
-        } catch (err) {}
+        } catch (err) { }
       }
 
       const doctorFromServer = data?.data
@@ -282,7 +282,7 @@ export default function DoctorDetailPage() {
       if (form.imagePreview && form.imageFile) {
         try {
           URL.revokeObjectURL(form.imagePreview);
-        } catch (err) {}
+        } catch (err) { }
       }
 
       setForm({
@@ -307,7 +307,7 @@ export default function DoctorDetailPage() {
       if (fileInputRef.current) {
         try {
           fileInputRef.current.value = "";
-        } catch (err) {}
+        } catch (err) { }
       }
 
       setSlotDate("");
@@ -609,7 +609,7 @@ export default function DoctorDetailPage() {
             <button
               type="submit"
               disabled={loading}
-              className={s.submitButton + " " + s.cursorPointer + " " + 
+              className={s.submitButton + " " + s.cursorPointer + " " +
                 (loading ? s.submitButtonDisabled : s.submitButtonEnabled)}
             >
               {loading ? "Adding..." : "Add Doctor to Team"}
@@ -621,7 +621,7 @@ export default function DoctorDetailPage() {
       {/* TOAST */}
       {toast.show && (
         <div
-          className={s.toastContainer + " " + 
+          className={s.toastContainer + " " +
             (toast.type === "success" ? s.toastSuccess : s.toastError)}
         >
           {toast.type === "success" ? (
