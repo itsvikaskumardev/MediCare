@@ -36,8 +36,8 @@ namespace backend_dotnet.Services.Appointment
 
             var appointmentsQuery = _db.Appointments.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.DoctorId) && Guid.TryParse(query.DoctorId, out var doctorId))
-                appointmentsQuery = appointmentsQuery.Where(a => a.DoctorId == doctorId);
+            if (query.DoctorId.HasValue)
+                appointmentsQuery = appointmentsQuery.Where(a => a.DoctorId == query.DoctorId.Value);
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))
                 appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);
@@ -630,22 +630,14 @@ namespace backend_dotnet.Services.Appointment
         }
 
         //-------------------------------GetAppointmentsByDoctor------------------------------------------------------
-        public async Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(string doctorId, GetAppointmentsByDoctorQueryDTO query)
+        public async Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(Guid doctorId, GetAppointmentsByDoctorQueryDTO query)
         {
-            if (string.IsNullOrWhiteSpace(doctorId) || !Guid.TryParse(doctorId, out var docGuid))
-            {
-                return new AppointmentListResultDTO
-                {
-                    IsSuccess = false,
-                    ErrorMessage = "Valid doctorId required"
-                };
-            }
 
             var limit = Math.Min(200, Math.Max(1, query.Limit ?? 50));
             var page = Math.Max(1, query.Page ?? 1);
             var skip = (page - 1) * limit;
 
-            var appointmentsQuery = _db.Appointments.AsNoTracking().Where(a => a.DoctorId == docGuid);
+            var appointmentsQuery = _db.Appointments.AsNoTracking().Where(a => a.DoctorId == doctorId);
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))
                 appointmentsQuery = appointmentsQuery.Where(a => a.Mobile == query.Mobile);
@@ -671,7 +663,7 @@ namespace backend_dotnet.Services.Appointment
                 .ToListAsync();
 
             // manual "populate" of doctor summary fields (see FK note below)
-            var doctor = await _db.Doctors.Include(d => d.User).AsNoTracking().FirstOrDefaultAsync(d => d.Id == docGuid);
+            var doctor = await _db.Doctors.Include(d => d.User).AsNoTracking().FirstOrDefaultAsync(d => d.Id == doctorId);
 
             var projected = items.Select(a => (object)new
             {

@@ -1,5 +1,6 @@
 using backend_dotnet.Models.DTOs.User;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend_dotnet.Services.User
 {
@@ -16,7 +17,7 @@ namespace backend_dotnet.Services.User
         {
             try
             {
-                var totalCount = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.CountAsync(_db.Users);
+                var totalCount = await _db.Users.CountAsync();
 
                 return new UserCountResultDTO
                 {

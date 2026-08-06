@@ -1,8 +1,8 @@
-﻿namespace backend_dotnet.Models.DTOs.Appointment
+namespace backend_dotnet.Models.DTOs.Appointment
 {
     public class GetAppointmentsQueryDTO
     {
-        public string? DoctorId { get; set; }
+        public Guid? DoctorId { get; set; }
         public string? Mobile { get; set; }
         public string? Status { get; set; }
         public string? Search { get; set; } = "";

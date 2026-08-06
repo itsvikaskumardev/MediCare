@@ -324,7 +324,7 @@ namespace backend_dotnet.Endpoints
         //-------------------------------GetAppointmentsByDoctor------------------------------------------------------
 
         private static async Task<IResult> GetAppointmentsByDoctor(
-        string doctorId,
+        Guid doctorId,
         [AsParameters] GetAppointmentsByDoctorQueryDTO query,
         IAppointmentService appointmentService)
         {

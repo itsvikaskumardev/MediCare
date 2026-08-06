@@ -13,6 +13,6 @@ namespace backend_dotnet.Services.Appointment
         Task<AppointmentUpdateResultDTO> CancelAppointmentAsync(Guid id);
 
         Task<AppointmentStatsResultDTO> GetStatsAsync();
-        Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(string doctorId, GetAppointmentsByDoctorQueryDTO query);
+        Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(Guid doctorId, GetAppointmentsByDoctorQueryDTO query);
     }
 }

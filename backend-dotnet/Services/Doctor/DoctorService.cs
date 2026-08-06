@@ -232,19 +232,14 @@ namespace backend_dotnet.Services.Doctor
         }
 
         //-------------------------------------------GetDoctorById-----------------------------------------------------
-        public async Task<DoctorSingleResultDTO> GetDoctorByIdAsync(string id)
+        public async Task<DoctorSingleResultDTO> GetDoctorByIdAsync(Guid id)
         {
             try
             {
-                if (!Guid.TryParse(id, out var doctorId))
-                {
-                    return new DoctorSingleResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
-                }
-
                 var doctor = await _db.Doctors
                     .Include(d => d.User)
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
+                    .FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);
 
                 if (doctor is null)
                 {
@@ -267,16 +262,11 @@ namespace backend_dotnet.Services.Doctor
         }
 
         //-------------------------------------------UpdateDoctor-----------------------------------------------------
-        public async Task<DoctorUpdateResultDTO> UpdateDoctorAsync(string id, UpdateDoctorRequestDTO updateDoctorRequestDTO, IFormFile? image)
+        public async Task<DoctorUpdateResultDTO> UpdateDoctorAsync(Guid id, UpdateDoctorRequestDTO updateDoctorRequestDTO, IFormFile? image)
         {
             try
             {
-                if (!Guid.TryParse(id, out var doctorId))
-                {
-                    return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
-                }
-
-                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);
                 if (existing is null)
                 {
                     return new DoctorUpdateResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
@@ -372,16 +362,11 @@ namespace backend_dotnet.Services.Doctor
         }
 
         //-------------------------------------------DeleteDoctor-----------------------------------------------------
-        public async Task<DoctorDeleteResultDTO> DeleteDoctorAsync(string id)
+        public async Task<DoctorDeleteResultDTO> DeleteDoctorAsync(Guid id)
         {
             try
             {
-                if (!Guid.TryParse(id, out var doctorId))
-                {
-                    return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
-                }
-
-                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
+                var existing = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);
                 if (existing is null)
                 {
                     return new DoctorDeleteResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
@@ -412,16 +397,11 @@ namespace backend_dotnet.Services.Doctor
         }
 
         //-------------------------------------------ToggleAvailability-----------------------------------------------------
-        public async Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(string id)
+        public async Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(Guid id)
         {
             try
             {
-                if (!Guid.TryParse(id, out var doctorId))
-                {
-                    return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };
-                }
-
-                var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == doctorId || d.UserId == doctorId);
+                var doctor = await _db.Doctors.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);
                 if (doctor is null)
                 {
                     return new DoctorToggleAvailabilityResultDTO { IsSuccess = false, ErrorMessage = "Doctor not found" };

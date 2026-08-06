@@ -137,7 +137,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
         //-------------------------------------------GetDoctorById-----------------------------------------------------
         private static async Task<IResult> GetDoctorById(
-        string id,
+        Guid id,
         IDoctorService doctorService)
         {
             var result = await doctorService.GetDoctorByIdAsync(id);
@@ -171,7 +171,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         }
         //-------------------------------------------UpdateDoctor-----------------------------------------------------
         private static async Task<IResult> UpdateDoctor(
-        string id,
+        Guid id,
         [FromForm] UpdateDoctorRequestDTO updateDoctorRequestDTO,
         IFormFile? image,
         ClaimsPrincipal user,
@@ -179,7 +179,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         {
             var authenticatedDoctorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
+            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id.ToString())
             {
                 return Results.Forbid();
             }
@@ -228,7 +228,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
 
         private static async Task<IResult> DeleteDoctor(
-            string id,
+            Guid id,
             IDoctorService doctorService)
         {
             var result = await doctorService.DeleteDoctorAsync(id);
@@ -263,13 +263,13 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
         //-------------------------------------------ToggleAvailability-----------------------------------------------------
         private static async Task<IResult> ToggleAvailability(
-        string id,
+        Guid id,
         ClaimsPrincipal user,
         IDoctorService doctorService)
         {
             var authenticatedDoctorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id)
+            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id.ToString())
             {
                 return Results.Forbid();
             }

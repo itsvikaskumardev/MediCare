@@ -6,9 +6,9 @@ namespace backend_dotnet.Services.Doctor
     {
         Task<DoctorAuthResultDTO> CreateDoctorAsync(CreateDoctorRequestDTO request, IFormFile? image);
         Task<DoctorListResultDTO> GetDoctorsAsync(GetDoctorsRequestDTO request);
-        Task<DoctorSingleResultDTO> GetDoctorByIdAsync(string id);
-        Task<DoctorUpdateResultDTO> UpdateDoctorAsync(string id, UpdateDoctorRequestDTO request, IFormFile? image);
-        Task<DoctorDeleteResultDTO> DeleteDoctorAsync(string id);
-        Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(string id);
+        Task<DoctorSingleResultDTO> GetDoctorByIdAsync(Guid id);
+        Task<DoctorUpdateResultDTO> UpdateDoctorAsync(Guid id, UpdateDoctorRequestDTO request, IFormFile? image);
+        Task<DoctorDeleteResultDTO> DeleteDoctorAsync(Guid id);
+        Task<DoctorToggleAvailabilityResultDTO> ToggleAvailabilityAsync(Guid id);
     }
 }
