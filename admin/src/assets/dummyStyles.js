@@ -942,3 +942,153 @@ export const serviceDashboardStyles = {
     value: "text-lg font-semibold text-slate-800"
   }
 };
+export const editProfilePageStyles = {
+  // Page container
+  pageContainer: "min-h-screen font-serif bg-linear-to-br from-emerald-50 via-white to-emerald-50/30 p-4 sm:p-5 md:p-6",
+  maxWidthContainer: "max-w-6xl pt-8 md:pt-10 mx-auto relative",
+  
+  // Loading states
+  loadingContainer: "min-h-screen flex items-center justify-center",
+  loadingSpinner: "w-12 h-12 border-4 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto mb-4",
+  loadingText: "text-gray-600",
+  errorText: "text-red-600",
+  
+  // Toast notifications
+  toastContainer: "fixed top-3 right-2 sm:right-4 z-50 space-y-3 max-w-xs sm:max-w-sm",
+  toastBase: "transform transition-all duration-300 ease-out rounded-r-lg shadow-lg p-3 sm:p-4 flex items-start gap-3 animate-slideIn",
+  toastSuccess: "bg-linear-to-r from-emerald-50 to-emerald-100 border-l-4 border-emerald-500",
+  toastError: "bg-linear-to-r from-rose-50 to-rose-100 border-l-4 border-rose-500",
+  toastInfo: "bg-linear-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500",
+  toastIcon: "w-5 h-5 mt-0.5",
+  toastSuccessIcon: "text-emerald-600",
+  toastErrorIcon: "text-rose-600",
+  toastText: "text-sm font-medium text-gray-800",
+  
+  // Main card
+  mainCard: "bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-emerald-100/50",
+  headerBackground: "relative h-24 sm:h-28 md:h-32 bg-linear-to-r from-emerald-400 to-emerald-600",
+  
+  // Profile image
+  imageContainer: "absolute -bottom-16 left-1/2 transform -translate-x-1/2 md:left-8 md:transform-none",
+  imageWrapper: "relative group",
+  profileImage: "relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 md:ml-23 rounded-full object-cover border-4 border-white shadow-2xl",
+  imageEditButton: (editing) => `absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg cursor-pointer transition-transform ${!editing && "cursor-not-allowed"}`,
+  imageEditIcon: (editing) => `w-5 h-5 ${editing ? "text-emerald-600" : "text-gray-400"}`,
+  imageInput: "hidden",
+  
+  // Profile content
+  profileContent: "pt-20 pb-8 px-4 sm:px-6 md:px-8",
+  profileHeader: "flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8",
+  profileInfo: "flex-1 min-w-0",
+  profileName: "text-2xl sm:text-3xl md:text-4xl font-bold bg-linear-to-r from-emerald-700 to-emerald-900 bg-clip-text text-transparent truncate",
+  profileSubtitle: "text-sm sm:text-lg text-emerald-700 mt-2 flex items-center gap-2",
+  subtitleIcon: "w-4 h-4",
+  
+  // Stats container
+  statsContainer: "mt-4 flex flex-wrap items-center gap-3",
+  statItem: "flex items-center gap-3 bg-white px-3 py-2 rounded-full border border-emerald-100 shadow-sm text-sm sm:text-base",
+  ratingStatItem: "flex items-center gap-3 bg-linear-to-r from-amber-50 to-amber-100 px-3 py-2 rounded-full border border-amber-200 text-sm sm:text-base",
+  feeStatItem: "flex items-center gap-1 bg-linear-to-r from-amber-50 to-amber-100 px-3 py-2 rounded-full border border-amber-200",
+  statIcon: "w-4 h-4",
+  statEmeraldIcon: "text-emerald-600",
+  statAmberIcon: (field) => {
+    if (field === 'star') return "w-5 h-5 text-amber-500 fill-amber-500";
+    return "w-4 h-4 text-amber-600";
+  },
+  statLabel: "text-xs text-emerald-600 font-medium",
+  statAmberLabel: "text-xs text-amber-700 font-medium",
+  statValue: "text-sm font-semibold text-emerald-900 truncate",
+  statAmberValue: "text-sm font-bold text-amber-800",
+  statInput: "w-20 rounded-full border px-2 py-1 text-sm focus:outline-none",
+  statPatientsInput: "w-24 rounded-full border px-2 py-1 text-sm focus:outline-none",
+  
+  // Action buttons
+  actionButtons: "flex flex-col sm:flex-row items-center gap-3",
+  availabilityToggle: (isAvailable) => `flex items-center gap-3 px-4 sm:px-5 py-2 rounded-full cursor-pointer border-2 shadow-sm transition-all duration-300 ${isAvailable ? "bg-linear-to-r from-emerald-50 to-emerald-100 border-emerald-300 hover:shadow-emerald-200" : "bg-linear-to-r from-gray-50 to-gray-100 border-gray-300 hover:shadow-gray-200"} hover:shadow-lg w-full sm:w-auto`,
+  toggleTrack: (isAvailable) => `relative w-10 h-5 rounded-full transition-colors ${isAvailable ? "bg-emerald-500" : "bg-gray-400"}`,
+  toggleThumb: (isAvailable) => `absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isAvailable ? "left-6" : "left-0.5"}`,
+  toggleText: (isAvailable) => `font-medium ${isAvailable ? "text-emerald-700" : "text-gray-600"}`,
+  
+  editButton: "group relative overflow-hidden bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-5 py-2 rounded-full cursor-pointer shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] w-full sm:w-auto",
+  editButtonContent: "relative flex items-center gap-2",
+  
+  // Form sections
+  formSection: "mb-8",
+  sectionTitle: "text-xl sm:text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2",
+  sectionIconContainer: "w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center",
+  sectionIcon: "w-4 h-4 text-emerald-600",
+  
+  // Field grid
+  fieldGrid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6",
+  fieldGroup: "group",
+  fieldHeader: "flex items-center gap-3 mb-2",
+  fieldIconContainer: (editing) => `p-2 rounded-full ${editing ? "bg-emerald-100 text-emerald-600" : "bg-gray-100 text-gray-500"}`,
+  fieldIcon: "w-4 h-4",
+  fieldLabel: "text-sm font-semibold text-emerald-800",
+  
+  // Input fields
+  inputBase: (editing) => `w-full rounded-full border-2 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base transition-all duration-200 ${editing ? "border-emerald-200 bg-emerald-50/50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 focus:bg-white" : "border-gray-200 bg-gray-50/50 text-gray-600 cursor-not-allowed"}`,
+  
+  // About textarea
+  aboutTextarea: (editing) => `w-full rounded-xl border-2 px-4 py-3 text-sm sm:text-base transition-all duration-200 ${editing ? "border-emerald-200 bg-emerald-50/50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 focus:bg-white" : "border-gray-200 bg-gray-50/50 text-gray-600 cursor-not-allowed"}`,
+  aboutCharCount: "absolute bottom-3 right-3 text-xs text-gray-400",
+  
+  // Schedule section
+  scheduleHeader: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6",
+  emptySchedule: "text-center py-10 rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/50",
+  emptyScheduleIcon: "w-12 h-12 text-emerald-400 mx-auto mb-3",
+  emptyScheduleText: "text-emerald-700 font-medium",
+  emptyScheduleSubtext: "text-sm text-emerald-600 mt-1",
+  
+  // Schedule grid
+  scheduleGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5",
+  
+  // Date card
+  dateCard: "group relative bg-linear-to-br from-white to-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
+  dateHeader: "flex items-center justify-between mb-3 pb-3 border-b border-emerald-100",
+  dateIconContainer: "p-2 rounded-full bg-emerald-100",
+  dateIcon: "w-5 h-5 text-emerald-600",
+  dateTitle: "font-bold text-base sm:text-lg text-emerald-900",
+  dateSubtitle: "text-xs sm:text-sm text-emerald-600",
+  dateSlotCount: "text-xs font-medium px-3 py-1 rounded-full bg-emerald-100 text-emerald-700",
+  dateDeleteButton: (editing) => `p-2 rounded-full cursor-pointer transition-colors ${editing ? "hover:bg-rose-50 text-rose-500 hover:text-rose-600" : "text-gray-400 cursor-not-allowed"}`,
+  dateDeleteIcon: "w-4 h-4",
+  
+  // Time slots
+  timeSlotContainer: "space-y-3",
+  timeSlotItem: "flex items-center justify-between bg-white px-3 py-2 rounded-full border border-emerald-100 hover:border-emerald-200 transition-colors",
+  timeSlotIcon: "w-4 h-4 text-emerald-600",
+  timeSlotText: "font-medium text-emerald-900 text-sm sm:text-base",
+  timeSlotDeleteButton: (editing) => `p-1.5 rounded-full cursor-pointer transition-colors ${editing ? "hover:bg-rose-50 text-rose-500 hover:text-rose-600" : "text-gray-400 cursor-not-allowed"}`,
+  timeSlotDeleteIcon: "w-4 h-4",
+  
+  // Add time slot
+  addSlotContainer: "pt-3 border-t border-emerald-100",
+  addSlotInput: "flex-1 rounded-full px-3 py-2 text-sm border border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200",
+  addSlotButton: "p-2 rounded-full cursor-pointer bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors",
+  addSlotIcon: "w-4 h-4",
+  
+  // Save message
+  saveMessage: (type) => `px-4 py-2 rounded-lg ${type === "saving" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`,
+
+  // Actions section
+  actionsSection: "flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-emerald-100",
+  actionsText: "text-sm text-gray-500",
+  actionsButtons: "flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto",
+  resetButton: "px-6 py-3 rounded-full cursor-pointer border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-200 font-medium w-full sm:w-auto text-center",
+  saveButton: "group relative overflow-hidden bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-6 py-3 rounded-full cursor-pointer shadow-lg transition-all duration-300 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-auto text-center",
+  saveButtonContent: "relative flex items-center gap-2 justify-center",
+  saveSpinner: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin",
+  
+  // AddDate component styles
+  addDateContainer: "flex items-center gap-2",
+  addDateInput: "rounded-xl px-3 py-2 border-2 border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 text-sm sm:text-base",
+  addDateButton: "flex items-center gap-2 bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm sm:text-base",
+  addDateIcon: "w-4 h-4",
+  
+  // Custom animations
+  customCSS: `
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .animate-slideIn { animation: slideIn 0.3s ease-out forwards; }
+  `
+};

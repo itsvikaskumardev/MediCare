@@ -11,6 +11,7 @@ import SerDashboard from "./pages/SerDashboard/SerDashboard";
 import AddSer from "./pages/AddSer/AddSer";
 import ListService from "./pages/ListService/ListService";
 import ServiceAppointments from "./pages/ServiceAppointments/ServiceAppointments";
+import AdminProfile from "./pages/AdminProfile/AdminProfile";
 import Hero from "./components/Hero/Hero";
 import Login from "./pages/Login/Login";
 
@@ -55,6 +56,14 @@ const App = () => {
         element={
           <RequireAuth>
             <Home />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <RequireAuth>
+            <AdminProfile />
           </RequireAuth>
         }
       />

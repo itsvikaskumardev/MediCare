@@ -237,12 +237,21 @@ export default function AnimatedNavbar() {
             {/* Auth buttons (Desktop) */}
             <div className="hidden md:flex items-center gap-2">
               {isSignedIn ? (
-                <button
-                  onClick={handleSignOut}
-                  className={ns.signOutButton + " " + ns.cursorPointer}
-                >
-                  Sign Out
-                </button>
+                <>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 mr-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span className="text-sm font-medium">{user?.fullName || user?.email || "Admin"}</span>
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className={ns.signOutButton + " " + ns.cursorPointer}
+                  >
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <button
                   onClick={handleOpenSignIn}
@@ -330,15 +339,28 @@ export default function AnimatedNavbar() {
 
               <div className={ns.mobileAuthContainer}>
                 {isSignedIn ? (
-                  <button
-                    onClick={() => {
-                      handleSignOut();
-                      setOpen(false);
-                    }}
-                    className={ns.mobileSignOutButton}
-                  >
-                    Sign Out
-                  </button>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 rounded-lg text-emerald-800">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span className="text-sm font-medium">{user?.fullName || user?.email || "Admin"}</span>
+                    </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setOpen(false)}
+                      className={ns.mobileItemBase + " font-medium text-emerald-700 bg-white border border-emerald-200"}
+                    >
+                      View Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setOpen(false);
+                      }}
+                      className={ns.mobileSignOutButton}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     <button
