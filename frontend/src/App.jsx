@@ -11,6 +11,7 @@ import DoctorDetail from "./pages/DoctorDetail/DoctorDetail";
 import ServiceDetailPage from "./pages/ServiceDetailPage/ServiceDetailPage";
 import Appointments from "./pages/Appointments/Appointments";
 import Login from "./pages/Login/Login";
+import MyProfile from "./pages/MyProfile/MyProfile";
 
 // Doctor Admin
 import DHome from "./pages/DHome/DHome";
@@ -88,6 +89,7 @@ const App = () => {
           <Route path="/services" element={<Service />} />
           <Route path="/services/:id" element={<ServiceDetailPage />} />
           <Route path="/appointments" element={<Appointments />} />
+          <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/doctor-admin/login" element={<Login />} />
 
           {/* ✅ STRIPE PAYMENT ROUTES */}
