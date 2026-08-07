@@ -52,6 +52,8 @@ namespace backend_dotnet.Data
                       .WithOne(u => u.DoctorProfile)
                       .HasForeignKey<Doctor>(d => d.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasQueryFilter(d => !d.IsDeleted);
             });
 
             // ---- Patient ----
@@ -63,6 +65,12 @@ namespace backend_dotnet.Data
                       .WithOne(u => u.PatientProfile)
                       .HasForeignKey<Patient>(p => p.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ---- Service ----
+            modelBuilder.Entity<Service>(entity =>
+            {
+                entity.HasQueryFilter(s => !s.IsDeleted);
             });
 
             // ---- Appointment ----

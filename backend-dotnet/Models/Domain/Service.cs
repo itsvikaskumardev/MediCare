@@ -46,6 +46,8 @@ namespace backend_dotnet.Models.Domain
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        
+        public bool IsDeleted { get; set; } = false;
 
         // Navigation properties
         public ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();

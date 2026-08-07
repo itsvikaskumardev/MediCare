@@ -25,6 +25,7 @@ namespace backend_dotnet.Models.Domain
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal Fee { get; set; } = 0;
+        public bool IsDeleted { get; set; } = false;
 
         public Availability Availability { get; set; } = Availability.Available;
 

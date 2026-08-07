@@ -230,7 +230,8 @@ namespace backend_dotnet.Services.Service
                 }
             }
 
-            _db.Services.Remove(existing);
+            existing.IsDeleted = true;
+
             await _db.SaveChangesAsync();
 
             return new ServiceResultDTO

@@ -384,7 +384,7 @@ namespace backend_dotnet.Services.Doctor
                     }
                 }
 
-                _db.Users.Remove(existing.User); // Deleting the user will cascade delete the doctor
+                existing.IsDeleted = true;
                 await _db.SaveChangesAsync();
 
                 return new DoctorDeleteResultDTO { IsSuccess = true };
