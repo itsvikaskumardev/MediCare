@@ -128,10 +128,16 @@ export default function ServicePage({ apiBase, previewCount = 9999 }) {
         return;
       }
 
-      const items = (json && (json.data || json)) || [];
+      // support both { success:true, data: [...] } and .NET { result: [...] } or { result: { services: [...] } }
+      const items = (json && (
+        Array.isArray(json.result) ? json.result :
+        json.result?.services || json.result?.data || json.data || json.services || json.items
+      )) || [];
       const normalized = (Array.isArray(items) ? items : []).map((s) => {
         const id = s._id || s.id;
-        const image = s.imageUrl || s.image || s.imageSmall || "";
+        const name = s.name || "Service";
+        const fallbackImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=512`;
+        const image = s.imageUrl || s.image || s.imageSmall || fallbackImage;
         const available =
           typeof s.available === "boolean"
             ? s.available
@@ -141,7 +147,7 @@ export default function ServicePage({ apiBase, previewCount = 9999 }) {
 
         return {
           id,
-          name: s.name || "Service",
+          name,
           shortDescription: s.shortDescription || s.about || "",
           image,
           imageSmall: s.imageSmall || null,

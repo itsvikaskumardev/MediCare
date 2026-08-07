@@ -31,7 +31,7 @@ namespace backend_dotnet.Endpoints
                 .Produces<ApiResponse>(StatusCodes.Status401Unauthorized)
                 .Produces<ApiResponse>(StatusCodes.Status409Conflict)
                 .Produces<ApiResponse>(StatusCodes.Status502BadGateway)
-                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError).DisableAntiforgery();
 
             serviceAppointmentGroup.MapPut("/UpdateServiceAppointment/{id}", UpdateServiceAppointment)
                 .WithName("UpdateServiceAppointment")

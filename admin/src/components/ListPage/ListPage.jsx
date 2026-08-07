@@ -315,7 +315,13 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
             <article key={id} className={doctorListStyles.article}>
               <div className={doctorListStyles.articleContent}>
                 <img
-                  src={doc.imageUrl || doc.image || ""}
+                  src={
+                    doc.imageUrl ||
+                    doc.image ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      doc.name || "Doctor"
+                    )}&background=random&color=fff&size=512`
+                  }
                   alt={doc.name}
                   className={doctorListStyles.doctorImage}
                 />

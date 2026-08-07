@@ -151,7 +151,7 @@ const StatusBadge = ({ itemStatus }) => {
 
 /* -------------------- Component -------------------- */
 export default function AppointmentPage() {
-  const { isLoaded, user, getToken } = useAuth();
+  const { isLoaded, user, token } = useAuth();
   const isSignedIn = !!user;
 
   const [loadingDoctors, setLoadingDoctors] = useState(false);
@@ -171,17 +171,6 @@ export default function AppointmentPage() {
     if (!isLoaded) return;
     setLoadingDoctors(true);
     setError(null);
-
-    let token = null;
-    try {
-      token = await getToken();
-      console.log(
-        "Clerk token (frontend):",
-        token ? `${token.slice(0, 20)}...` : null,
-      );
-    } catch (err) {
-      console.error("Failed to get Clerk token (frontend):", err);
-    }
 
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     console.log("Outgoing headers for /api/appointments/me:", headers);
@@ -263,7 +252,7 @@ export default function AppointmentPage() {
     } finally {
       setLoadingDoctors(false);
     }
-  }, [isLoaded, getToken, user]);
+  }, [isLoaded, token, user]);
 
   /* -------------------- Fetch Service Appointments -------------------- */
   const loadServiceAppointments = useCallback(async () => {
@@ -271,12 +260,6 @@ export default function AppointmentPage() {
     setLoadingServices(true);
     setError(null);
 
-    let token = null;
-    try {
-      token = await getToken();
-    } catch (err) {
-      console.error("Failed to get Clerk token (frontend): err", err);
-    }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     console.log("Outgoing headers for /api/service-appointments/GetServiceAppointments:", headers);
 
@@ -344,7 +327,7 @@ export default function AppointmentPage() {
     } finally {
       setLoadingServices(false);
     }
-  }, [isLoaded, getToken, user]);
+  }, [isLoaded, token, user]);
 
   /* -------------------- Combined loader -------------------- */
   useEffect(() => {

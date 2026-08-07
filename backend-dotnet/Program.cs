@@ -74,6 +74,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddProblemDetails();
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
+
 var secretKey = builder.Configuration["ApiSettings:Secret"]
                 ?? throw new InvalidOperationException("ApiSettings:Secret is not configured.");
 var issuer = builder.Configuration["ApiSettings:Issuer"];
@@ -116,7 +122,11 @@ builder.Services.AddScoped<IServiceModuleService, ServiceModuleService>();
 builder.Services.AddScoped<IServiceAppointmentService, ServiceAppointmentService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
 builder.Services.AddAntiforgery();
 
 var app = builder.Build();

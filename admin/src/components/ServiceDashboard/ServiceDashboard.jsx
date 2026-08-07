@@ -37,6 +37,7 @@ function normalizeService(doc) {
   // various possible stat shapes
   const totalAppointments =
     doc.totalAppointments ??
+    doc.total ??
     doc.appointments?.total ??
     doc.count ??
     doc.stats?.total ??
@@ -55,14 +56,29 @@ function normalizeService(doc) {
     doc.canceledAppointments ??
     0;
 
+  const confirmed =
+    doc.confirmed ??
+    doc.appointments?.confirmed ??
+    doc.stats?.confirmed ??
+    doc.confirmedAppointments ??
+    0;
+
+  const earning = 
+    doc.earning ??
+    doc.earnings ??
+    doc.revenue ??
+    0;
+
   return {
     id,
     name,
     price,
     image,
     totalAppointments: Number(totalAppointments) || 0,
+    confirmed: Number(confirmed) || 0,
     completed: Number(completed) || 0,
     canceled: Number(canceled) || 0,
+    earning: Number(earning) || 0,
     raw: doc,
   };
 }
@@ -120,11 +136,13 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
       // backend might return { services: [...] } or { data: [...] } or array directly
       let list = [];
       if (Array.isArray(body)) list = body;
+      else if (Array.isArray(body.result)) list = body.result;
+      else if (body.result && Array.isArray(body.result.services)) list = body.result.services;
       else if (Array.isArray(body.services)) list = body.services;
       else if (Array.isArray(body.data)) list = body.data;
       else if (Array.isArray(body.items)) list = body.items;
       else {
-        const maybeArray = Object.values(body).find((v) => Array.isArray(v));
+        const maybeArray = Object.values(body.result || body).find((v) => Array.isArray(v));
         if (maybeArray) list = maybeArray;
       }
 
@@ -153,7 +171,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
         // cleanup global
         // eslint-disable-next-line no-undef
         delete window.refreshServices;
-      } catch {}
+      } catch { }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -253,14 +271,16 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
       (acc, s) => {
         acc.totalServices += 1;
         acc.totalAppointments += s.totalAppointments;
+        acc.totalConfirmed += s.confirmed;
         acc.totalCompleted += s.completed;
         acc.totalCanceled += s.canceled;
-        acc.totalEarning += s.completed * s.price;
+        acc.totalEarning += (s.earning > 0 ? s.earning : s.completed * s.price);
         return acc;
       },
       {
         totalServices: 0,
         totalAppointments: 0,
+        totalConfirmed: 0,
         totalCompleted: 0,
         totalCanceled: 0,
         totalEarning: 0,
@@ -291,9 +311,8 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
             <div className={serviceDashboardStyles.refresh.countText}>
               {loading
                 ? "Loading..."
-                : `${filteredServices.length} service${
-                    filteredServices.length !== 1 ? "s" : ""
-                  }`}
+                : `${filteredServices.length} service${filteredServices.length !== 1 ? "s" : ""
+                }`}
             </div>
             <button
               onClick={() => {
@@ -332,6 +351,11 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
           />
           <StatCard
             icon={<CheckCircle size={18} />}
+            label="Confirmed"
+            value={totals.totalConfirmed}
+          />
+          <StatCard
+            icon={<CheckCircle size={18} />}
             label="Completed"
             value={totals.totalCompleted}
           />
@@ -339,6 +363,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
             icon={<XCircle size={18} />}
             label="Canceled"
             value={totals.totalCanceled}
+
           />
         </div>
 
@@ -397,7 +422,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
               </div>
             ) : (
               visibleServices.map((s) => {
-                const earning = s.completed * s.price;
+                const earning = (s.earning > 0 ? s.earning : s.completed * s.price);
                 return (
                   <div
                     key={s.id}

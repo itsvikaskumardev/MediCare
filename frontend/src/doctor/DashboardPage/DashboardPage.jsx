@@ -256,7 +256,7 @@ export default function DashboardPage({ apiBase }) {
     );
 
     try {
-      const res = await fetch(`${API}/api/appointments/${id}`, {
+      const res = await fetch(`${API}/api/appointments/UpdateAppointment/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: backendStatus }),

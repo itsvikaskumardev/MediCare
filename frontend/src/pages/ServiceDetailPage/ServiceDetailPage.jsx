@@ -21,7 +21,7 @@ export default function ServiceDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { isSignedIn, userId, getToken } = useAuth();
+  const { isSignedIn, user, token } = useAuth();
 
   // UI state
   const [selectedDate, setSelectedDate] = useState("");
@@ -69,7 +69,7 @@ export default function ServiceDetail() {
     const controller = new AbortController();
 
     const endpoints = [
-      `${DEFAULT_HOST}/api/services/${encodeURIComponent(id)}`,
+      `${DEFAULT_HOST}/api/services/GetServiceById/${encodeURIComponent(id)}`,
     ];
 
     async function tryFetch() {
@@ -106,7 +106,7 @@ export default function ServiceDetail() {
           }
 
           const json = await res.json().catch(() => null);
-          const doc = json?.data ?? json?.service ?? json;
+          const doc = json?.result ?? json?.data ?? json?.service ?? json;
 
           if (!doc) {
             lastError = new Error(`No service data at ${url}`);
@@ -219,25 +219,57 @@ export default function ServiceDetail() {
       doc.slug ??
       String(doc.name).replace(/\s+/g, "-").toLowerCase();
     out.name = doc.name ?? doc.title ?? "Service";
+    const fallbackImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(out.name)}&background=random&color=fff&size=512`;
     out.image =
-      doc.image || doc.imageUrl || doc.imageURL || doc.image_path || null;
+      doc.image || doc.imageUrl || doc.imageURL || doc.image_path || fallbackImage;
     out.price =
       typeof doc.price === "number" ? doc.price : Number(doc.price) || 0;
     out.about = doc.about ?? doc.description ?? doc.shortDescription ?? "";
     out.instructions = Array.isArray(doc.instructions) ? doc.instructions : [];
 
+    let parsedSlots = doc.slots;
+    if (typeof parsedSlots === "string") {
+      try { parsedSlots = JSON.parse(parsedSlots); } catch (e) { }
+    }
+    if (parsedSlots && typeof parsedSlots === "object" && !Array.isArray(parsedSlots)) {
+      parsedSlots = Object.values(parsedSlots);
+    }
+
     let dates = Array.isArray(doc.dates) ? doc.dates.slice() : [];
     let slotsMap = {};
     if (
-      doc.slots &&
-      !Array.isArray(doc.slots) &&
-      typeof doc.slots === "object"
+      parsedSlots &&
+      !Array.isArray(parsedSlots) &&
+      typeof parsedSlots === "object"
     ) {
-      slotsMap = { ...doc.slots };
+      slotsMap = { ...parsedSlots };
       if (dates.length === 0) dates = Object.keys(slotsMap);
-    } else if (Array.isArray(doc.slots)) {
-      const arr = doc.slots.slice();
-      if (dates.length > 0) {
+    } else if (Array.isArray(parsedSlots)) {
+      const arr = parsedSlots.slice();
+      let hasFormattedSlots = false;
+      const grouped = {};
+      const months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+
+      arr.forEach((str) => {
+        const m = typeof str === 'string' && str.match(/^(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})\s*•\s*(.*)$/);
+        if (m) {
+           hasFormattedSlots = true;
+           const day = m[1].padStart(2, "0");
+           const monthShort = m[2];
+           const year = m[3];
+           const time = m[4].trim();
+           const mi = months.findIndex((mm) => mm === monthShort.toLowerCase());
+           const monthNum = mi >= 0 ? String(mi + 1).padStart(2, "0") : "01";
+           const dateKey = `${year}-${monthNum}-${day}`;
+           if (!grouped[dateKey]) grouped[dateKey] = [];
+           grouped[dateKey].push(time);
+        }
+      });
+
+      if (hasFormattedSlots) {
+        slotsMap = grouped;
+        dates = Object.keys(grouped);
+      } else if (dates.length > 0) {
         dates.forEach((d) => (slotsMap[d] = arr.slice()));
       } else {
         const today = new Date().toISOString().split("T")[0];
@@ -281,15 +313,14 @@ export default function ServiceDetail() {
     }
 
     // Require Clerk sign-in: show toast and abort if not signed in
-    if (!isSignedIn) {
-      toast.error("Please sign in to create a booking.");
-      return;
-    }
+    // if (!isSignedIn) {
+    //   toast.error("Please sign in to create a booking.");
+    //   return;
+    // }
 
     setSubmitting(true);
     try {
-      // get Clerk token (frontend)
-      const token = await getToken().catch(() => null);
+      // get token (frontend)
 
       // payload (replace the existing payload in ServiceDetail.jsx)
       const payload = {
@@ -314,7 +345,7 @@ export default function ServiceDetail() {
           "",
         patientName: customerName.trim(),
         mobile: mobile.trim(),
-        age: age ? Number(age) : undefined,
+        age: age ? String(age) : undefined,
         gender: gender || "",
         date: selectedDate,
         time: selectedTime,
@@ -344,7 +375,7 @@ export default function ServiceDetail() {
         return;
       }
 
-      const res = await fetch(`${DEFAULT_HOST}/api/service-appointments`, {
+      const res = await fetch(`${DEFAULT_HOST}/api/service-appointments/CreateServiceAppointment`, {
         method: "POST",
         headers,
         body: JSON.stringify(payload),
@@ -601,10 +632,10 @@ export default function ServiceDetail() {
                   ))}
                   {(!service.slots[selectedDate] ||
                     service.slots[selectedDate].length === 0) && (
-                    <div className={serviceDetailStyles.noSlotsMessage}>
-                      No slots available for this date.
-                    </div>
-                  )}
+                      <div className={serviceDetailStyles.noSlotsMessage}>
+                        No slots available for this date.
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -632,9 +663,8 @@ export default function ServiceDetail() {
               <Send />
               {submitting
                 ? "Submitting..."
-                : `Confirm Booking ${
-                    service.price ? `• ₹${service.price}` : ""
-                  }`}
+                : `Confirm Booking ${service.price ? `• ₹${service.price}` : ""
+                }`}
             </button>
           </div>
         </div>

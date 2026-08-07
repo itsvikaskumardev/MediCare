@@ -659,8 +659,9 @@ namespace backend_dotnet.Services.ServiceAppointment
                 var total = apptsForSvc.Count;
                 var completed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Completed);
                 var canceled = apptsForSvc.Count(a => a.Status == AppointmentStatus.Canceled);
+                var confirmed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Confirmed);
                 var earning = apptsForSvc
-                    .Where(a => a.PaymentStatus == PaymentStatus.Paid)
+                    .Where(a => a.Status == AppointmentStatus.Completed)
                     .Sum(a => svc.Price);
 
                 resultList.Add(new
@@ -668,6 +669,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                     _id = svc.Id,
                     name = svc.Name,
                     total,
+                    confirmed,
                     completed,
                     canceled,
                     earning

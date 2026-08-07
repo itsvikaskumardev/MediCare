@@ -408,7 +408,7 @@ export default function ServiceAppointmentsPage() {
     pushToast("Updating status", `Appointment #${id} → ${newStatus}`);
 
     try {
-      const res = await fetch(`${API_BASE}/api/service-appointments/${id}`, {
+      const res = await fetch(`${API_BASE}/api/service-appointments/UpdateServiceAppointment/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),

@@ -142,6 +142,9 @@ export default function ListServicePage({ apiBase }) {
             parsedSlots = JSON.parse(parsedSlots);
           } catch (e) {}
         }
+        if (parsedSlots && typeof parsedSlots === "object" && !Array.isArray(parsedSlots)) {
+          parsedSlots = Object.values(parsedSlots);
+        }
 
         return {
           id: s._id || s.id,
