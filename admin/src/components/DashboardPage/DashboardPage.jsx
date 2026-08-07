@@ -97,7 +97,7 @@ export default function DashboardPage() {
   const [error, setError] = useState(null);
 
   // new: patient count from backend (total registered users)
-  const [patientCount, setPatientCount] = useState(null);
+  const [userCounts, setUserCounts] = useState({ totalPatients: null, totalAdmins: null });
   const [patientCountLoading, setPatientCountLoading] = useState(false);
 
   const [query, setQuery] = useState("");
@@ -155,18 +155,22 @@ export default function DashboardPage() {
         const res = await fetch(PATIENT_COUNT_API);
         if (!res.ok) {
           console.warn("Patient count fetch failed:", res.status);
-          if (mounted) setPatientCount(0);
+          if (mounted) setUserCounts({ totalPatients: 0, totalAdmins: 0 });
           return;
         }
 
         const body = await res.json().catch(() => ({}));
-        const count = Number(
-          body?.result?.totalUsers ?? body?.count ?? body?.totalUsers ?? body?.data ?? 0
-        );
-        if (mounted) setPatientCount(isNaN(count) ? 0 : count);
+        const result = body?.result || {};
+        
+        if (mounted) {
+          setUserCounts({
+            totalPatients: typeof result.totalPatients === 'number' ? result.totalPatients : 0,
+            totalAdmins: typeof result.totalAdmins === 'number' ? result.totalAdmins : 0,
+          });
+        }
       } catch (err) {
-        console.error("Failed to fetch patient count:", err);
-        if (mounted) setPatientCount(0);
+        console.error("Failed to fetch user counts:", err);
+        if (mounted) setUserCounts({ totalPatients: 0, totalAdmins: 0 });
       } finally {
         if (mounted) setPatientCountLoading(false);
       }
@@ -252,11 +256,20 @@ export default function DashboardPage() {
           {/* Updated: show count fetched from backend, fallback to derived value */}
           <StatCard
             icon={<UserRoundCheck className="w-6 h-6" />}
-            label="Total Registered Users"
+            label="Total Patients"
             value={
               patientCountLoading
                 ? "Loading..."
-                : patientCount ?? totals.totalLoginPatients
+                : userCounts.totalPatients ?? totals.totalLoginPatients
+            }
+          />
+          <StatCard
+            icon={<UserRoundCheck className="w-6 h-6" />}
+            label="Total Admin"
+            value={
+              patientCountLoading
+                ? "Loading..."
+                : userCounts.totalAdmins ?? 0
             }
           />
 

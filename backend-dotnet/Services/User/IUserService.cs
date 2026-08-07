@@ -7,5 +7,8 @@ namespace backend_dotnet.Services.User
         Task<UserCountResultDTO> GetRegisteredUserCountAsync();
         Task<PatientProfileResultDTO> GetPatientProfileAsync(Guid authenticatedUserId);
         Task<UpdatePatientProfileResultDTO> UpdatePatientProfileAsync(Guid authenticatedUserId, UpdatePatientProfileRequestDTO request);
+        
+        Task<AdminProfileResultDTO> GetAdminProfileAsync(Guid authenticatedUserId);
+        Task<AdminProfileResultDTO> UpdateAdminProfileAsync(Guid authenticatedUserId, UpdateAdminProfileRequestDTO request);
     }
 }

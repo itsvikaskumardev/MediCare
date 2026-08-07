@@ -668,6 +668,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                 {
                     _id = svc.Id,
                     name = svc.Name,
+                    price = svc.Price,
                     total,
                     confirmed,
                     completed,

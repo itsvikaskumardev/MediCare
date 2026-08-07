@@ -42,17 +42,46 @@ export default function AdminProfile() {
   };
 
   useEffect(() => {
-    // Mock fetch profile based on auth user
-    if (authUser) {
-      setProfile({
-        name: authUser.fullName || "Administrator",
-        email: authUser.email || "admin@medicare.com",
-        role: authUser.role || "ADMIN",
-        id: authUser.id,
-        imageUrl: "",
-      });
-      setLoading(false);
+    let mounted = true;
+    async function loadProfile() {
+      if (!authUser || !authUser.id) return;
+      try {
+        const token = localStorage.getItem("authToken");
+        const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
+        const res = await fetch(`${API_BASE}/api/user/admin-profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to load profile");
+        const body = await res.json();
+        const data = body.result || {};
+        
+        if (mounted) {
+          setProfile({
+            name: data.name || authUser.fullName || "Administrator",
+            email: data.email || authUser.email || "admin@medicare.com",
+            role: data.role || authUser.role || "ADMIN",
+            id: data.id || authUser.id,
+            imageUrl: data.imageUrl || "",
+          });
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Error loading admin profile:", err);
+        if (mounted) {
+          // Fallback to authUser if fetch fails
+          setProfile({
+            name: authUser.fullName || "Administrator",
+            email: authUser.email || "admin@medicare.com",
+            role: authUser.role || "ADMIN",
+            id: authUser.id,
+            imageUrl: "",
+          });
+          setLoading(false);
+        }
+      }
     }
+    loadProfile();
+    return () => { mounted = false; };
   }, [authUser]);
 
   const updateField = (field, value) => {
@@ -71,13 +100,36 @@ export default function AdminProfile() {
     addToast("Changes discarded", "info");
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
+    try {
+      const token = localStorage.getItem("authToken");
+      const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
+      const response = await fetch(`${API_BASE}/api/user/admin-profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: profile.name,
+          email: profile.email,
+          imageUrl: profile.imageUrl
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+      
       setEditing(false);
       addToast("Profile updated successfully!", "success");
-    }, 800);
+    } catch (err) {
+      console.error(err);
+      addToast("Failed to update profile", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCreateAdmin = async (e) => {

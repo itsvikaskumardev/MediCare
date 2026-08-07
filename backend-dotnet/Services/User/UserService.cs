@@ -13,27 +13,31 @@ namespace backend_dotnet.Services.User
             _db = db;
         }
 
+        //-------------------------------GetRegisteredUserCountAsync------------------------------------------------------
+
         public async Task<UserCountResultDTO> GetRegisteredUserCountAsync()
         {
             try
             {
-                var totalCount = await _db.Users.CountAsync();
+                var totalPatients = await _db.Users.CountAsync(u => u.Role == Role.PATIENT);
+                var totalAdmins = await _db.Users.CountAsync(u => u.Role == Role.ADMIN);
+                var totalUsers = totalPatients + totalAdmins;
 
                 return new UserCountResultDTO
                 {
                     IsSuccess = true,
-                    TotalUsers = totalCount
+                    TotalUsers = totalUsers,
+                    TotalPatients = totalPatients,
+                    TotalAdmins = totalAdmins
                 };
             }
             catch (Exception ex)
             {
-                return new UserCountResultDTO
-                {
-                    IsSuccess = false,
-                    ErrorMessage = ex.Message
-                };
+                return new UserCountResultDTO { IsSuccess = false, ErrorMessage = ex.Message };
             }
         }
+
+        //-------------------------------GetPatientProfileAsync------------------------------------------------------
 
         public async Task<PatientProfileResultDTO> GetPatientProfileAsync(Guid authenticatedUserId)
         {
@@ -72,6 +76,8 @@ namespace backend_dotnet.Services.User
                 }
             };
         }
+
+        //-------------------------------UpdatePatientProfileAsync------------------------------------------------------
 
         public async Task<UpdatePatientProfileResultDTO> UpdatePatientProfileAsync(Guid authenticatedUserId, UpdatePatientProfileRequestDTO request)
         {
@@ -128,6 +134,74 @@ namespace backend_dotnet.Services.User
                     EmergencyContactNumber = user.PatientProfile?.EmergencyContactNumber,
                     InsuranceProvider = user.PatientProfile?.InsuranceProvider,
                     InsurancePolicyNumber = user.PatientProfile?.InsurancePolicyNumber
+                }
+            };
+        }
+
+        //-------------------------------GetAdminProfileAsync------------------------------------------------------
+
+        public async Task<AdminProfileResultDTO> GetAdminProfileAsync(Guid authenticatedUserId)
+        {
+            if (authenticatedUserId == Guid.Empty)
+            {
+                return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.Unauthorized, ErrorMessage = "Unauthorized" };
+            }
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN);
+            if (user == null)
+            {
+                return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.NotFound, ErrorMessage = "Admin not found" };
+            }
+
+            return new AdminProfileResultDTO
+            {
+                IsSuccess = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Profile = new AdminProfileDTO
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Role = "ADMIN",
+                    ImageUrl = user.ImageUrl
+                }
+            };
+        }
+
+        //-------------------------------UpdateAdminProfileAsync------------------------------------------------------
+
+        public async Task<AdminProfileResultDTO> UpdateAdminProfileAsync(Guid authenticatedUserId, UpdateAdminProfileRequestDTO request)
+        {
+            if (authenticatedUserId == Guid.Empty)
+            {
+                return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.Unauthorized, ErrorMessage = "Unauthorized" };
+            }
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN);
+            if (user == null)
+            {
+                return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.NotFound, ErrorMessage = "Admin not found" };
+            }
+
+            if (!string.IsNullOrEmpty(request.Name)) user.Name = request.Name;
+            if (!string.IsNullOrEmpty(request.Email)) user.Email = request.Email;
+            if (request.ImageUrl != null) user.ImageUrl = request.ImageUrl; // Assuming ImageUrl is handled here
+
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+
+            return new AdminProfileResultDTO
+            {
+                IsSuccess = true,
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Profile = new AdminProfileDTO
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Role = "ADMIN",
+                    ImageUrl = user.ImageUrl
                 }
             };
         }

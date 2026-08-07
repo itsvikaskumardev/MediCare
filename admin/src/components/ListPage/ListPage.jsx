@@ -7,8 +7,10 @@ import {
   Search,
   Users,
   EyeClosed,
+  Check,
+  X,
 } from "lucide-react";
-import { doctorListStyles } from "../../assets/dummyStyles";
+import { doctorListStyles, serviceListStyles as s } from "../../assets/dummyStyles";
 
 function formatDateISO(iso) {
   if (!iso || typeof iso !== "string") return iso;
@@ -107,6 +109,22 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
   const [showAll, setShowAll] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
   const [loading, setLoading] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Toasts
+  const [toasts, setToasts] = useState([]);
+  function addToast(
+    message,
+    type = "success",
+    ttl = 3000,
+    position = "bottom-right",
+    animated = false
+  ) {
+    const id = Date.now() + Math.random();
+    setToasts((t) => [...t, { id, message, type, position, animated }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), ttl);
+  }
 
   // track if we are on a mobile (tailwind "sm" breakpoint is 640px)
   const [isMobileScreen, setIsMobileScreen] = useState(false);
@@ -197,24 +215,30 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
   async function removeDoctor(id) {
     const doc = doctors.find((d) => (d._id || d.id) === id);
     if (!doc) return;
-    const ok = window.confirm(`Delete ${doc.name}? This cannot be undone.`);
-    if (!ok) return;
+
+    setIsDeleting(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/doctors/${id}`, {
+      const res = await fetch(`${API_BASE}/api/doctors/DeleteDoctor/${id}`, {
         method: "DELETE",
       });
       const body = await res.json().catch(() => null);
+
       if (!res.ok) {
-        alert(body?.message || "Failed to delete");
+        addToast(body?.message || "Failed to delete", "error");
         return;
       }
+
       // remove locally
       setDoctors((prev) => prev.filter((p) => (p._id || p.id) !== id));
       if (expanded === id) setExpanded(null);
+      setDeleteConfirmId(null);
+      addToast("Doctor deleted successfully", "success");
     } catch (err) {
-      console.error("delete error", err);
-      alert("Network error deleting doctor");
+      console.error(err);
+      addToast("Error removing doctor", "error");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -376,7 +400,7 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
                     <div className={doctorListStyles.actionContainer}>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => removeDoctor(id)}
+                          onClick={() => setDeleteConfirmId(id)}
                           title={`Delete ${doc.name}`}
                           className={doctorListStyles.deleteButton}
                         >
@@ -487,6 +511,77 @@ export default function AnimatedDoctorListResponsive({ apiBase }) {
           </div>
         )}
       </main>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 transform transition-all border border-slate-100">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center mb-4">
+                <Trash2 className="w-6 h-6 text-rose-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Delete Doctor?</h3>
+              <p className="text-sm text-slate-500 mb-6">
+                Are you sure you want to completely remove {doctors.find((d) => (d._id || d.id) === deleteConfirmId)?.name || "this doctor"}? This action cannot be undone.
+              </p>
+              <div className="flex w-full gap-3">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  disabled={isDeleting}
+                  className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => removeDoctor(deleteConfirmId)}
+                  disabled={isDeleting}
+                  className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-rose-500 hover:bg-rose-600 transition-colors flex items-center justify-center gap-2"
+                >
+                  {isDeleting ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : null}
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toasts */}
+      <div className={s.toastContainerBottom}>
+        {toasts
+          .filter((t) => t.position === "bottom-right")
+          .map((t) => (
+            <div key={t.id} className={s.toast}>
+              <div
+                className={`${s.toastInner} ${t.type === "success" ? s.toastSuccess : s.toastError
+                  }`}
+              >
+                <div className={s.toastContent}>
+                  <div
+                    className={
+                      t.type === "success"
+                        ? s.toastIconSuccess
+                        : s.toastIconError
+                    }
+                  >
+                    <Check className={s.toastIconSvg} />
+                  </div>
+                  <div className={s.toastMessage}>{t.message}</div>
+                  <button
+                    onClick={() =>
+                      setToasts((s) => s.filter((x) => x.id !== t.id))
+                    }
+                    className={s.toastCloseButton}
+                  >
+                    <X className={s.toastCloseIcon} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

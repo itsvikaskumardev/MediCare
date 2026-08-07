@@ -21,6 +21,9 @@ namespace backend_dotnet.Services.ImageUpload
             _cloudinary = new Cloudinary(account);
         }
 
+        //-----------------------------------UploadImageAsync--------------------------------------------
+
+
         public async Task<string?> UploadImageAsync(IFormFile file, string folderName = "medicare")
         {
             if (file == null || file.Length == 0)
@@ -43,6 +46,9 @@ namespace backend_dotnet.Services.ImageUpload
 
             return null;
         }
+
+        //-----------------------------------DeleteImageAsync--------------------------------------------
+
 
         public async Task<bool> DeleteImageAsync(string publicId)
         {

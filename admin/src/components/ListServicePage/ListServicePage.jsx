@@ -18,6 +18,8 @@ export default function ListServicePage({ apiBase }) {
   const [services, setServices] = useState([]);
   const [openDetails, setOpenDetails] = useState({});
   const [editingId, setEditingId] = useState(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [search, setSearch] = useState("");
   const [filterMode, setFilterMode] = useState("all");
   const [editForm, setEditForm] = useState(null);
@@ -132,7 +134,7 @@ export default function ListServicePage({ apiBase }) {
       // support both { success:true, data: [...] } and .NET { result: [...] } or { result: { services: [...] } }
       const items = (body && (
         Array.isArray(body.result) ? body.result :
-        body.result?.services || body.result?.data || body.data || body.services || body.items
+          body.result?.services || body.result?.data || body.data || body.services || body.items
       )) || [];
       // normalize id field for UI
       const normalized = items.map((s) => {
@@ -140,7 +142,7 @@ export default function ListServicePage({ apiBase }) {
         if (typeof parsedSlots === "string") {
           try {
             parsedSlots = JSON.parse(parsedSlots);
-          } catch (e) {}
+          } catch (e) { }
         }
         if (parsedSlots && typeof parsedSlots === "object" && !Array.isArray(parsedSlots)) {
           parsedSlots = Object.values(parsedSlots);
@@ -605,10 +607,9 @@ export default function ListServicePage({ apiBase }) {
 
   // Remove service -> DELETE call
   async function removeService(id) {
-    if (!window.confirm("Are you sure you want to remove this service?"))
-      return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/services/${id}`, {
+      const res = await fetch(`${API_BASE}/api/services/DeleteService/${id}`, {
         method: "DELETE",
       });
       const body = await res.json().catch(() => null);
@@ -619,10 +620,13 @@ export default function ListServicePage({ apiBase }) {
       }
       setServices((s) => s.filter((x) => x.id !== id));
       setOpenDetails({});
+      setDeleteConfirmId(null);
       addToast("Service removed", "success");
     } catch (err) {
       console.error("removeService error", err);
       addToast("Network error while removing", "error");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -783,6 +787,42 @@ export default function ListServicePage({ apiBase }) {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 transform transition-all border border-slate-100">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center mb-4">
+                <Trash2 className="w-6 h-6 text-rose-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Delete Service?</h3>
+              <p className="text-sm text-slate-500 mb-6">
+                Are you sure you want to completely remove this service? This action cannot be undone.
+              </p>
+              <div className="flex w-full gap-3">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  disabled={isDeleting}
+                  className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => removeService(deleteConfirmId)}
+                  disabled={isDeleting}
+                  className="flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-rose-500 hover:bg-rose-600 transition-colors flex items-center justify-center gap-2"
+                >
+                  {isDeleting ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : null}
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Grid */}
       <div className={s.servicesGrid}>
@@ -1108,7 +1148,7 @@ export default function ListServicePage({ apiBase }) {
                       </button>
 
                       <button
-                        onClick={() => removeService(svc.id)}
+                        onClick={() => setDeleteConfirmId(svc.id)}
                         className={`${s.removeButton} ${s.cursorPointer}`}
                       >
                         <Trash2 className="w-4 h-4" /> Remove

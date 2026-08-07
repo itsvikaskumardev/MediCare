@@ -139,15 +139,14 @@ export default function Navbar() {
                 <div className="flex items-center gap-2">
                   <Link to="/my-profile" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-full text-xs font-medium border border-emerald-200 transition-colors cursor-pointer" title="My Profile">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="max-w-[120px] truncate">{user.email}</span>
+                    <span className="max-w-[120px] truncate">{user.fullName || user.email}</span>
                   </Link>
                   <button
                     type="button"
                     onClick={logout}
-                    className="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
-                    title="Sign Out"
+                    className={navbarStyles.signOutButton}
                   >
-                    <LogOut size={16} />
+                    Sign Out
                   </button>
                 </div>
               )}
@@ -213,17 +212,17 @@ export default function Navbar() {
                 ) : (
                   <div className="flex flex-col gap-2 w-full">
                     <div className="px-3 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-xs font-medium text-center">
-                      Logged in as {user.email}
+                      Logged in as {user.fullName || user.email}
                     </div>
                     <button
                       type="button"
                       onClick={() => {
-                        setIsOpen(false);
                         logout();
+                        setIsOpen(false);
                       }}
-                      className="w-full py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-semibold"
+                      className={navbarStyles.mobileSignOutButton}
                     >
-                      Logout
+                      Sign Out
                     </button>
                   </div>
                 )}

@@ -634,6 +634,7 @@ export const navbarStyles = {
   doctorAdminText: "hidden lg:text-xs lg:whitespace-nowrap sm:inline-block",
   loginButton: "btn-login hidden lg:flex lg:text-sm items-center gap-2 bg-linear-to-r from-emerald-400 to-green-600 text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-xl transition-all duration-300 cursor-default",
   loginIcon: "w-4 h-4",
+  signOutButton: "inline-flex px-5 py-2.5 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 text-sm font-semibold items-center gap-2 transition-all shadow-sm cursor-pointer",
   
   // Mobile toggle
   mobileToggle: "lg:hidden p-2.5 rounded-lg hover:bg-emerald-50 transition-colors",
@@ -649,6 +650,7 @@ export const navbarStyles = {
   mobileDoctorAdminButton: "w-full flex items-center justify-center gap-2 py-2.5 rounded-full border border-emerald-200 bg-white text-sm font-semibold hover:bg-emerald-50 transition-all",
   mobileLoginContainer: "w-full mt-3",
   mobileLoginButton: "w-full cursor-default md:rounded-full flex items-center justify-center gap-2 bg-linear-to-r from-emerald-500 to-green-600 text-white py-2.5 rounded-lg font-semibold hover:shadow-lg transition-all",
+  mobileSignOutButton: "w-full text-center py-3 bg-rose-50 text-rose-600 rounded-xl font-semibold hover:bg-rose-100 transition-colors shadow-sm cursor-pointer",
   
   // Animation styles (to be added via style tag)
   animationStyles: `
