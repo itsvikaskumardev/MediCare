@@ -34,7 +34,8 @@ namespace backend_dotnet.Endpoints
                 .WithName("UpdateService")
                 .Produces<ApiResponse>(StatusCodes.Status200OK)
                 .Produces<ApiResponse>(StatusCodes.Status404NotFound)
-                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError)
+                .DisableAntiforgery();
 
             serviceGroup.MapDelete("/DeleteService/{id}", DeleteService)
                 .WithName("DeleteService")

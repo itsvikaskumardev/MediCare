@@ -349,11 +349,11 @@ export default function ListServicePage({ apiBase }) {
     let latest = service;
     if (service.id) {
       try {
-        const res = await fetch(`${API_BASE}/api/services/${service.id}`);
+        const res = await fetch(`${API_BASE}/api/services/GetServiceById/${service.id}`);
         const body = await res.json().catch(() => null);
         if (res.ok && body) {
-          // body might be { success:true, data: service }
-          latest = body.data || body.service || body;
+          // body might be { isSuccess: true, result: service }
+          latest = body.data || body.service || body.result || body;
         }
       } catch (e) {
         // ignore and use provided object
@@ -556,7 +556,7 @@ export default function ListServicePage({ apiBase }) {
       }
 
       const id = editForm.id;
-      const res = await fetch(`${API_BASE}/api/services/${id}`, {
+      const res = await fetch(`${API_BASE}/api/services/UpdateService/${id}`, {
         method: "PUT",
         body: fd,
       });
@@ -569,28 +569,39 @@ export default function ListServicePage({ apiBase }) {
       }
 
       // update local UI with returned data if available, otherwise patch locally
-      const updatedRaw = body?.data || body?.service || null;
+      const updatedRaw = body?.result || body?.data || body?.service || null;
+
+      let nextSlots = editForm.slots;
+      if (updatedRaw?.slots) {
+        let parsed = updatedRaw.slots;
+        if (typeof parsed === "string") {
+          try { parsed = JSON.parse(parsed); } catch (e) { }
+        }
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          parsed = Object.values(parsed);
+        }
+        if (Array.isArray(parsed)) {
+          nextSlots = convertSlotsForUI(parsed);
+        }
+      }
 
       setServices((list) =>
         list.map((s) =>
           s.id === id
             ? {
               id,
-              name: editForm.name,
-              about: editForm.about,
+              name: updatedRaw?.name || editForm.name,
+              about: updatedRaw?.about || editForm.about,
               instructions: instructions,
               instructionsText: instructions.join("\n"),
-              price: Number(editForm.price) || 0,
-              available: !!editForm.available,
+              price: Number(updatedRaw?.price ?? editForm.price) || 0,
+              available: updatedRaw?.available ?? !!editForm.available,
               image:
                 updatedRaw?.imageUrl ||
                 updatedRaw?.image ||
                 editForm.imagePreview ||
                 s.image,
-              slots:
-                updatedRaw?.slots && Array.isArray(updatedRaw.slots)
-                  ? convertSlotsForUI(updatedRaw.slots)
-                  : editForm.slots || s.slots,
+              slots: nextSlots || s.slots,
               _raw: updatedRaw || s._raw,
             }
             : s
@@ -598,6 +609,7 @@ export default function ListServicePage({ apiBase }) {
       );
 
       addToast("Service updated successfully", "success");
+      setOpenDetails((prev) => ({ ...prev, [id]: false }));
       cancelEdit();
     } catch (err) {
       console.error("saveEdit error", err);
