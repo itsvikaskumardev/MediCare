@@ -3,24 +3,25 @@ using backend_dotnet.Models.DTOs.Appointment;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using static System.Collections.Specialized.BitVector32;
-using Stripe;
-using Stripe.Checkout;
-using Microsoft.Extensions.Configuration;
 
+using Razorpay.Api;
+using Microsoft.Extensions.Configuration;
 namespace backend_dotnet.Services.Appointment
 {
     public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _db;
         private readonly string _majorAdminId;
-        private readonly string _stripeSecretKey;
+        private readonly string _razorpayKeyId;
+        private readonly string _razorpayKeySecret;
         private readonly string _frontendUrl;
 
         public AppointmentService(ApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
             _majorAdminId = configuration["App:MajorAdminId"] ?? "";
-            _stripeSecretKey = configuration["Stripe:SecretKey"] ?? "";
+            _razorpayKeyId = configuration["Razorpay:KeyId"] ?? "";
+            _razorpayKeySecret = configuration["Razorpay:KeySecret"] ?? "";
             _frontendUrl = configuration["App:FrontendUrl"] ?? "http://localhost:5173";
         }
 
@@ -365,88 +366,19 @@ namespace backend_dotnet.Services.Appointment
                 };
             }
 
-            // Online: Stripe
-            if (string.IsNullOrWhiteSpace(_stripeSecretKey))
+            // Online: Razorpay
+            if (string.IsNullOrWhiteSpace(_razorpayKeyId) || string.IsNullOrWhiteSpace(_razorpayKeySecret))
             {
                 return new AppointmentCreateResultDTO
                 {
                     IsSuccess = false,
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrorMessage = "Stripe not configured on server"
-                };
-            }
-
-            var frontBase = BuildFrontendBase(frontendOrigin);
-            if (string.IsNullOrWhiteSpace(frontBase))
-            {
-                return new AppointmentCreateResultDTO
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ErrorMessage = "Frontend URL could not be determined. Set FRONTEND_URL or send Origin header."
-                };
-            }
-
-            var successUrl = $"{frontBase}/appointment/success?session_id={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{frontBase}/appointment/cancel";
-
-            Session session;
-            try
-            {
-                StripeConfiguration.ApiKey = _stripeSecretKey;
-                var options = new SessionCreateOptions
-                {
-                    PaymentMethodTypes = new List<string> { "card" },
-                    Mode = "payment",
-                    CustomerEmail = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email,
-                    LineItems = new List<SessionLineItemOptions>
-            {
-                new SessionLineItemOptions
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        Currency = "inr",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = $"Appointment - {request.PatientName.Substring(0, Math.Min(40, request.PatientName.Length))}"
-                        },
-                        UnitAmount = (long)Math.Round(numericFee.Value * 100)
-                    },
-                    Quantity = 1
-                }
-            },
-                    SuccessUrl = successUrl,
-                    CancelUrl = cancelUrl,
-                    Metadata = new Dictionary<string, string>
-            {
-                { "doctorId", request.DoctorId },
-                { "doctorName", doctorName ?? "" },
-                { "speciality", speciality ?? "" },
-                { "patientName", appointment.PatientName },
-                { "mobile", appointment.Mobile },
-                { "clerkUserId", authenticatedUserId ?? "" }
-            }
-                };
-
-                var service = new SessionService();
-                session = await service.CreateAsync(options);
-            }
-            catch (StripeException stripeErr)
-            {
-                Console.Error.WriteLine($"Stripe create session error: {stripeErr.Message}");
-                var message = stripeErr.StripeError?.Message ?? "Stripe error";
-                return new AppointmentCreateResultDTO
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.BadGateway,
-                    ErrorMessage = $"Payment provider error: {message}"
+                    ErrorMessage = "Razorpay not configured on server"
                 };
             }
 
             try
             {
-                appointment.SessionId = session.Id;
-                appointment.PaymentProviderId = session.PaymentIntentId;
                 appointment.Status = AppointmentStatus.Pending;
                 appointment.PaymentMethod = PaymentMethod.Online;
                 appointment.PaymentStatus = PaymentStatus.Pending;
@@ -455,22 +387,36 @@ namespace backend_dotnet.Services.Appointment
                 _db.Appointments.Add(appointment);
                 await _db.SaveChangesAsync();
 
+                // Create Razorpay Order
+                var client = new RazorpayClient(_razorpayKeyId, _razorpayKeySecret);
+                var options = new Dictionary<string, object>
+                {
+                    { "amount", (int)(numericFee.Value * 100) }, // Amount in paise
+                    { "currency", "INR" },
+                    { "receipt", appointment.Id.ToString() }
+                };
+                Order order = client.Order.Create(options);
+                string orderId = order["id"].ToString();
+
+                appointment.SessionId = orderId;
+                await _db.SaveChangesAsync();
+
                 return new AppointmentCreateResultDTO
                 {
                     IsSuccess = true,
                     StatusCode = HttpStatusCode.Created,
                     Appointment = appointment,
-                    CheckoutUrl = session.Url
+                    RazorpayOrderId = orderId
                 };
             }
-            catch (Exception dbErr)
+            catch (Exception ex)
             {
-                Console.Error.WriteLine($"DB error saving appointment after stripe session: {dbErr.Message}");
+                Console.Error.WriteLine($"Razorpay order creation or DB error: {ex.Message}");
                 return new AppointmentCreateResultDTO
                 {
                     IsSuccess = false,
                     StatusCode = HttpStatusCode.InternalServerError,
-                    ErrorMessage = "Failed to create appointment record"
+                    ErrorMessage = "Failed to create appointment record or payment order"
                 };
             }
         }
@@ -716,5 +662,67 @@ namespace backend_dotnet.Services.Appointment
 
 
 
+        //-------------------------------VerifyRazorpayPayment------------------------------------------------------
+        public async Task<AppointmentCreateResultDTO> VerifyRazorpayPaymentAsync(string razorpayOrderId, string razorpayPaymentId, string razorpaySignature)
+        {
+            if (string.IsNullOrWhiteSpace(razorpayOrderId) || string.IsNullOrWhiteSpace(razorpayPaymentId) || string.IsNullOrWhiteSpace(razorpaySignature))
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "Missing payment verification parameters"
+                };
+            }
+
+            try
+            {
+                var attributes = new Dictionary<string, string>
+                {
+                    { "razorpay_payment_id", razorpayPaymentId },
+                    { "razorpay_order_id", razorpayOrderId },
+                    { "razorpay_signature", razorpaySignature }
+                };
+
+                Utils.verifyPaymentSignature(attributes);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Razorpay signature verification failed: {ex.Message}");
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    ErrorMessage = "Invalid payment signature"
+                };
+            }
+
+            var appt = await _db.Appointments.FirstOrDefaultAsync(a => a.SessionId == razorpayOrderId);
+            if (appt is null)
+            {
+                return new AppointmentCreateResultDTO
+                {
+                    IsSuccess = false,
+                    StatusCode = HttpStatusCode.NotFound,
+                    ErrorMessage = "Appointment not found"
+                };
+            }
+
+            if (appt.PaymentStatus != PaymentStatus.Paid)
+            {
+                appt.PaymentStatus = PaymentStatus.Paid;
+                appt.PaymentProviderId = razorpayPaymentId;
+                appt.Status = AppointmentStatus.Confirmed;
+                appt.UpdatedAt = DateTime.UtcNow;
+
+                await _db.SaveChangesAsync();
+            }
+
+            return new AppointmentCreateResultDTO
+            {
+                IsSuccess = true,
+                Appointment = appt
+            };
+        }
     }
 }

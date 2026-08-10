@@ -20,8 +20,6 @@ import EditProfile from "./pages/EditProfile/EditProfile";
 
 // Lucide icon
 import { CircleChevronUp } from "lucide-react";
-import VerifyPaymentPage from "../VerifyPaymetPage";
-import VerifyServicePaymentPage from "../VerifyServicePaymentPage";
 
 /* ================= Scroll To Top ================= */
 const ScrollToTop = () => {
@@ -92,18 +90,7 @@ const App = () => {
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/doctor-admin/login" element={<Login />} />
 
-          {/* ✅ STRIPE PAYMENT ROUTES */}
-          <Route path="/appointment/success" element={<VerifyPaymentPage />} />
-          <Route path="/appointment/cancel" element={<VerifyPaymentPage />} />
 
-          <Route
-            path="/service-appointment/success"
-            element={<VerifyServicePaymentPage />}
-          />
-          <Route
-            path="/service-appointment/cancel"
-            element={<VerifyServicePaymentPage />}
-          />
 
           {/* Doctor Admin */}
           <Route path="/doctor-admin/:id" element={<DHome />} />

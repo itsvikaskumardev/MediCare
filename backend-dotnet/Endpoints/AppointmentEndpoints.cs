@@ -65,8 +65,11 @@ namespace backend_dotnet.Endpoints
                     .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
                     .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
-
-
+            appointmentGroup.MapPost("/VerifyRazorpay", VerifyRazorpay)
+                    .WithName("VerifyRazorpay")
+                    .Produces<ApiResponse>(StatusCodes.Status200OK)
+                    .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                    .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
         }
 
 
@@ -369,11 +372,45 @@ namespace backend_dotnet.Endpoints
         //-------------------------------GetAppointmentsByPatient------------------------------------------------------
 
 
-        //-------------------------------GetAppointmentsByPatient------------------------------------------------------
+        //-------------------------------VerifyRazorpay------------------------------------------------------
+        private static async Task<IResult> VerifyRazorpay(
+            [FromBody] VerifyRazorpayRequestDTO request,
+            IAppointmentService appointmentService)
+        {
+            try
+            {
+                var result = await appointmentService.VerifyRazorpayPaymentAsync(request.RazorpayOrderId, request.RazorpayPaymentId, request.RazorpaySignature);
 
+                if (!result.IsSuccess)
+                {
+                    return Results.Json(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = result.StatusCode,
+                        ErrorMessages = [result.ErrorMessage ?? "Payment verification failed"]
+                    }, statusCode: (int)result.StatusCode);
+                }
 
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new { appointment = result.Appointment }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"VerifyRazorpay error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-
-
+    }
+    
+    public class VerifyRazorpayRequestDTO
+    {
+        public string RazorpayOrderId { get; set; } = null!;
+        public string RazorpayPaymentId { get; set; } = null!;
+        public string RazorpaySignature { get; set; } = null!;
     }
 }

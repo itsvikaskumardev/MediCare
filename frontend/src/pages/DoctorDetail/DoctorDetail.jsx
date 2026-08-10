@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useAuth } from "../../context/AuthContext";
 import { doctorDetailStyles } from "../../assets/dummyStyles";
+import { loadRazorpay } from "../../utils/loadRazorpay";
 
 const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
 
@@ -323,12 +324,68 @@ export default function DoctorDetail() {
         return;
       }
 
-      const checkoutUrl = body?.result?.checkoutUrl || body?.checkoutUrl;
 
-      // If checkoutUrl is returned -> redirect to Stripe Checkout
-      if (checkoutUrl) {
-        // redirect user to Stripe Checkout
-        window.location.href = checkoutUrl;
+      const razorpayOrderId = body?.result?.razorpayOrderId || body?.razorpayOrderId;
+      const razorpayKeyId = body?.result?.razorpayKeyId || body?.razorpayKeyId || "rzp_test_YourTestKeyId"; // Fallback to config if not sent
+
+      if (razorpayOrderId) {
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) {
+          toast.error("Razorpay SDK failed to load. Are you online?");
+          setIsSubmitting(false);
+          return;
+        }
+
+        const options = {
+          key: "rzp_test_YourTestKeyId", // Should ideally be fetched from backend config API or environment variable
+          amount: fee * 100,
+          currency: "INR",
+          name: "Medicare",
+          description: `Appointment with ${doctor?.user?.name}`,
+          order_id: razorpayOrderId,
+          handler: async function (response) {
+            try {
+              const verifyRes = await fetch(`${API_BASE}/api/appointments/VerifyRazorpay`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpaySignature: response.razorpay_signature,
+                }),
+              });
+
+              if (verifyRes.ok) {
+                toast.success("Payment successful! Booking confirmed.", { position: "top-center" });
+                setTimeout(() => {
+                  window.location.href = "/appointments?payment_status=Paid";
+                }, 1000);
+              } else {
+                toast.error("Payment verification failed. Please contact support.");
+              }
+            } catch (err) {
+              toast.error("Verification error");
+            }
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: mobileDigits,
+          },
+          theme: {
+            color: "#6366f1", // Match primary indigo color
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          toast.error(`Payment Failed: ${response.error.description}`);
+        });
+        rzp.open();
+        setIsSubmitting(false);
         return;
       }
 

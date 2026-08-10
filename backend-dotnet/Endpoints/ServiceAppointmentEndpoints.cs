@@ -40,12 +40,7 @@ namespace backend_dotnet.Endpoints
                 .Produces<ApiResponse>(StatusCodes.Status404NotFound)
                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
-            serviceAppointmentGroup.MapGet("/ConfirmServicePayment", ConfirmServicePayment)
-                .WithName("ConfirmServicePayment")
-                .Produces<ApiResponse>(StatusCodes.Status200OK)
-                .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
-                .Produces<ApiResponse>(StatusCodes.Status404NotFound)
-                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
+
 
             serviceAppointmentGroup.MapPatch("/CancelServiceAppointment/{id}", CancelServiceAppointment)
                 .WithName("CancelServiceAppointment")
@@ -64,8 +59,11 @@ namespace backend_dotnet.Endpoints
                 .Produces<ApiResponse>(StatusCodes.Status200OK)
                 .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
 
-
-
+            serviceAppointmentGroup.MapPost("/VerifyRazorpay", VerifyRazorpay)
+                .WithName("VerifyServiceRazorpay")
+                .Produces<ApiResponse>(StatusCodes.Status200OK)
+                .Produces<ApiResponse>(StatusCodes.Status400BadRequest)
+                .Produces<ApiResponse>(StatusCodes.Status500InternalServerError);
         }
 
         //-------------------------------------------GetServiceAppointments-----------------------------------------------------
@@ -212,40 +210,7 @@ namespace backend_dotnet.Endpoints
             }
         }
 
-        //-------------------------------------------ConfirmServicePayment-----------------------------------------------------
 
-
-        private static async Task<IResult> ConfirmServicePayment(
-        [FromQuery] string session_id,
-        IServiceAppointmentService serviceAppointmentService)
-        {
-            try
-            {
-                var result = await serviceAppointmentService.ConfirmServicePaymentAsync(session_id);
-
-                if (!result.IsSuccess)
-                {
-                    return Results.Json(new ApiResponse
-                    {
-                        IsSuccess = false,
-                        StatusCode = result.StatusCode,
-                        ErrorMessages = [result.ErrorMessage ?? "Request failed"]
-                    }, statusCode: (int)result.StatusCode);
-                }
-
-                return Results.Ok(new ApiResponse
-                {
-                    IsSuccess = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Result = new { appointment = result.Appointment }
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"ConfirmServicePayment error: {ex.Message}");
-                return Results.StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
         //-------------------------------------------CancelServiceAppointment-----------------------------------------------------
 
         private static async Task<IResult> CancelServiceAppointment(
@@ -332,10 +297,44 @@ namespace backend_dotnet.Endpoints
             }
         }
 
-        //-------------------------------------------GetServiceAppointments-----------------------------------------------------
+        //-------------------------------------------VerifyRazorpay-----------------------------------------------------
+        private static async Task<IResult> VerifyRazorpay(
+            [FromBody] VerifyServiceRazorpayRequestDTO request,
+            IServiceAppointmentService serviceAppointmentService)
+        {
+            try
+            {
+                var result = await serviceAppointmentService.VerifyServiceRazorpayPaymentAsync(request.RazorpayOrderId, request.RazorpayPaymentId, request.RazorpaySignature);
 
+                if (!result.IsSuccess)
+                {
+                    return Results.Json(new ApiResponse
+                    {
+                        IsSuccess = false,
+                        StatusCode = result.StatusCode,
+                        ErrorMessages = [result.ErrorMessage ?? "Payment verification failed"]
+                    }, statusCode: (int)result.StatusCode);
+                }
 
+                return Results.Ok(new ApiResponse
+                {
+                    IsSuccess = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result = new { appointment = result.Appointment }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"VerifyRazorpay error: {ex.Message}");
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+    }
 
-
+    public class VerifyServiceRazorpayRequestDTO
+    {
+        public string RazorpayOrderId { get; set; } = null!;
+        public string RazorpayPaymentId { get; set; } = null!;
+        public string RazorpaySignature { get; set; } = null!;
     }
 }

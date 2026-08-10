@@ -12,6 +12,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { serviceDetailStyles, iconSize } from "../../assets/dummyStyles";
+import { loadRazorpay } from "../../utils/loadRazorpay";
 
 const DEFAULT_HOST = (
   import.meta.env.BACKEND_URL || "http://localhost:4000"
@@ -405,10 +406,67 @@ export default function ServiceDetail() {
         return;
       }
 
-      const { appointment, checkoutUrl } = json || {};
+      const { appointment, razorpayOrderId, razorpayKeyId } = json || {};
+      const actualKeyId = razorpayKeyId || "rzp_test_YourTestKeyId"; // Fallback
 
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
+      if (razorpayOrderId) {
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) {
+          setSubmitError("Razorpay SDK failed to load. Are you online?");
+          setSubmitting(false);
+          return;
+        }
+
+        const options = {
+          key: actualKeyId,
+          amount: service.price * 100,
+          currency: "INR",
+          name: "Medicare",
+          description: `Booking for ${service.serviceName}`,
+          order_id: razorpayOrderId,
+          handler: async function (response) {
+            try {
+              const verifyRes = await fetch(`${DEFAULT_HOST}/api/service-appointments/VerifyRazorpay`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpaySignature: response.razorpay_signature,
+                }),
+              });
+
+              if (verifyRes.ok) {
+                toast.success("Payment successful! Booking confirmed.");
+                setTimeout(() => {
+                  navigate("/appointments?payment_status=Paid", { replace: true });
+                }, 1000);
+              } else {
+                setSubmitError("Payment verification failed. Please contact support.");
+              }
+            } catch (err) {
+              setSubmitError("Verification error");
+            }
+          },
+          prefill: {
+            name: customerName,
+            email: email,
+            contact: mobile,
+          },
+          theme: {
+            color: "#6366f1",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          setSubmitError(`Payment Failed: ${response.error.description}`);
+        });
+        rzp.open();
+        setSubmitting(false);
         return;
       }
 
@@ -416,7 +474,7 @@ export default function ServiceDetail() {
         "Booking created successfully. Redirecting to appointments...",
       );
       setTimeout(() => {
-        navigate("/appointments?payment_status=Paid", { replace: true });
+        navigate("/appointments?payment_status=Pending", { replace: true });
       }, 700);
 
       setCustomerName("");

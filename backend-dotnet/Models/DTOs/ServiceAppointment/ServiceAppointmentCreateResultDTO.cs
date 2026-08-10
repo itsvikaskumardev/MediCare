@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 
 namespace backend_dotnet.Models.DTOs.ServiceAppointment
 {
@@ -9,5 +9,6 @@ namespace backend_dotnet.Models.DTOs.ServiceAppointment
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
         public object? Appointment { get; set; }
         public string? CheckoutUrl { get; set; }
+        public string? RazorpayOrderId { get; set; }
     }
 }

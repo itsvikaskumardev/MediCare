@@ -9,6 +9,7 @@ namespace backend_dotnet.Services.Appointment
         Task<AppointmentResultDTO> GetAppointmentByIdAsync(Guid id);
         Task<AppointmentListByPatientResultDTO> GetAppointmentsByPatientAsync(GetAppointmentsByPatientQueryDTO query, string? authenticatedUserId);
         Task<AppointmentCreateResultDTO> CreateAppointmentAsync(CreateAppointmentRequestDTO request, string? authenticatedUserId, string? frontendOrigin);
+        Task<AppointmentCreateResultDTO> VerifyRazorpayPaymentAsync(string razorpayOrderId, string razorpayPaymentId, string razorpaySignature);
         Task<AppointmentUpdateResultDTO> UpdateAppointmentAsync(Guid id, UpdateAppointmentRequestDTO request);
         Task<AppointmentUpdateResultDTO> CancelAppointmentAsync(Guid id);
 
