@@ -130,6 +130,12 @@ function normalizeAppointment(a) {
   const status = backendToFrontendStatus(
     a.status || (a.payment && a.payment.status) || "Pending",
   );
+  
+  // PaymentStatus mapped from backend (0: Pending, 1: Paid, 2: Failed, 3: Refunded) or string
+  const paymentStatus = String(a.paymentStatus) === "1" || String(a.paymentStatus).toLowerCase() === "paid" 
+    ? "paid" 
+    : "pending";
+
   return {
     id,
     patient,
@@ -143,6 +149,7 @@ function normalizeAppointment(a) {
     time: time24,
     fee,
     status,
+    paymentStatus,
     raw: a,
   };
 }
@@ -237,7 +244,7 @@ export default function DashboardPage({ apiBase }) {
     (a) => a.status === "cancelled",
   ).length;
   const totalEarnings = appointments
-    .filter((a) => a.status === "complete")
+    .filter((a) => a.status === "complete" || a.paymentStatus === "paid")
     .reduce((s, a) => s + (Number(a.fee) || 0), 0);
 
   /* -------------------------

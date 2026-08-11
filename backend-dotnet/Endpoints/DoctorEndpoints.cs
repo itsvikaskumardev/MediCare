@@ -1,7 +1,9 @@
 using backend_dotnet.Models;
 using backend_dotnet.Models.DTOs.Doctor;
 using backend_dotnet.Services.Doctor;
+using backend_dotnet.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Security.Claims;
 
@@ -175,13 +177,19 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         [FromForm] UpdateDoctorRequestDTO updateDoctorRequestDTO,
         IFormFile? image,
         ClaimsPrincipal user,
-        IDoctorService doctorService)
+        IDoctorService doctorService,
+        ApplicationDbContext dbContext)
         {
-            var authenticatedDoctorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authenticatedUserId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var isAdmin = user.IsInRole("ADMIN");
 
-            if (string.IsNullOrEmpty(authenticatedDoctorId) || authenticatedDoctorId != id.ToString())
+            if (!isAdmin)
             {
-                return Results.Forbid();
+                var doctor = await dbContext.Doctors.AsNoTracking().FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);
+                if (doctor == null || string.IsNullOrEmpty(authenticatedUserId) || !string.Equals(doctor.UserId.ToString(), authenticatedUserId, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Results.Forbid();
+                }
             }
 
             var result = await doctorService.UpdateDoctorAsync(id, updateDoctorRequestDTO, image);

@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { editProfilePageStyles, iconSize } from "../../assets/dummyStyles";
 
-const STORAGE_KEY = "doctorToken_v1";
+const STORAGE_KEY = "authToken";
 
 /* ----------------- helpers ----------------- */
 function parse12HourTimeToMinutes(t) {
@@ -45,6 +45,29 @@ function formatTimeFromInput(time24) {
 
 function dedupeAndSortSchedule(schedule = {}) {
   const out = {};
+  
+  if (typeof schedule === 'string') {
+    try {
+      schedule = JSON.parse(schedule);
+    } catch (e) {
+      schedule = {};
+    }
+  }
+
+  if (typeof schedule !== 'object' || schedule === null) {
+    schedule = {};
+  }
+
+  if (Object.keys(schedule).length === 0) {
+    const today = new Date();
+    for (let i = 1; i <= 3; i++) {
+      const nextDate = new Date(today);
+      nextDate.setDate(today.getDate() + i);
+      const dateStr = nextDate.toISOString().split('T')[0];
+      schedule[dateStr] = ["10:00 AM", "12:00 PM", "04:00 PM"];
+    }
+  }
+
   Object.entries(schedule || {}).forEach(([date, slots]) => {
     const uniq = Array.from(new Set(slots || []));
     uniq.sort(
@@ -59,7 +82,7 @@ function dedupeAndSortSchedule(schedule = {}) {
 export default function EditProfilePage({ apiBase }) {
   const { id } = useParams(); // expects route like /doctor-edit/:id
   const navigate = useNavigate();
-  const API_BASE = `${import.meta.env.BACKEND_URL || "http://localhost:4000"}/api/doctors/GetDoctorById`;
+  const API_BASE = `${import.meta.env.BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5205"}/api/doctors`;
 
   const [doc, setDoc] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -76,7 +99,7 @@ export default function EditProfilePage({ apiBase }) {
     async function fetchDoctor() {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/${id}`);
+        const res = await fetch(`${API_BASE}/GetDoctorById/${id}`);
         const json = await res.json();
         if (!res.ok) throw new Error(json?.message || "Failed to fetch doctor");
         const d = json.result?.data || json.result || json.data || json || {};
@@ -187,7 +210,7 @@ export default function EditProfilePage({ apiBase }) {
   const handleReset = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/${id}`);
+      const res = await fetch(`${API_BASE}/GetDoctorById/${id}`);
       const json = await res.json();
       if (!res.ok) throw new Error(json?.message || "Failed to fetch");
       const d = json.data || json || {};
@@ -246,7 +269,7 @@ export default function EditProfilePage({ apiBase }) {
       const token = localStorage.getItem(STORAGE_KEY);
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      const res = await fetch(`${API_BASE}/${id}`, {
+      const res = await fetch(`${API_BASE}/UpdateDoctor/${id}`, {
         method: "PUT",
         headers,
         body: form,
@@ -257,7 +280,7 @@ export default function EditProfilePage({ apiBase }) {
         throw new Error(json?.message || "Failed to save");
       }
 
-      const updated = json.data || json;
+      const updated = json.result?.data || json.result || json.data || json || {};
       updated.schedule = dedupeAndSortSchedule(updated.schedule || {});
       setDoc(updated);
       setLocalImageFile(null);
@@ -783,32 +806,34 @@ export default function EditProfilePage({ apiBase }) {
                   : "View and edit your profile"}
               </div>
 
-              <div className={styles.actionsButtons}>
-                <button onClick={handleReset} className={styles.resetButton}>
-                  Reset to Server
-                </button>
+              {editing && (
+                <div className={styles.actionsButtons}>
+                  <button onClick={handleReset} className={styles.resetButton}>
+                    Reset to Server
+                  </button>
 
-                <button
-                  onClick={handleSave}
-                  disabled={!editing || saveMessage?.type === "saving"}
-                  className={styles.saveButton}
-                >
-                  {saveMessage?.type === "saving" ? (
-                    <div className={styles.saveButtonContent}>
-                      <div className={styles.saveSpinner}></div>
-                      <span>Saving...</span>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                  <button
+                    onClick={handleSave}
+                    disabled={saveMessage?.type === "saving"}
+                    className={styles.saveButton}
+                  >
+                    {saveMessage?.type === "saving" ? (
                       <div className={styles.saveButtonContent}>
-                        <Save className="w-4 h-4" />
-                        <span className="font-medium">Save Profile</span>
+                        <div className={styles.saveSpinner}></div>
+                        <span>Saving...</span>
                       </div>
-                    </>
-                  )}
-                </button>
-              </div>
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                        <div className={styles.saveButtonContent}>
+                          <Save className="w-4 h-4" />
+                          <span className="font-medium">Save Profile</span>
+                        </div>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

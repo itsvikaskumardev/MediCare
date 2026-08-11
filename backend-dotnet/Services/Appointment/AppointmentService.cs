@@ -306,6 +306,7 @@ namespace backend_dotnet.Services.Appointment
 
             var appointment = new backend_dotnet.Models.Domain.Appointment
             {
+                UserId = Guid.TryParse(authenticatedUserId, out var parsedUid) ? parsedUid : null,
                 DoctorId = doctor.Id,
                 DoctorName = doctorName,
                 Speciality = speciality,
@@ -406,7 +407,8 @@ namespace backend_dotnet.Services.Appointment
                     IsSuccess = true,
                     StatusCode = HttpStatusCode.Created,
                     Appointment = appointment,
-                    RazorpayOrderId = orderId
+                    RazorpayOrderId = orderId,
+                    RazorpayKeyId = _razorpayKeyId
                 };
             }
             catch (Exception ex)
@@ -466,6 +468,10 @@ namespace backend_dotnet.Services.Appointment
                     };
                 }
                 appt.Status = parsedStatus;
+                if (appt.Status == AppointmentStatus.Completed)
+                {
+                    appt.PaymentStatus = PaymentStatus.Paid;
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(request.Date) && !string.IsNullOrWhiteSpace(request.Time))

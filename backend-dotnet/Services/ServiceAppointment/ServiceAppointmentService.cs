@@ -207,6 +207,7 @@ namespace backend_dotnet.Services.ServiceAppointment
 
             var appointment = new backend_dotnet.Models.Domain.ServiceAppointment
             {
+                UserId = Guid.TryParse(authenticatedUserId, out var parsedUid) ? parsedUid : null,
                 ServiceId = serviceIdGuid,
                 ServiceName = resolvedServiceName,
                 ServiceImageUrl = finalServiceImageUrl,
@@ -305,7 +306,8 @@ namespace backend_dotnet.Services.ServiceAppointment
                     IsSuccess = true,
                     StatusCode = HttpStatusCode.Created,
                     Appointment = appointment,
-                    RazorpayOrderId = orderId
+                    RazorpayOrderId = orderId,
+                    RazorpayKeyId = _razorpayKeyId
                 };
             }
             catch (Exception ex)
@@ -433,7 +435,13 @@ namespace backend_dotnet.Services.ServiceAppointment
             }
 
             if (newStatus is not null && Enum.TryParse<AppointmentStatus>(newStatus, true, out var statusEnum))
+            {
                 existing.Status = statusEnum;
+                if (existing.Status == AppointmentStatus.Completed)
+                {
+                    existing.PaymentStatus = PaymentStatus.Paid;
+                }
+            }
 
             existing.UpdatedAt = DateTime.UtcNow;
 

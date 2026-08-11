@@ -10,5 +10,6 @@ namespace backend_dotnet.Models.DTOs.Appointment
         public object? Appointment { get; set; }
         public string? CheckoutUrl { get; set; }
         public string? RazorpayOrderId { get; set; }
+        public string? RazorpayKeyId { get; set; }
     }
 }

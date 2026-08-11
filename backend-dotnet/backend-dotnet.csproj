@@ -7,6 +7,7 @@
 		<RootNamespace>backend_dotnet</RootNamespace>
 		<NuGetAudit>false</NuGetAudit>
 		<NoWarn>$(NoWarn);NU1901;NU1902;NU1903;NU1904</NoWarn>
+		<UserSecretsId>e5266173-bfef-4de7-aad4-63ef63f7ef20</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -337,7 +337,7 @@ export default function DoctorDetail() {
         }
 
         const options = {
-          key: "rzp_test_YourTestKeyId", // Should ideally be fetched from backend config API or environment variable
+          key: razorpayKeyId, // Fetched from backend config
           amount: fee * 100,
           currency: "INR",
           name: "Medicare",
