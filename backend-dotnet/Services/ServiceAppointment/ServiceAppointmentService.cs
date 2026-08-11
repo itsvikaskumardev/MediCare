@@ -33,7 +33,7 @@ namespace backend_dotnet.Services.ServiceAppointment
             var page = Math.Max(1, query.Page ?? 1);
             var skip = (page - 1) * limit;
 
-            var appointmentsQuery = _db.ServiceAppointments.AsQueryable();
+            var appointmentsQuery = _db.ServiceAppointments.Where(a => a.IsActive && !a.IsDeleted && a.Service.IsActive && !a.Service.IsDeleted).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.ServiceId) && Guid.TryParse(query.ServiceId, out var serviceGuid))
                 appointmentsQuery = appointmentsQuery.Where(a => a.ServiceId == serviceGuid);
@@ -555,7 +555,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                 };
             }
 
-            var appointmentsQuery = _db.ServiceAppointments.AsQueryable();
+            var appointmentsQuery = _db.ServiceAppointments.Where(a => a.IsActive && !a.IsDeleted && a.Service.IsActive && !a.Service.IsDeleted).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(resolvedCreatedBy))
                 appointmentsQuery = appointmentsQuery.Where(a => a.CreatedBy == resolvedCreatedBy);

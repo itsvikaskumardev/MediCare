@@ -146,7 +146,10 @@ namespace backend_dotnet.Services.Doctor
                 var page = Math.Max(1, getDoctorsRequestDTO.Page ?? 1);
                 var skip = (page - 1) * limit;
 
-                var query = _db.Doctors.Include(d => d.User).AsQueryable();
+                var query = _db.Doctors
+                    .Where(d => d.IsActive && !d.IsDeleted)
+                    .Include(d => d.User)
+                    .AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(getDoctorsRequestDTO.Q))
                 {
@@ -237,6 +240,7 @@ namespace backend_dotnet.Services.Doctor
             try
             {
                 var doctor = await _db.Doctors
+                    .Where(d => d.IsActive && !d.IsDeleted)
                     .Include(d => d.User)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(d => d.Id == id || d.UserId == id);

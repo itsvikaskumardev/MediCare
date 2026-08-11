@@ -216,7 +216,8 @@ namespace backend_dotnet.Endpoints
                     Result = new
                     {
                         appointment = result.Appointment,
-                        checkoutUrl = result.CheckoutUrl
+                        checkoutUrl = result.CheckoutUrl,
+                        razorpayOrderId = result.RazorpayOrderId
                     }
                 });
             }

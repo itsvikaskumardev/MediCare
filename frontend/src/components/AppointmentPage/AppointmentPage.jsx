@@ -405,10 +405,10 @@ export default function AppointmentPage() {
           }
         }
 
-        const payment = (a.payment && a.payment.method) || "Cash";
+        const payment = (a.payment && a.payment.method) || a.paymentMethod || "Cash";
         const status =
           a.status ||
-          (a.payment && a.payment.status === "Paid" ? "Confirmed" : "Pending");
+          ((a.payment && a.payment.status === "Paid") || a.paymentStatus === "Paid" ? "Confirmed" : "Pending");
         const rescheduledTo = normalizeRescheduled(
           a.rescheduledTo || {
             date: a.rescheduledDate,
@@ -459,10 +459,10 @@ export default function AppointmentPage() {
           }
         }
 
-        const payment = (s.payment && s.payment.method) || "Cash";
+        const payment = (s.payment && s.payment.method) || s.paymentMethod || "Cash";
         const status =
           s.status ||
-          (s.payment && s.payment.status === "Paid" ? "Confirmed" : "Pending");
+          ((s.payment && s.payment.status === "Paid") || s.paymentStatus === "Paid" ? "Confirmed" : "Pending");
 
         const rescheduledTo = normalizeRescheduled(s.rescheduledTo || null);
 

@@ -19,8 +19,8 @@ namespace backend_dotnet.Services.User
         {
             try
             {
-                var totalPatients = await _db.Users.CountAsync(u => u.Role == Role.PATIENT);
-                var totalAdmins = await _db.Users.CountAsync(u => u.Role == Role.ADMIN);
+                var totalPatients = await _db.Users.CountAsync(u => u.Role == Role.PATIENT && u.IsActive && !u.IsDeleted);
+                var totalAdmins = await _db.Users.CountAsync(u => u.Role == Role.ADMIN && u.IsActive && !u.IsDeleted);
                 var totalUsers = totalPatients + totalAdmins;
 
                 return new UserCountResultDTO
@@ -47,6 +47,7 @@ namespace backend_dotnet.Services.User
             }
 
             var user = await _db.Users
+                .Where(u => u.IsActive && !u.IsDeleted)
                 .Include(u => u.PatientProfile)
                 .FirstOrDefaultAsync(u => u.Id == authenticatedUserId);
             if (user == null)
@@ -87,6 +88,7 @@ namespace backend_dotnet.Services.User
             }
 
             var user = await _db.Users
+                .Where(u => u.IsActive && !u.IsDeleted)
                 .Include(u => u.PatientProfile)
                 .FirstOrDefaultAsync(u => u.Id == authenticatedUserId);
             if (user == null)
@@ -147,7 +149,7 @@ namespace backend_dotnet.Services.User
                 return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.Unauthorized, ErrorMessage = "Unauthorized" };
             }
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN && u.IsActive && !u.IsDeleted);
             if (user == null)
             {
                 return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.NotFound, ErrorMessage = "Admin not found" };
@@ -177,7 +179,7 @@ namespace backend_dotnet.Services.User
                 return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.Unauthorized, ErrorMessage = "Unauthorized" };
             }
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == authenticatedUserId && u.Role == Role.ADMIN && u.IsActive && !u.IsDeleted);
             if (user == null)
             {
                 return new AdminProfileResultDTO { IsSuccess = false, StatusCode = System.Net.HttpStatusCode.NotFound, ErrorMessage = "Admin not found" };

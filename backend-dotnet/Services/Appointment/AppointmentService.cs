@@ -35,7 +35,7 @@ namespace backend_dotnet.Services.Appointment
             var page = Math.Max(1, query.Page ?? 1);
             var skip = (page - 1) * limit;
 
-            var appointmentsQuery = _db.Appointments.AsQueryable();
+            var appointmentsQuery = _db.Appointments.Where(a => a.IsActive && !a.IsDeleted && a.Doctor.IsActive && !a.Doctor.IsDeleted).AsQueryable();
 
             if (query.DoctorId.HasValue)
                 appointmentsQuery = appointmentsQuery.Where(a => a.DoctorId == query.DoctorId.Value);
@@ -173,7 +173,7 @@ namespace backend_dotnet.Services.Appointment
                 };
             }
 
-            var appointmentsQuery = _db.Appointments.AsNoTracking().Include(a => a.Doctor).ThenInclude(d => d.User).AsQueryable();
+            var appointmentsQuery = _db.Appointments.AsNoTracking().Where(a => a.IsActive && !a.IsDeleted && a.Doctor.IsActive && !a.Doctor.IsDeleted).Include(a => a.Doctor).ThenInclude(d => d.User).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(resolvedCreatedBy))
                 appointmentsQuery = appointmentsQuery.Where(a => a.CreatedBy == resolvedCreatedBy);
@@ -592,6 +592,7 @@ namespace backend_dotnet.Services.Appointment
             }
 
             var appointmentsQuery = _db.Appointments.AsNoTracking()
+                .Where(a => a.IsActive && !a.IsDeleted && a.Doctor.IsActive && !a.Doctor.IsDeleted)
                 .Where(a => a.DoctorId == actualDoctorId);
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))

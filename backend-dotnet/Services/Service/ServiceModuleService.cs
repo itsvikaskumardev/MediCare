@@ -88,6 +88,7 @@ namespace backend_dotnet.Services.Service
         public async Task<ServiceResultDTO> GetServicesAsync()
         {
             var list = await _db.Services
+                .Where(s => s.IsActive && !s.IsDeleted)
                 .AsNoTracking()
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
@@ -104,6 +105,7 @@ namespace backend_dotnet.Services.Service
         public async Task<ServiceResultDTO> GetServiceByIdAsync(Guid id)
         {
             var service = await _db.Services
+                .Where(s => s.IsActive && !s.IsDeleted)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == id); // dont use findasync 
 
