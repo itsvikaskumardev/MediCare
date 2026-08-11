@@ -252,7 +252,8 @@ namespace backend_dotnet.Services.Appointment
                 a.CreatedBy == authenticatedUserId &&
                 a.Date == request.Date &&
                 a.Time == request.Time &&
-                a.Status != AppointmentStatus.Canceled);
+                a.Status != AppointmentStatus.Canceled &&
+                a.Status != AppointmentStatus.Completed);
 
             if (existingBooking is not null)
             {
@@ -639,6 +640,7 @@ namespace backend_dotnet.Services.Appointment
                 },
                 a.Mobile,
                 a.Status,
+                a.PaymentStatus,
                 a.PatientName,
                 a.Date,
                 a.Time,

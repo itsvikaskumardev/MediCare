@@ -243,8 +243,14 @@ export default function DashboardPage({ apiBase }) {
   const cancelledAppointments = appointments.filter(
     (a) => a.status === "cancelled",
   ).length;
+  const pendingAppointments = appointments.filter(
+    (a) => a.status === "pending",
+  ).length;
+  const confirmedAppointments = appointments.filter(
+    (a) => a.status === "confirmed",
+  ).length;
   const totalEarnings = appointments
-    .filter((a) => a.status === "complete" || a.paymentStatus === "paid")
+    .filter((a) => a.paymentStatus === "paid")
     .reduce((s, a) => s + (Number(a.fee) || 0), 0);
 
   /* -------------------------
@@ -438,6 +444,20 @@ export default function DashboardPage({ apiBase }) {
           <StatCard
             title="Completed"
             value={completedAppointments}
+            icon={<CheckCircle className="w-5 h-5" />}
+            accentTop={dashboardStyles.accentTopEmeraldLight}
+            accentBottom={dashboardStyles.accentBottomEmerald}
+          />
+           <StatCard
+            title="Pending"
+            value={pendingAppointments}
+            icon={<CheckCircle className="w-5 h-5" />}
+            accentTop={dashboardStyles.accentTopEmeraldLight}
+            accentBottom={dashboardStyles.accentBottomEmerald}
+          />
+           <StatCard
+            title="Confirmed"
+            value={confirmedAppointments}
             icon={<CheckCircle className="w-5 h-5" />}
             accentTop={dashboardStyles.accentTopEmeraldLight}
             accentBottom={dashboardStyles.accentBottomEmerald}

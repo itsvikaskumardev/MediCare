@@ -162,7 +162,8 @@ namespace backend_dotnet.Services.ServiceAppointment
                     a.Hour == finalHour.Value &&
                     a.Minute == finalMinute.Value &&
                     a.Ampm == finalAmpm &&
-                    a.Status != AppointmentStatus.Canceled);
+                    a.Status != AppointmentStatus.Canceled &&
+                    a.Status != AppointmentStatus.Completed);
 
                 if (existing is not null)
                 {
@@ -520,7 +521,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                 var canceled = apptsForSvc.Count(a => a.Status == AppointmentStatus.Canceled);
                 var confirmed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Confirmed);
                 var earning = apptsForSvc
-                    .Where(a => a.Status == AppointmentStatus.Completed)
+                    .Where(a => a.PaymentStatus == PaymentStatus.Paid)
                     .Sum(a => svc.Price);
 
                 resultList.Add(new

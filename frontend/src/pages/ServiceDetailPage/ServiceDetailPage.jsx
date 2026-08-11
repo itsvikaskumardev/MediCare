@@ -249,21 +249,21 @@ export default function ServiceDetail() {
       const arr = parsedSlots.slice();
       let hasFormattedSlots = false;
       const grouped = {};
-      const months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+      const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
       arr.forEach((str) => {
         const m = typeof str === 'string' && str.match(/^(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})\s*•\s*(.*)$/);
         if (m) {
-           hasFormattedSlots = true;
-           const day = m[1].padStart(2, "0");
-           const monthShort = m[2];
-           const year = m[3];
-           const time = m[4].trim();
-           const mi = months.findIndex((mm) => mm === monthShort.toLowerCase());
-           const monthNum = mi >= 0 ? String(mi + 1).padStart(2, "0") : "01";
-           const dateKey = `${year}-${monthNum}-${day}`;
-           if (!grouped[dateKey]) grouped[dateKey] = [];
-           grouped[dateKey].push(time);
+          hasFormattedSlots = true;
+          const day = m[1].padStart(2, "0");
+          const monthShort = m[2];
+          const year = m[3];
+          const time = m[4].trim();
+          const mi = months.findIndex((mm) => mm === monthShort.toLowerCase());
+          const monthNum = mi >= 0 ? String(mi + 1).padStart(2, "0") : "01";
+          const dateKey = `${year}-${monthNum}-${day}`;
+          if (!grouped[dateKey]) grouped[dateKey] = [];
+          grouped[dateKey].push(time);
         }
       });
 
@@ -297,7 +297,6 @@ export default function ServiceDetail() {
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    setSubmitError(null);
     setSuccessMessage(null);
 
     const missing = getClientMissingFields();
@@ -309,7 +308,7 @@ export default function ServiceDetail() {
     }
 
     if (!service) {
-      setSubmitError("Service details not loaded");
+      toast.error("Service details not loaded");
       return;
     }
 
@@ -391,28 +390,32 @@ export default function ServiceDetail() {
       }
 
       if (!res.ok) {
-        const msg =
-          (json && (json.message || json.error || json.rawText)) ||
-          `Server returned ${res.status}`;
-        if (json && json.errors && typeof json.errors === "object") {
-          const ve = Array.isArray(json.errors)
-            ? json.errors.join(", ")
-            : JSON.stringify(json.errors);
-          setSubmitError(`${msg} — ${ve}`);
-        } else {
-          setSubmitError(String(msg));
+        const errorList = json?.errorMessages || json?.errors;
+        let msg = json?.message || json?.error || "";
+
+        if (errorList && Array.isArray(errorList)) {
+          msg = msg ? `${msg} — ${errorList.join(", ")}` : errorList.join(", ");
+        } else if (errorList && typeof errorList === "object") {
+          msg = msg ? `${msg} — ${JSON.stringify(errorList)}` : JSON.stringify(errorList);
         }
+
+        if (!msg) {
+          msg = json?.rawText || `Server returned ${res.status}`;
+        }
+
+        toast.error(String(msg));
         setSubmitting(false);
         return;
       }
 
-      const { appointment, razorpayOrderId, razorpayKeyId } = json || {};
+      const payloadData = json?.result || json || {};
+      const { appointment, razorpayOrderId, razorpayKeyId } = payloadData;
       const actualKeyId = razorpayKeyId || "rzp_test_YourTestKeyId"; // Fallback
 
       if (razorpayOrderId) {
         const isLoaded = await loadRazorpay();
         if (!isLoaded) {
-          setSubmitError("Razorpay SDK failed to load. Are you online?");
+          toast.error("Razorpay SDK failed to load. Are you online?");
           setSubmitting(false);
           return;
         }
@@ -445,10 +448,10 @@ export default function ServiceDetail() {
                   navigate("/appointments?payment_status=Paid", { replace: true });
                 }, 1000);
               } else {
-                setSubmitError("Payment verification failed. Please contact support.");
+                toast.error("Payment verification failed. Please contact support.");
               }
             } catch (err) {
-              setSubmitError("Verification error");
+              toast.error("Verification error");
             }
           },
           prefill: {
@@ -463,7 +466,7 @@ export default function ServiceDetail() {
 
         const rzp = new window.Razorpay(options);
         rzp.on("payment.failed", function (response) {
-          setSubmitError(`Payment Failed: ${response.error.description}`);
+          toast.error(`Payment Failed: ${response.error.description}`);
         });
         rzp.open();
         setSubmitting(false);
@@ -486,7 +489,7 @@ export default function ServiceDetail() {
       setEmail("");
     } catch (err) {
       console.error("Booking submit error:", err);
-      setSubmitError("Network error while creating booking.");
+      toast.error("Network error while creating booking.");
     } finally {
       setSubmitting(false);
     }

@@ -185,11 +185,11 @@ namespace backend_dotnet.Services.Doctor
                         d.Success,
                         AppointmentsTotal = _db.Appointments.Count(a => a.DoctorId == d.Id),
                         AppointmentsCompleted = _db.Appointments.Count(a =>
-                            a.DoctorId == d.Id && (a.Status == AppointmentStatus.Confirmed || a.Status == AppointmentStatus.Completed)),
+                            a.DoctorId == d.Id && a.Status == AppointmentStatus.Completed),
                         AppointmentsCanceled = _db.Appointments.Count(a =>
                             a.DoctorId == d.Id && a.Status == AppointmentStatus.Canceled),
                         Earnings = _db.Appointments
-                            .Where(a => a.DoctorId == d.Id && (a.Status == AppointmentStatus.Confirmed || a.Status == AppointmentStatus.Completed))
+                            .Where(a => a.DoctorId == d.Id && a.PaymentStatus == PaymentStatus.Paid)
                             .Sum(a => (decimal?)a.Fees) ?? 0
                     })
                     .ToListAsync();
