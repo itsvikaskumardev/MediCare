@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CheckCircle,
   XCircle,
@@ -45,6 +46,7 @@ function formatDateISO(iso) {
 }
 
 export default function DoctorDetailPage() {
+  const navigate = useNavigate();
   const [doctorList, setDoctorList] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -314,6 +316,7 @@ export default function DoctorDetailPage() {
       setSlotHour("");
       setSlotMinute("00");
       setShowPassword(false);
+      navigate("/list");
     } catch (err) {
       console.error("submit error:", err);
       showToast("error", "Network or server error");

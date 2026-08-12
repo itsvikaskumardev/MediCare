@@ -493,7 +493,7 @@ export default function ServiceAppointmentsPage() {
     );
 
     try {
-      const res = await fetch(`${API_BASE}/api/service-appointments/${id}`, {
+      const res = await fetch(`${API_BASE}/api/service-appointments/UpdateServiceAppointment/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         // send rescheduledTo (backend expects this) and set status
