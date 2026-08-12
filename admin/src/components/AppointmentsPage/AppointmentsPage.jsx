@@ -74,9 +74,9 @@ export default function AppointmentsPage() {
         const fetchedAppointments = data?.result?.appointments || data?.appointments || [];
         const items = fetchedAppointments.map((a) => {
           const doctorName =
-            (a.doctorId && a.doctorId.name) || a.doctorName || "";
+            a.doctor?.name || (a.doctorId && a.doctorId.name) || a.doctorName || "Doctor";
           const speciality =
-            (a.doctorId && a.doctorId.specialization) ||
+            a.doctor?.specialization || (a.doctorId && a.doctorId.specialization) ||
             a.speciality ||
             a.specialization ||
             "General";
@@ -95,6 +95,7 @@ export default function AppointmentsPage() {
               time: a.time || (a.slot && a.slot.time) || "00:00 AM",
             },
             status: a.status || (a.payment && a.payment.status) || "Pending",
+            paymentStatus: String(a.paymentStatus) === "1" || String(a.paymentStatus).toLowerCase() === "paid" ? "Paid" : "Pending",
             raw: a, // keep original in case we need it
           };
         });
@@ -338,32 +339,40 @@ export default function AppointmentsPage() {
                     opacity: 0,
                   }}
                   className={pageStyles.card}
-                >
-                  <div className={pageStyles.cardHeader}>
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className={pageStyles.cardTitle}>
-                          {a.patientName}
-                        </h3>
-
-                        <div className={pageStyles.patientInfo}>
-                          <span>{a.age ? `${a.age} yrs` : ""}</span>
-                          <span> {a.age ? ":" : ""} </span>
-                          <span>{a.gender}</span>
-                          <span className="hidden md:inline"> : </span>
-                          <span className=" max-w-[120px]">{a.mobile}</span>
+                >                  <div className={pageStyles.cardHeader}>
+                    <div className="min-w-0 w-full">
+                      <div className="flex flex-col gap-2">
+                        {/* Doctor Info */}
+                        <div className="flex items-center flex-wrap gap-2">
+                          <span className="font-semibold text-gray-500 text-sm shrink-0">Doctor: </span>
+                          <span className="font-bold text-gray-800">{a.doctorName}</span>
+                          {a.speciality && (
+                            <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium border border-blue-100 whitespace-nowrap">
+                              {a.speciality}
+                            </span>
+                          )}
                         </div>
-                      </div>
-
-                      <div className={pageStyles.doctorInfo}>
-                        {a.doctorName} :{" "}
-                        <span className={pageStyles.doctorSpeciality}>
-                          {a.speciality}
-                        </span>
+                        
+                        {/* Patient Info */}
+                        <div className="flex items-center flex-wrap gap-1">
+                          <span className="font-semibold text-gray-500 text-sm shrink-0">Patient: </span>
+                          <span className="font-medium text-gray-800">{a.patientName}</span>
+                          {(a.gender || a.age) && (
+                            <span className="text-gray-500 text-sm ml-1">
+                              ({[a.gender, a.age ? `${a.age} yrs` : null].filter(Boolean).join(', ')})
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Contact Info */}
+                        <div>
+                          <span className="font-semibold text-gray-500 text-sm">Contact: </span>
+                          <span className="text-gray-700 text-sm">{a.mobile}</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <div className={pageStyles.feeLabel}>
                         Fees
                       </div>
@@ -374,29 +383,41 @@ export default function AppointmentsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center justify-between gap-3 flex-wrap mt-3 pt-3 border-t border-gray-100">
                     <div className={pageStyles.slotContainer}>
                       <Calendar size={14} className={pageStyles.slotIcon} />
-                      <span>
+                      <span className="font-medium">
                         {formatDateISO(a.slot.date)} — {a.slot.time}
                       </span>
                     </div>
 
-                    <div
-                      className={`${pageStyles.statusBadge} ${statusClasses(a.status)}`}
-                    >
-                      {a.status ? a.status.toUpperCase() : "PENDING"}
+                    <div className="flex gap-2 items-center flex-wrap">
+                      <div
+                        className={`${pageStyles.statusBadge} ${
+                          a.paymentStatus === "Paid" 
+                            ? "bg-green-100 text-green-700 border border-green-200" 
+                            : "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                        }`}
+                        title="Payment Status"
+                      >
+                        Payment Status: {a.paymentStatus?.toUpperCase() || "PENDING"}
+                      </div>
+                      
+                      <div
+                        className={`${pageStyles.statusBadge} ${statusClasses(a.status)}`}
+                        title="Appointment Status"
+                      >
+                        Appointment Status: {a.status ? a.status.toUpperCase() : "PENDING"}
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      {isAdmin && (
+                      {isAdmin && !isCompleted && (
                         <button
                           onClick={() => adminCancelAppointment(a.id)}
                           title={
                             isDisabled
-                              ? isCompleted
-                                ? "Cannot cancel a completed appointment"
-                                : "Already cancelled"
+                              ? "Already cancelled"
                               : "Admin Cancel (mark as cancelled)"
                           }
                           disabled={isDisabled}
@@ -404,9 +425,7 @@ export default function AppointmentsPage() {
                           className={pageStyles.cancelButton(isDisabled, isCompleted)}
                         >
                           {isDisabled
-                            ? isCompleted
-                              ? "Completed"
-                              : "Admin Cancelled"
+                            ? "Admin Cancelled"
                             : "Admin Cancel"}
                         </button>
                       )}

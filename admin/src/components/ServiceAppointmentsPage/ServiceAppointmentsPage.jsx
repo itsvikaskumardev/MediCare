@@ -359,6 +359,7 @@ export default function ServiceAppointmentsPage() {
             minute: parsed.minute,
             ampm: parsed.ampm,
             status: a.status || (a.payment && a.payment.status) || "Pending",
+            paymentStatus: String(a.paymentStatus) === "1" || String(a.paymentStatus).toLowerCase() === "paid" ? "Paid" : "Pending",
             raw: a,
           };
         })
@@ -753,13 +754,20 @@ export default function ServiceAppointmentsPage() {
                         </div>
 
                         <div className={serviceAppointmentsStyles.statusContainer}>
-                          <StatusBadge status={a.status} />
-                          <div className="mt-1">
-                            <StatusSelect
-                              appointment={a}
-                              onChange={(s) => changeStatusRemote(a.id, s)}
-                              disabled={false}
-                            />
+                          <div className="text-sm text-gray-500 mb-1 font-medium">Appointment Status:</div>
+                          <StatusSelect
+                            appointment={a}
+                            onChange={(s) => changeStatusRemote(a.id, s)}
+                            disabled={false}
+                          />
+                          <div className="mt-3">
+                            <div className="text-sm text-gray-500 mb-1 font-medium">Payment Status:</div>
+                            <div className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${a.paymentStatus === "Paid"
+                                ? "bg-green-100 text-green-800 border border-green-200"
+                                : "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                              }`}>
+                              {a.paymentStatus?.toUpperCase() || "PENDING"}
+                            </div>
                           </div>
                         </div>
                       </div>

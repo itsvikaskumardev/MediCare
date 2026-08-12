@@ -10,6 +10,8 @@ namespace backend_dotnet.Models.DTOs.Doctor
         public int AppointmentsTotal { get; set; }
         public int AppointmentsCompleted { get; set; }
         public int AppointmentsCanceled { get; set; }
+        public int AppointmentsPending { get; set; }
+        public int AppointmentsConfirmed { get; set; }
         public decimal Earnings { get; set; }
         public string Availability { get; set; } = "Available";
         public object Schedule { get; set; } = new { };

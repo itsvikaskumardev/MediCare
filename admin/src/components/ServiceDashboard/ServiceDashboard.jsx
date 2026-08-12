@@ -15,6 +15,7 @@ import {
   XCircle,
   BadgeIndianRupee,
   Search,
+  Clock,
 } from "lucide-react";
 import { serviceDashboardStyles } from "../../assets/dummyStyles";
 
@@ -63,6 +64,13 @@ function normalizeService(doc) {
     doc.confirmedAppointments ??
     0;
 
+  const pending =
+    doc.pending ??
+    doc.appointments?.pending ??
+    doc.stats?.pending ??
+    doc.pendingAppointments ??
+    0;
+
   const earning = 
     doc.earning ??
     doc.earnings ??
@@ -76,6 +84,7 @@ function normalizeService(doc) {
     image,
     totalAppointments: Number(totalAppointments) || 0,
     confirmed: Number(confirmed) || 0,
+    pending: Number(pending) || 0,
     completed: Number(completed) || 0,
     canceled: Number(canceled) || 0,
     earning: Number(earning) || 0,
@@ -272,6 +281,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
         acc.totalServices += 1;
         acc.totalAppointments += s.totalAppointments;
         acc.totalConfirmed += s.confirmed;
+        acc.pending += s.pending;
         acc.totalCompleted += s.completed;
         acc.totalCanceled += s.canceled;
         acc.totalEarning += (s.earning > 0 ? s.earning : s.completed * s.price);
@@ -281,6 +291,7 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
         totalServices: 0,
         totalAppointments: 0,
         totalConfirmed: 0,
+        pending: 0,
         totalCompleted: 0,
         totalCanceled: 0,
         totalEarning: 0,
@@ -354,6 +365,13 @@ export default function ServiceDashboard({ services: servicesProp = null }) {
             label="Confirmed"
             value={totals.totalConfirmed}
           />
+
+          <StatCard
+            icon={<Clock size={18} />}
+            label="Pending"
+            value={totals.pending}
+          />
+
           <StatCard
             icon={<CheckCircle size={18} />}
             label="Completed"

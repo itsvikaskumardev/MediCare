@@ -7,6 +7,7 @@ import {
   CheckCircle,
   XCircle,
   UserRoundCheck,
+  Clock,
 } from "lucide-react";
 import { dashboardStyles as s } from "../../assets/dummyStyles";
 
@@ -64,6 +65,16 @@ function normalizeDoctor(doc) {
       doc.appointments?.canceled ??
       doc.canceledAppointments ??
       doc.appointmentsCanceled ??
+      0,
+    pending:
+      doc.appointments?.pending ??
+      doc.pendingAppointments ??
+      doc.appointmentsPending ??
+      0,
+    confirmed:
+      doc.appointments?.confirmed ??
+      doc.confirmedAppointments ??
+      doc.appointmentsConfirmed ??
       0,
   };
 
@@ -200,6 +211,14 @@ export default function DashboardPage() {
       (s, d) => s + safeNumber(d.appointments?.canceled, 0),
       0
     );
+    const pending = doctors.reduce(
+      (s, d) => s + safeNumber(d.appointments?.pending, 0),
+      0
+    );
+    const confirmed = doctors.reduce(
+      (s, d) => s + safeNumber(d.appointments?.confirmed, 0),
+      0
+    );
     const totalLoginPatients =
       doctors.reduce((s, d) => s + (d.raw?.loginPatientsCount ?? 0), 0) || 0;
     return {
@@ -208,6 +227,8 @@ export default function DashboardPage() {
       totalEarnings,
       completed,
       canceled,
+      pending,
+      confirmed,
       totalLoginPatients,
     };
   }, [doctors]);
@@ -289,6 +310,18 @@ export default function DashboardPage() {
             icon={<CheckCircle className="w-6 h-6" />}
             label="Completed"
             value={totals.completed}
+          />
+
+          <StatCard
+            icon={<Clock className="w-6 h-6" />}
+            label="Pending"
+            value={totals.pending}
+          />
+
+          <StatCard
+            icon={<CheckCircle className="w-6 h-6" />}
+            label="Confirmed"
+            value={totals.confirmed}
           />
 
           <StatCard

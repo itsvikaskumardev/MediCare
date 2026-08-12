@@ -520,6 +520,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                 var completed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Completed);
                 var canceled = apptsForSvc.Count(a => a.Status == AppointmentStatus.Canceled);
                 var confirmed = apptsForSvc.Count(a => a.Status == AppointmentStatus.Confirmed);
+                var pending = apptsForSvc.Count(a => a.Status == AppointmentStatus.Pending);
                 var earning = apptsForSvc
                     .Where(a => a.PaymentStatus == PaymentStatus.Paid)
                     .Sum(a => svc.Price);
@@ -531,6 +532,7 @@ namespace backend_dotnet.Services.ServiceAppointment
                     price = svc.Price,
                     total,
                     confirmed,
+                    pending,
                     completed,
                     canceled,
                     earning

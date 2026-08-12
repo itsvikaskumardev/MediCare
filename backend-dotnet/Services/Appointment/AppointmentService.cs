@@ -80,6 +80,7 @@ namespace backend_dotnet.Services.Appointment
                     },
                     a.Mobile,
                     a.Status,
+                    a.PaymentStatus,
                     a.PatientName,
                     a.Date,
                     a.Time,

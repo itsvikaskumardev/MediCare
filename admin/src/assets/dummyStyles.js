@@ -5,30 +5,30 @@ export const doctorDetailStyles = {
   maxWidthContainer: "max-w-4xl mx-auto",
   maxWidthContainerLg: "max-w-6xl mx-auto",
   maxWidthContainerXL: "max-w-9xl",
-  
+
   // Header styles
   headerContainer: "text-center mb-12",
   headerFlexContainer: "flex flex-col sm:flex-row justify-center items-center gap-3 mb-4",
   headerIconContainer: "p-3 bg-emerald-500 rounded-full shadow-lg",
   headerTitle: "text-3xl sm:text-4xl md:text-5xl font-bold bg-linear-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent mt-2 sm:mt-0",
-  
+
   // Form styles
   formContainer: "bg-white/80 backdrop-blur-sm border border-emerald-100 shadow-2xl p-6 sm:p-8 rounded-3xl mb-16",
   formGrid: "grid grid-cols-1 md:grid-cols-2 gap-6",
-  
+
   // Input styles
   inputBase: "p-3 rounded-full border-2 border-emerald-100 bg-white placeholder:text-gray-400 shadow-sm w-full focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 transition-all",
   textareaBase: "p-3 rounded-xl border-2 border-emerald-100 bg-white placeholder:text-gray-400 shadow-sm w-full focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 transition-all",
   inputWithIcon: "pr-12",
-  
+
   // File upload styles
   fileInput: "w-40 md:w-[180px] border-2 border-emerald-100 rounded-full p-2 text-sm bg-white focus:border-emerald-400 transition",
   imagePreview: "h-12 w-12 md:h-16 md:w-16 rounded-full shadow-md border-2 border-emerald-200 object-cover",
   removeImageButton: "absolute -top-2 -right-1.5 bg-rose-500 text-white rounded-full p-1 transition",
-  
+
   // Password field styles
   passwordToggleButton: "absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full",
-  
+
   // Schedule section styles
   scheduleContainer: "p-6 bg-emerald-50 rounded-2xl border border-emerald-100",
   scheduleHeader: "flex items-center gap-3 mb-4",
@@ -39,18 +39,18 @@ export const doctorDetailStyles = {
   addSlotButton: "px-5 py-3 bg-emerald-500 text-white rounded-full flex items-center gap-2 w-full sm:w-auto justify-center",
   slotsGrid: "mt-4 space-y-2 max-w-9xl grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:grid-cols-3 gap-4",
   slotItem: "flex justify-between items-center bg-emerald-50 p-3 rounded-xl border border-emerald-100 shadow-sm hover:shadow-md text-emerald-800",
-  
+
   // Submit button styles
   submitButtonContainer: "md:col-span-2 flex justify-center mt-6",
   submitButton: "px-8 py-4 rounded-full font-semibold shadow-xl w-full md:w-auto",
   submitButtonEnabled: "bg-linear-to-r from-emerald-500 to-cyan-500 text-white",
   submitButtonDisabled: "opacity-60 cursor-not-allowed",
-  
+
   // Toast styles
   toastContainer: "fixed top-6 right-3 left-3 sm:right-6 sm:left-auto p-4 rounded-xl shadow-xl flex items-center gap-3",
   toastSuccess: "bg-emerald-50 border border-emerald-200 text-emerald-700",
   toastError: "bg-rose-50 border border-rose-200 text-rose-700",
-  
+
   // Doctor list styles
   doctorListContainer: "max-w-4xl mx-auto mt-8",
   doctorListGrid: "grid grid-cols-1 md:grid-cols-2 gap-4",
@@ -59,11 +59,11 @@ export const doctorDetailStyles = {
   doctorImage: "h-12 w-12 rounded-full object-cover",
   doctorName: "font-semibold",
   doctorSpecialization: "text-sm text-gray-500",
-  
+
   // Labels and text
   label: "block text-sm font-medium text-gray-700 mb-2",
   emptyState: "text-center text-gray-500",
-  
+
   // Cursor utilities
   cursorPointer: "cursor-pointer",
   cursorNotAllowed: "cursor-not-allowed",
@@ -74,53 +74,52 @@ export const doctorDetailStyles = {
 export const pageStyles = {
   container: "min-h-screen font-serif bg-emerald-50 p-3 sm:p-4 md:p-6 lg:p-8",
   maxWidthContainer: "max-w-[1400px] mx-auto",
-  
+
   headerContainer: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6",
   headerTitleSection: "w-full sm:w-auto",
   headerTitle: "text-xl sm:text-2xl font-semibold text-emerald-800",
   headerSubtitle: "text-xs sm:text-sm text-emerald-600",
   headerControlsSection: "w-full sm:w-auto",
-  
+
   searchContainer: "flex items-center bg-white rounded-full px-3 py-2 shadow-sm w-full sm:w-72",
   searchIcon: "text-emerald-400",
   searchInput: "ml-3 w-full outline-none text-emerald-700 placeholder-emerald-400 bg-transparent text-sm",
-  
+
   filterContainer: "flex items-center flex-col md:flex-row lg:flex-row gap-2 w-full sm:w-auto",
   dateFilter: "bg-white rounded-full px-3 py-2 shadow-sm flex items-center gap-2 w-full sm:w-auto",
   dateFilterIcon: "text-emerald-400",
   dateInput: "text-sm outline-none text-emerald-700 bg-transparent w-full",
-  
+
   selectFilter: "text-sm px-3 py-2 cursor-pointer rounded-full bg-emerald-100 shadow-sm outline-emerald-300 w-full sm:w-auto",
   clearButton: "ml-0 sm:ml-2 px-3 cursor-pointer py-2 rounded-full bg-emerald-600 text-white text-sm shadow-sm hover:opacity-95 transition w-full sm:w-auto",
-  
+
   loadingErrorContainer: "col-span-full text-center text-emerald-600 py-12 rounded-lg bg-white/60 border border-emerald-100",
   errorContainer: "col-span-full text-center text-rose-600 py-6 rounded-lg bg-white/60 border border-rose-100",
   noResultsContainer: "col-span-full text-center text-emerald-600 py-12 rounded-lg bg-white/60 border border-emerald-100",
-  
+
   gridContainer: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4",
-  
+
   card: "bg-white rounded-2xl p-3 sm:p-4 md:p-5 shadow-sm border border-emerald-100 flex flex-col gap-3 hover:shadow-md transform hover:-translate-y-1 transition",
   cardHeader: "flex items-start lg:line-clamp-2 justify-between gap-3",
   cardTitle: "text-base sm:text-lg font-medium text-emerald-800 truncate",
   patientInfo: "text-xs sm:text-sm text-emerald-500 flex items-center gap-2",
   doctorInfo: "mt-1 text-xs sm:text-sm text-emerald-600 truncate",
   doctorSpeciality: "font-medium text-emerald-700",
-  
+
   feeLabel: "text-nd lg:pt-3 lg:justify-start flex items-center font-bold text-emerald-700 text-xs sm:text-sm",
   feeAmount: "text-lg sm:text-xl font-semibold lg:justify-start text-emerald-800 flex items-center justify-end gap-1",
-  
+
   slotContainer: "inline-flex items-center gap-2 text-sm text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full",
   slotIcon: "text-emerald-400",
-  
+
   statusBadge: "text-xs px-3 py-1 rounded-full",
-  
-  cancelButton: (isDisabled, isCompleted) => 
-    `px-3 py-2 cursor-pointer rounded-full text-sm flex items-center gap-2 transition ${
-      isDisabled
-        ? "bg-rose-50 text-rose-400 opacity-60 cursor-not-allowed"
-        : "bg-rose-50 text-rose-700 hover:scale-105"
+
+  cancelButton: (isDisabled, isCompleted) =>
+    `px-3 py-2 cursor-pointer rounded-full text-sm flex items-center gap-2 transition ${isDisabled
+      ? "bg-rose-50 text-rose-400 opacity-60 cursor-not-allowed"
+      : "bg-rose-50 text-rose-700 hover:scale-105"
     }`,
-  
+
   showMoreButton: "px-4 py-2 cursor-pointer rounded-full bg-white border border-emerald-200 shadow-sm hover:shadow-md transition",
 };
 
@@ -150,12 +149,12 @@ export const dashboardStyles = {
   // Layout styles
   pageContainer: "min-h-screen font-serif p-4 sm:p-6 bg-linear-to-br from-green-50 via-green-100 to-white",
   maxWidthContainer: "max-w-7xl mx-auto",
-  
+
   // Header styles
   headerContainer: "flex items-center justify-between mb-6",
   headerTitle: "text-2xl md:text-3xl font-bold text-gray-800",
   headerSubtitle: "text-sm text-slate-600 mt-1",
-  
+
   // Stats section styles
   statsGrid: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-6",
   statCard: "p-4 rounded-full bg-linear-to-br from-emerald-100 to-emerald-50 shadow-sm border border-green-100",
@@ -163,7 +162,7 @@ export const dashboardStyles = {
   statIconContainer: "p-2 bg-white/80 rounded-full shadow-inner",
   statLabel: "text-sm text-slate-600",
   statValue: "text-xl font-semibold text-slate-800",
-  
+
   // Search section styles
   searchLabel: "block text-lg text-slate-600 mb-2",
   searchContainer: "flex items-center gap-3 max-w-md",
@@ -171,7 +170,7 @@ export const dashboardStyles = {
   searchInput: "pl-10 pr-4 py-2 rounded-full shadow-sm border border-green-200 bg-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-green-200 w-full",
   searchIcon: "absolute left-3 top-2.5 w-5 h-5 text-green-500",
   clearButton: "px-3 py-2 bg-green-500 text-white rounded-full shadow hover:bg-green-600",
-  
+
   // Doctors table styles
   tableContainer: "bg-white rounded-2xl shadow overflow-hidden",
   tableHeader: "px-6 py-4 border-b border-green-50 flex items-center justify-between",
@@ -198,7 +197,7 @@ export const dashboardStyles = {
   completedText: "text-sm text-center text-emerald-600",
   canceledText: "text-sm text-center text-rose-500",
   earningsText: "text-sm text-right font-semibold text-slate-800",
-  
+
   // Mobile view styles
   mobileDoctorContainer: "md:hidden px-4 py-4",
   mobileDoctorGrid: "space-y-3",
@@ -212,15 +211,15 @@ export const dashboardStyles = {
   mobileStatLabel: "text-xs text-slate-500",
   mobileStatValue: "text-sm font-semibold text-slate-800",
   mobileEarningsContainer: "mt-3 flex items-center justify-between text-sm text-slate-700",
-  
+
   // Show more button styles
   showMoreContainer: "px-6 py-4 border-t border-green-50 flex justify-center",
   showMoreButton: "px-4 py-2 rounded-full bg-white border border-green-200 shadow-sm hover:bg-green-50 transition",
-  
+
   // Cursor utilities
   cursorPointer: "cursor-pointer",
   cursorNotAllowed: "cursor-not-allowed",
-  
+
   // Text colors (for reuse)
   textSlate600: "text-slate-600",
   textSlate700: "text-slate-700",
@@ -258,11 +257,10 @@ export const addServiceStyles = {
 
   // Image upload styles
   imageUpload: {
-    container: (hasError) => 
-      `w-full rounded-2xl p-4 ${
-        hasError 
-          ? "border-2 border-red-200 bg-linear-to-b from-red-50 to-orange-50" 
-          : "bg-linear-to-b from-emerald-50 to-teal-50 border border-emerald-100"
+    container: (hasError) =>
+      `w-full rounded-2xl p-4 ${hasError
+        ? "border-2 border-red-200 bg-linear-to-b from-red-50 to-orange-50"
+        : "bg-linear-to-b from-emerald-50 to-teal-50 border border-emerald-100"
       } shadow-inner flex flex-col items-center gap-4`,
     preview: "w-full h-56 rounded-xl overflow-hidden bg-white flex items-center justify-center border border-emerald-100",
     placeholder: "flex flex-col items-center text-emerald-400"
@@ -270,17 +268,15 @@ export const addServiceStyles = {
 
   // Input/Form field styles
   formFields: {
-    input: (hasError) => 
-      `mt-2 w-full px-4 py-3 rounded-full focus:outline-none focus:ring-2 shadow-md transition-all ${
-        hasError 
-          ? "border-2 border-red-200" 
-          : "border border-emerald-100 focus:ring-emerald-200"
+    input: (hasError) =>
+      `mt-2 w-full px-4 py-3 rounded-full focus:outline-none focus:ring-2 shadow-md transition-all ${hasError
+        ? "border-2 border-red-200"
+        : "border border-emerald-100 focus:ring-emerald-200"
       }`,
-    textarea: (hasError) => 
-      `mt-2 w-full px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 shadow-md resize-none transition-all ${
-        hasError 
-          ? "border-2 border-red-200" 
-          : "border border-emerald-100 focus:ring-emerald-200"
+    textarea: (hasError) =>
+      `mt-2 w-full px-4 py-3 rounded-2xl focus:outline-none focus:ring-2 shadow-md resize-none transition-all ${hasError
+        ? "border-2 border-red-200"
+        : "border border-emerald-100 focus:ring-emerald-200"
       }`,
     select: "mt-2 w-full px-4 py-3 rounded-full border border-emerald-100 text-gray-700 bg-white appearance-none focus:ring-2 focus:ring-emerald-200 focus:outline-none",
     smallSelect: "mt-1 w-full px-3 py-2 rounded-full border border-emerald-100 text-gray-700 bg-white appearance-none focus:ring-2 focus:ring-emerald-200 focus:outline-none",
@@ -290,11 +286,10 @@ export const addServiceStyles = {
 
   // Instruction styles
   instructions: {
-    container: (hasError) => 
-      `mt-3 space-y-2 ${
-        hasError 
-          ? "ring-2 ring-red-100 rounded-xl p-2" 
-          : ""
+    container: (hasError) =>
+      `mt-3 space-y-2 ${hasError
+        ? "ring-2 ring-red-100 rounded-xl p-2"
+        : ""
       } max-h-44 overflow-auto pr-2`,
     item: "flex items-start gap-3 my-2 bg-white rounded-full p-3 border border-emerald-50 shadow-sm hover:shadow transition-shadow min-w-0",
     input: "flex-1 min-w-0 px-3 py-2 rounded-full border border-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-200",
@@ -303,11 +298,10 @@ export const addServiceStyles = {
 
   // Slots styles
   slots: {
-    container: (hasError) => 
-      `bg-linear-to-br from-white to-emerald-50 rounded-2xl p-4 ${
-        hasError 
-          ? "border-2 border-red-200" 
-          : "border border-emerald-50"
+    container: (hasError) =>
+      `bg-linear-to-br from-white to-emerald-50 rounded-2xl p-4 ${hasError
+        ? "border-2 border-red-200"
+        : "border border-emerald-50"
       } shadow-sm`,
     slotItem: "flex items-center gap-2 bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-100 px-2 py-2 my-1 rounded-full shadow hover:shadow-md transition-shadow min-w-0",
     slotText: "text-xs whitespace-nowrap xl:text-xs lg:text-xs lg:whitespace-nowrap xl:whitespace-nowrap font-medium max-w-[180px] sm:max-w-[300px] md:max-w-[320px]"
@@ -402,13 +396,13 @@ export const doctorListStyles = {
   headerIconSvg: "text-emerald-600",
   headerTitle: "text-base sm:text-lg font-semibold text-emerald-800",
   headerSubtitle: "text-sm sm:text-md text-emerald-600",
-  
+
   headerSearchContainer: "w-full sm:w-auto mt-3 sm:mt-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-3",
   searchBox: "flex items-center w-full sm:w-96 bg-white rounded-full px-3 py-2 shadow-sm",
   searchIcon: "text-emerald-400",
   searchInput: "ml-3 w-full outline-none text-emerald-700 placeholder-emerald-400 bg-transparent",
   clearButton: "px-3 py-2 cursor-pointer rounded-full bg-emerald-600 text-white shadow hover:opacity-95 transition w-full sm:w-auto",
-  
+
   filterContainer: "flex flex-wrap gap-2 pt-5",
   filterButton: (isActive, color) => {
     const base = "text-xs px-3 cursor-pointer py-1 rounded-full transition border";
@@ -423,66 +417,64 @@ export const doctorListStyles = {
     }
     return base;
   },
-  
+
   loadingContainer: "text-center text-emerald-600 py-8",
   noResultsContainer: "text-center text-emerald-600 py-8",
-  
+
   gridContainer: "max-w-6xl grid xl:grid-cols-2 lg:grid-cols-2 lg:gap-3 xl:gap-4 mx-auto space-y-4",
-  
+
   article: "bg-linear-to-r from-emerald-100/50 to-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden transition-all duration-300",
   articleContent: "flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 sm:p-4 md:p-5",
-  
+
   doctorImage: "w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-emerald-200 shadow-sm mx-auto sm:mx-0",
-  
+
   doctorInfoContainer: "flex-1 min-w-0 w-full",
   doctorHeader: "flex flex-col sm:flex-row sm:items-start items-start justify-between gap-3 w-full",
   doctorName: "text-base sm:text-lg md:text-xl text-emerald-800 font-medium truncate",
-  
-  availabilityBadge: (isAvailable) => 
-    `ml-0 sm:ml-2 mt-2 sm:mt-0 inline-flex items-center gap-2 text-xs font-medium px-2 py-0.5 rounded-full ${
-      isAvailable
-        ? "bg-emerald-50 text-emerald-700"
-        : "bg-red-50 text-red-600"
+
+  availabilityBadge: (isAvailable) =>
+    `ml-0 sm:ml-2 mt-2 sm:mt-0 inline-flex items-center gap-2 text-xs font-medium px-2 py-0.5 rounded-full ${isAvailable
+      ? "bg-emerald-50 text-emerald-700"
+      : "bg-red-50 text-red-600"
     }`,
-  availabilityDot: (isAvailable) => 
+  availabilityDot: (isAvailable) =>
     `w-2 h-2 rounded-full ${isAvailable ? "bg-emerald-600" : "bg-red-600"}`,
-  
+
   doctorDetails: "text-sm text-emerald-600 truncate mt-2 sm:mt-1",
-  
+
   ratingContainer: "flex items-center gap-3 mt-3 sm:mt-0 sm:ml-4",
   rating: "text-sm text-emerald-700 flex items-center gap-1",
-  toggleButton: (isOpen) => 
-    `p-2 rounded-full cursor-pointer bg-white shadow-sm transform transition ${
-      isOpen ? "rotate-180" : "rotate-0"
+  toggleButton: (isOpen) =>
+    `p-2 rounded-full cursor-pointer bg-white shadow-sm transform transition ${isOpen ? "rotate-180" : "rotate-0"
     }`,
-  
+
   statsContainer: "mt-3 flex flex-col sm:flex-row items-start sm:items-center gap-3",
   statsLabel: "text-xs text-emerald-500",
   statsValue: "text-sm text-emerald-700 font-medium flex items-center gap-2",
-  
+
   actionContainer: "w-full sm:w-auto flex items-center justify-between sm:justify-end gap-2",
   deleteButton: "px-3 py-1 cursor-pointer rounded-full bg-red-50 text-red-600 text-xs flex items-center gap-2 transition",
   feesLabel: "text-md font-bold text-emerald-700",
   feesValue: "text-sm text-emerald-800 font-medium flex items-center gap-1",
-  
+
   expandableContent: "px-4 md:px-5 bg-white overflow-auto sm:overflow-visible",
-  
+
   aboutSection: "col-span-2",
   aboutHeading: "text-md font-bold text-emerald-700 mb-1",
   aboutText: "text-sm text-emerald-600 break-words whitespace-normal",
-  
+
   qualificationsHeading: "text-md text-emerald-700 font-bold",
   qualificationsText: "text-sm text-emerald-600 break-words whitespace-normal",
-  
+
   scheduleHeading: "text-md text-emerald-700 font-bold",
   scheduleDate: "text-xs text-emerald-500",
   scheduleSlot: "text-xs px-3 py-1 rounded-full border border-emerald-100 shadow-sm break-words",
-  
+
   statsSidebar: "col-span-1 flex flex-col sm:flex-row md:flex-col xl:flex-col lg:flex-col gap-3 items-start md:items-end",
   statsItemHeading: "text-md text-emerald-700 font-bold",
   statsItemValue: "text-sm text-emerald-700",
   locationValue: "text-sm sm:whitespace-nowrap whitespace-normal text-emerald-700",
-  
+
   showMoreButton: "px-5 py-2 cursor-pointer rounded-full bg-white border border-emerald-300 shadow-sm hover:shadow-md transition",
   showMoreContainer: "col-span-full flex justify-center mt-4",
 };
@@ -493,52 +485,52 @@ export const navbarStyles = {
   header: "relative font-serif sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/50",
   navContainer: "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4",
   flexContainer: "flex items-center justify-between gap-4",
-  
+
   // Logo section styles
   logoContainer: "flex items-center gap-3 flex-shrink-0",
   logoImage: "w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-sm object-cover",
   logoLink: "text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-emerald-700 to-teal-600 leading-none",
   logoSubtext: "text-xs sm:text-sm text-emerald-600 font-medium",
-  
+
   // Center navigation (desktop)
   centerNavContainer: "hidden md:flex flex-1 items-center justify-center relative min-w-0 px-2 lg:px-4",
   glowEffect: "relative rounded-full p-1 bg-linear-to-r from-emerald-50 via-emerald-100 to-emerald-50 shadow-sm min-w-0",
   centerNavInner: "relative flex items-center min-w-0 max-w-full overflow-hidden",
   centerNavScrollContainer: "relative rounded-full bg-white px-2 py-1 flex items-center gap-1 shadow-inner overflow-x-auto hide-scrollbar min-w-0 max-w-full",
-  
+
   // Center nav items
   centerNavItemBase: "relative flex items-center gap-2 px-3 lg:px-4 py-2 rounded-full transition-all text-sm font-medium whitespace-nowrap",
   centerNavItemActive: "bg-emerald-50 text-emerald-700 shadow-sm",
   centerNavItemInactive: "text-gray-600 hover:text-emerald-600 hover:bg-emerald-50/50",
-  
+
   // Right section styles
   rightContainer: "flex items-center gap-3 sm:gap-4 flex-shrink-0",
   signOutButton: "inline-flex px-5 py-2.5 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 text-sm font-semibold items-center gap-2 transition-all shadow-sm",
   loginButton: "inline-flex px-6 py-2.5 rounded-full bg-linear-to-r from-emerald-500 to-teal-500 text-white hover:shadow-lg text-sm font-semibold items-center transition-all",
-  
+
   // Mobile menu button
   mobileMenuButton: "md:hidden p-2 rounded-xl text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors shadow-sm",
-  
+
   // Mobile menu overlay
   mobileOverlay: "fixed inset-0 bg-emerald-900/20 z-40 md:hidden backdrop-blur-sm",
-  
+
   // Mobile menu container
   mobileMenuContainer: "absolute top-full left-0 right-0 z-50 bg-white border-b border-emerald-100 shadow-xl md:hidden max-h-[85vh] overflow-y-auto",
   mobileMenuInner: "px-4 py-4 space-y-1",
-  
+
   // Mobile menu items
   mobileItemBase: "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
   mobileItemActive: "bg-emerald-50 text-emerald-700 font-semibold",
   mobileItemInactive: "text-gray-600 hover:bg-emerald-50/50",
-  
+
   // Mobile auth section
   mobileAuthContainer: "pt-4 pb-2 mt-4 border-t border-emerald-100 space-y-3",
   mobileSignOutButton: "w-full flex items-center justify-center px-4 py-3.5 rounded-xl bg-rose-50 text-rose-600 font-semibold hover:bg-rose-100 transition-colors",
   mobileLoginButton: "w-full flex items-center justify-center px-4 py-3.5 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow-md transition-all",
-  
+
   // Indicator (for active navigation)
   indicator: "absolute bottom-0 left-0 h-full bg-emerald-50 transition-all duration-300 ease-out rounded-full -z-10",
-  
+
   // Cursor utilities
   cursorPointer: "cursor-pointer",
 };
@@ -553,25 +545,25 @@ export const heroStyles = {
   container: "min-h-screen font-sans bg-linear-to-b from-emerald-50 to-white",
   mainContainer: "flex items-center pt-28 justify-center px-6 py-16",
   section: "w-full max-w-4xl",
-  
+
   // Background decoration styles
   decorativeBg: {
     container: "relative",
     blurBackground: "absolute -inset-8 -z-10 flex items-center justify-center",
     blurShape: "w-full h-44 md:h-56 rounded-3xl bg-emerald-100/60 blur-3xl"
   },
-  
+
   // Content container
   contentBox: "bg-white/90 backdrop-blur-sm border border-emerald-100 rounded-3xl shadow-xl p-8 md:p-12 text-center",
-  
+
   // Logo/Image styles
   logoContainer: "mx-auto mb-4 w-24 h-24 flex items-center justify-center",
   logo: "w-50 h-50 object-contain",
-  
+
   // Text styles
   heading: "text-3xl md:text-4xl font-extrabold text-emerald-900 mb-2",
   description: "text-gray-600 max-w-2xl mx-auto leading-relaxed mb-6",
-  
+
   // Info cards styles
   infoCards: {
     container: "mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-4",
@@ -585,12 +577,12 @@ export const heroStyles = {
 export const serviceListStyles = {
   // Layout styles
   pageContainer: "p-4 sm:p-6 max-w-6xl font-serif mx-auto min-h-screen bg-linear-to-b from-green-50 via-white to-white",
-  
+
   // Header styles
   headerContainer: "flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4",
   headerTitle: "text-2xl md:text-3xl font-extrabold text-emerald-700",
   headerSubtitle: "text-sm text-emerald-500 mt-1",
-  
+
   // Filter and search styles
   filterContainer: "flex flex-col md:flex-col items-stretch md:items-center gap-3 w-full md:w-auto",
   filterButtonsContainer: "inline-flex flex-wrap items-center gap-2 rounded-full border border-emerald-100 bg-white p-1",
@@ -601,10 +593,10 @@ export const serviceListStyles = {
   searchIcon: "absolute inset-y-0 left-3 flex items-center pointer-events-none",
   searchIconSvg: "w-5 h-5 text-emerald-300",
   searchInput: "pl-12 pr-4 py-2 rounded-full border border-emerald-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-200 transition w-full md:w-72 bg-white",
-  
+
   // Grid styles
   servicesGrid: "grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-6",
-  
+
   // Service card styles
   serviceCard: "bg-white rounded-2xl overflow-hidden transform transition hover:-translate-y-1 hover:shadow-2xl border border-emerald-50",
   serviceCardContent: "flex flex-col sm:flex-row sm:items-start gap-4 p-4 cursor-pointer",
@@ -625,10 +617,10 @@ export const serviceListStyles = {
   chevronIcon: "w-6 h-6 transition-transform",
   chevronOpen: "rotate-180 text-emerald-400",
   chevronClosed: "text-emerald-300",
-  
+
   // Details section
   detailsContainer: "px-4 pb-4 transition-all",
-  
+
   // Edit form styles
   editForm: "space-y-4",
   editImageContainer: "flex flex-col sm:flex-row gap-4",
@@ -645,7 +637,7 @@ export const serviceListStyles = {
   textareaInstructions: "min-h-[80px]",
   formLabel: "block text-md font-bold mb-1 text-emerald-600",
   formLabelSmall: "block text-sm text-emerald-600",
-  
+
   // Slots management
   slotsHeader: "flex items-center justify-between",
   addSlotButton: "inline-flex cursor-pointer items-center gap-2 text-sm px-2 py-1 rounded-full border border-emerald-100",
@@ -655,12 +647,12 @@ export const serviceListStyles = {
   slotTimeContainer: "flex gap-2 items-center w-full sm:w-auto",
   slotSelect: "border rounded-lg px-2 py-1 outline-none focus:ring-2 focus:ring-emerald-200 border-emerald-100 w-20",
   removeSlotButton: "px-2 py-1 rounded-full cursor-pointer border-red-500 bg-red-300 border text-sm text-black",
-  
+
   // Form action buttons
   formActions: "flex flex-col sm:flex-row items-center gap-2 justify-end",
   cancelButton: "px-3 py-2 rounded-full cursor-pointer border-red-600 bg-red-300 border w-full sm:w-auto",
   saveButton: "px-3 py-2 rounded-full cursor-pointer bg-emerald-600 text-white w-full sm:w-auto",
-  
+
   // View mode styles
   viewSection: "space-y-3",
   viewSectionTitle: "text-md font-bold text-emerald-700",
@@ -670,15 +662,15 @@ export const serviceListStyles = {
   noSlotsMessage: "text-emerald-300",
   slotItem: "flex font-bold items-center gap-3",
   slotIcon: "w-4 h-4 text-emerald-400",
-  
+
   // Action buttons (view mode)
   viewActions: "flex items-center gap-2 justify-end",
   editButton: "inline-flex bg-emerald-200 cursor-pointer items-center gap-2 px-3 py-2 rounded-full border border-emerald-300",
   removeButton: "inline-flex items-center bg-red-200 cursor-pointer gap-2 px-3 py-2 rounded-full border text-rose-600",
-  
+
   // Empty state
   emptyState: "text-center text-emerald-300 mt-8",
-  
+
   // Toast styles
   toastContainerTop: "fixed right-3 top-3 z-50 space-y-3",
   toastContainerBottom: "fixed right-3 bottom-3 z-50 space-y-3",
@@ -694,7 +686,7 @@ export const serviceListStyles = {
   toastMessage: "flex-1 text-sm text-emerald-700",
   toastCloseButton: "text-emerald-300",
   toastCloseIcon: "w-4 h-4",
-  
+
   // Text colors
   textEmerald300: "text-emerald-300",
   textEmerald400: "text-emerald-400",
@@ -703,10 +695,10 @@ export const serviceListStyles = {
   textEmerald700: "text-emerald-700",
   textRose600: "text-rose-600",
   textRose700: "text-rose-700",
-  
+
   // Cursor utilities
   cursorPointer: "cursor-pointer",
-  
+
   // Display utilities
   block: "block",
   hidden: "hidden",
@@ -718,12 +710,12 @@ export const serviceListStyles = {
 
 export const serviceAppointmentsStyles = {
   container: "p-4 sm:p-6 md:p-6 font-serif",
-  
+
   headerContainer: "flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6",
   headerTitleContainer: "min-w-0",
   headerTitle: "text-2xl md:text-3xl font-extrabold text-emerald-800",
   headerSubtitle: "text-sm text-gray-500 mt-1",
-  
+
   searchContainer: "w-full md:w-96 flex flex-col gap-2",
   searchInputWrapper: "flex items-center gap-3",
   searchLabel: "relative block w-full",
@@ -732,24 +724,24 @@ export const serviceAppointmentsStyles = {
   searchInput: "pl-10 pr-10 w-full rounded-full border border-emerald-200 bg-white/90 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-200 transition-all",
   clearSearchButton: "absolute right-3 rounded-full p-1 hover:bg-gray-100",
   clearSearchIcon: "w-4 h-4 text-gray-500",
-  
+
   statusFilterSelect: "text-sm px-3 py-2 cursor-pointer rounded-full border border-emerald-400",
   searchInfo: "mt-2 text-xs text-gray-500 flex items-center justify-between",
   refreshButton: "text-xs text-emerald-600 hover:underline",
-  
+
   loadingContainer: "col-span-full rounded-2xl p-8 bg-white/90 border border-emerald-50 shadow-sm flex items-center justify-center gap-3",
   errorContainer: "col-span-full rounded-2xl p-4 bg-rose-50 border border-rose-100 text-rose-700",
-  
+
   noResultsContainer: "col-span-full rounded-2xl p-8 bg-white/90 border border-emerald-50 shadow-sm flex items-center justify-center flex-col gap-3",
   noResultsIcon: "text-3xl text-emerald-300",
   noResultsText: "text-sm text-gray-600",
   noResultsSubtext: "text-xs text-gray-400",
-  
+
   gridContainer: "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch",
-  
+
   article: "group relative rounded-3xl p-1 animated-border h-full transform transition-all duration-300 hover:-translate-y-2",
   cardInner: "card-inner rounded-2xl overflow-hidden border-2 border-emerald-300/60 p-5 bg-white/90 shadow-lg h-full flex flex-col justify-between",
-  
+
   cardHeader: "flex flex-col sm:flex-row sm:items-start justify-between gap-4",
   patientInfoContainer: "flex items-start gap-4 min-w-0",
   patientAvatar: "rounded-full w-12 h-12 flex items-center justify-center bg-emerald-100/70",
@@ -757,9 +749,9 @@ export const serviceAppointmentsStyles = {
   patientInfo: "min-w-0",
   patientName: "text-lg md:text-sm lg:text-xs xl:text-md whitespace-nowrap font-bold leading-tight text-emerald-900 w-full line-clamp-2",
   patientDetails: "text-sm text-gray-500 mt-1",
-  
+
   statusContainer: "flex flex-col items-start sm:items-end gap-2 mt-2 sm:mt-0",
-  
+
   detailsContainer: "mt-4 flex flex-col gap-3 text-gray-700",
   detailItem: "flex items-center gap-3 text-base",
   detailIcon: "w-4 h-4 text-emerald-500",
@@ -767,20 +759,19 @@ export const serviceAppointmentsStyles = {
   feesText: "font-semibold",
   serviceText: "mt-2 text-base text-gray-600",
   serviceName: "font-semibold text-emerald-800",
-  
+
   actionsContainer: "mt-4 flex items-center justify-between",
   actionsInnerContainer: "flex items-center gap-2 w-full",
-  cancelButton: (isLocked) => 
-    `px-3 py-1 rounded-full text-sm border ${
-      isLocked
-        ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed"
-        : "bg-white text-rose-600 border-rose-200 hover:shadow-sm"
+  cancelButton: (isLocked) =>
+    `px-3 py-1 rounded-full text-sm border ${isLocked
+      ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed"
+      : "bg-white text-rose-600 border-rose-200 hover:shadow-sm"
     }`,
-  
+
   legendContainer: "mt-6 p-4 rounded-lg bg-white/80 shadow-inner border border-emerald-100 text-sm flex flex-col sm:flex-row flex-wrap items-center gap-4",
   legendItem: "flex items-center gap-2",
   legendDot: "w-3 h-3 rounded-full",
-  
+
   // StatusBadge component styles
   statusBadge: (status) => {
     const map = {
@@ -793,21 +784,19 @@ export const serviceAppointmentsStyles = {
     const classes = map[status] || "bg-gray-100 text-gray-800";
     return `inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${classes}`;
   },
-  
+
   // StatusSelect component styles
-  statusSelect: (terminal) => 
-    `text-sm cursor-pointer px-3 py-1 rounded-full border focus:outline-none transition ${
-      terminal
-        ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
-        : "bg-white text-emerald-800 border-emerald-400"
+  statusSelect: (terminal) =>
+    `text-sm cursor-pointer px-3 py-1 rounded-full border focus:outline-none transition ${terminal
+      ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
+      : "bg-white text-emerald-800 border-emerald-400"
     }`,
-  
+
   // RescheduleButton component styles
-  rescheduleButton: (terminal) => 
-    `text-sm px-3 py-1 rounded-full cursor-pointer border transition ${
-      terminal
-        ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed"
-        : "bg-white text-emerald-800 border-emerald-400 hover:shadow-sm"
+  rescheduleButton: (terminal) =>
+    `text-sm px-3 py-1 rounded-full cursor-pointer border transition ${terminal
+      ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed"
+      : "bg-white text-emerald-800 border-emerald-400 hover:shadow-sm"
     }`,
   rescheduleEditContainer: "flex flex-col sm:flex-row xl:flex-col md:flex-col md:items-end gap-2 bg-gray-50 p-2 rounded-md shadow-sm",
   rescheduleDateInput: "text-sm px-3 py-1 w-full sm:w-auto text-green-800 border border-emerald-500 rounded-full",
@@ -815,7 +804,7 @@ export const serviceAppointmentsStyles = {
   rescheduleActions: "flex gap-2 w-full sm:w-auto",
   rescheduleSaveButton: "flex-1 sm:flex-none px-3 py-1 bg-green-500 cursor-pointer text-white border-emerald-500 rounded-full text-sm",
   rescheduleCancelButton: "flex-1 sm:flex-none px-3 py-1 bg-red-200 border text-sm cursor-pointer border-red-500 rounded-full",
-  
+
   // Toast component styles
   toastContainer: "fixed top-4 right-3 sm:right-4 z-50 flex flex-col gap-3",
   toast: "max-w-xs w-full rounded-lg shadow-lg px-4 py-3 border-l-4 border-emerald-400 bg-white/95 backdrop-blur-sm",
@@ -825,7 +814,7 @@ export const serviceAppointmentsStyles = {
   toastTitle: "font-semibold text-sm",
   toastMessage: "text-xs text-gray-600",
   toastCloseButton: "text-gray-400 hover:text-gray-700",
-  
+
   // Animation styles
   animatedBorderStyle: `
     .animated-border { position: relative; }
@@ -856,36 +845,35 @@ export const serviceDashboardStyles = {
   // Container styles
   container: "min-h-screen font-serif p-4 sm:p-6 bg-linear-to-b from-emerald-50 via-emerald-25 to-white",
   innerContainer: "max-w-7xl mx-auto",
-  
+
   // Header styles
   header: {
     container: "flex flex-col sm:flex-row items-start sm:items-center md:items-center justify-between mb-6 gap-3 md:gap-6 lg:gap-3",
     title: "text-2xl md:text-3xl font-semibold text-emerald-800",
     subtitle: "text-sm text-gray-600"
   },
-  
+
   // Refresh button styles
   refresh: {
     container: "mt-3 sm:mt-0 flex items-center gap-3",
     countText: "text-xs text-slate-600",
-    button: (hasServicesProp) => 
-      `px-3 py-1 rounded-full text-sm ${
-        hasServicesProp
-          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-          : "bg-white text-emerald-600 border border-emerald-200 hover:shadow-sm"
+    button: (hasServicesProp) =>
+      `px-3 py-1 rounded-full text-sm ${hasServicesProp
+        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+        : "bg-white text-emerald-600 border border-emerald-200 hover:shadow-sm"
       }`
   },
-  
+
   // Stat cards grid
   statGrid: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-6",
-  
+
   // Search bar styles
   search: {
     container: "mb-6 flex justify-start",
     inputContainer: "flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-emerald-200 w-full sm:w-64",
     input: "w-full text-sm outline-none"
   },
-  
+
   // Table styles
   table: {
     container: "bg-white rounded-2xl shadow-sm overflow-hidden border-b border-transparent",
@@ -895,7 +883,7 @@ export const serviceDashboardStyles = {
     headerTextLg: (span) => `col-span-${span} text-center text-xs font-medium`,
     body: "divide-y divide-transparent min-w-full",
     row: "px-4 py-4 font-serif hover:shadow-md transition bg-white md:bg-transparent",
-    
+
     // Tablet view
     tabletView: "hidden md:grid lg:hidden grid-cols-5 items-center gap-6",
     tabletImage: "w-10 h-10 rounded-lg overflow-hidden bg-gray-200 ring-1 ring-emerald-100",
@@ -903,37 +891,37 @@ export const serviceDashboardStyles = {
     tabletServiceName: "text-sm font-medium text-emerald-800 whitespace-nowrap",
     tabletPrice: "text-xs text-gray-500",
     tabletCell: "text-center text-sm",
-    
+
     // Desktop view
     desktopView: "hidden lg:grid grid-cols-12 items-center gap-4",
     desktopImage: "w-16 h-16 rounded-xl overflow-hidden ring-1 ring-emerald-100 bg-gray-200",
     desktopServiceName: "font-semibold md:text-xs lg:text-lg xl:text-lg text-emerald-800",
     desktopCell: (span) => `col-span-${span}`,
     desktopCenterCell: (span) => `col-span-${span} text-center`,
-    
+
     // Mobile view
     mobileView: "md:hidden flex flex-col gap-3",
     mobileImage: "w-14 h-14 rounded-lg overflow-hidden bg-gray-200 ring-1 ring-emerald-100",
     mobileServiceHeader: "flex items-center justify-between gap-3",
     mobileServiceName: "font-semibold text-xs text-emerald-800",
     mobileStatsContainer: "mt-2 flex flex-wrap gap-2 text-xs text-gray-600",
-    mobileStatItem: (color = "emerald") => 
+    mobileStatItem: (color = "emerald") =>
       `flex items-center gap-2 bg-${color}-50 px-2 py-1 rounded-full ring-1 ring-${color}-100`
   },
-  
+
   // Loading/Error states
   states: {
     loading: "px-4 py-6 text-center text-gray-500",
     error: "px-4 py-6 text-center text-rose-600",
     empty: "px-4 py-6 text-center text-gray-500"
   },
-  
+
   // Show more button
   showMore: {
     container: "px-6 py-4 border-t border-green-50 flex justify-center",
     button: "px-4 py-2 rounded-full cursor-pointer bg-white border border-green-200 shadow-sm hover:bg-green-50 transition"
   },
-  
+
   // StatCard component styles
   statCard: {
     container: "rounded-full bg-linear-to-br from-emerald-100 to-emerald-50 shadow-sm border border-green-100 p-4 gap-4 flex items-center",
@@ -946,13 +934,13 @@ export const editProfilePageStyles = {
   // Page container
   pageContainer: "min-h-screen font-serif bg-linear-to-br from-emerald-50 via-white to-emerald-50/30 p-4 sm:p-5 md:p-6",
   maxWidthContainer: "max-w-6xl pt-8 md:pt-10 mx-auto relative",
-  
+
   // Loading states
   loadingContainer: "min-h-screen flex items-center justify-center",
   loadingSpinner: "w-12 h-12 border-4 border-gray-300 border-t-transparent rounded-full animate-spin mx-auto mb-4",
   loadingText: "text-gray-600",
   errorText: "text-red-600",
-  
+
   // Toast notifications
   toastContainer: "fixed top-3 right-2 sm:right-4 z-50 space-y-3 max-w-xs sm:max-w-sm",
   toastBase: "transform transition-all duration-300 ease-out rounded-r-lg shadow-lg p-3 sm:p-4 flex items-start gap-3 animate-slideIn",
@@ -963,11 +951,11 @@ export const editProfilePageStyles = {
   toastSuccessIcon: "text-emerald-600",
   toastErrorIcon: "text-rose-600",
   toastText: "text-sm font-medium text-gray-800",
-  
+
   // Main card
   mainCard: "bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-emerald-100/50",
   headerBackground: "relative h-24 sm:h-28 md:h-32 bg-linear-to-r from-emerald-400 to-emerald-600",
-  
+
   // Profile image
   imageContainer: "absolute -bottom-16 left-1/2 transform -translate-x-1/2 md:left-8 md:transform-none",
   imageWrapper: "relative group",
@@ -975,7 +963,7 @@ export const editProfilePageStyles = {
   imageEditButton: (editing) => `absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg cursor-pointer transition-transform ${!editing && "cursor-not-allowed"}`,
   imageEditIcon: (editing) => `w-5 h-5 ${editing ? "text-emerald-600" : "text-gray-400"}`,
   imageInput: "hidden",
-  
+
   // Profile content
   profileContent: "pt-20 pb-8 px-4 sm:px-6 md:px-8",
   profileHeader: "flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8",
@@ -983,7 +971,7 @@ export const editProfilePageStyles = {
   profileName: "text-2xl sm:text-3xl md:text-4xl font-bold bg-linear-to-r from-emerald-700 to-emerald-900 bg-clip-text text-transparent truncate",
   profileSubtitle: "text-sm sm:text-lg text-emerald-700 mt-2 flex items-center gap-2",
   subtitleIcon: "w-4 h-4",
-  
+
   // Stats container
   statsContainer: "mt-4 flex flex-wrap items-center gap-3",
   statItem: "flex items-center gap-3 bg-white px-3 py-2 rounded-full border border-emerald-100 shadow-sm text-sm sm:text-base",
@@ -1001,23 +989,23 @@ export const editProfilePageStyles = {
   statAmberValue: "text-sm font-bold text-amber-800",
   statInput: "w-20 rounded-full border px-2 py-1 text-sm focus:outline-none",
   statPatientsInput: "w-24 rounded-full border px-2 py-1 text-sm focus:outline-none",
-  
+
   // Action buttons
   actionButtons: "flex flex-col sm:flex-row items-center gap-3",
   availabilityToggle: (isAvailable) => `flex items-center gap-3 px-4 sm:px-5 py-2 rounded-full cursor-pointer border-2 shadow-sm transition-all duration-300 ${isAvailable ? "bg-linear-to-r from-emerald-50 to-emerald-100 border-emerald-300 hover:shadow-emerald-200" : "bg-linear-to-r from-gray-50 to-gray-100 border-gray-300 hover:shadow-gray-200"} hover:shadow-lg w-full sm:w-auto`,
   toggleTrack: (isAvailable) => `relative w-10 h-5 rounded-full transition-colors ${isAvailable ? "bg-emerald-500" : "bg-gray-400"}`,
   toggleThumb: (isAvailable) => `absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${isAvailable ? "left-6" : "left-0.5"}`,
   toggleText: (isAvailable) => `font-medium ${isAvailable ? "text-emerald-700" : "text-gray-600"}`,
-  
+
   editButton: "group relative overflow-hidden bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-5 py-2 rounded-full cursor-pointer shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] w-full sm:w-auto",
   editButtonContent: "relative flex items-center gap-2",
-  
+
   // Form sections
   formSection: "mb-8",
   sectionTitle: "text-xl sm:text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2",
   sectionIconContainer: "w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center",
   sectionIcon: "w-4 h-4 text-emerald-600",
-  
+
   // Field grid
   fieldGrid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6",
   fieldGroup: "group",
@@ -1025,24 +1013,24 @@ export const editProfilePageStyles = {
   fieldIconContainer: (editing) => `p-2 rounded-full ${editing ? "bg-emerald-100 text-emerald-600" : "bg-gray-100 text-gray-500"}`,
   fieldIcon: "w-4 h-4",
   fieldLabel: "text-sm font-semibold text-emerald-800",
-  
+
   // Input fields
   inputBase: (editing) => `w-full rounded-full border-2 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base transition-all duration-200 ${editing ? "border-emerald-200 bg-emerald-50/50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 focus:bg-white" : "border-gray-200 bg-gray-50/50 text-gray-600 cursor-not-allowed"}`,
-  
+
   // About textarea
   aboutTextarea: (editing) => `w-full rounded-xl border-2 px-4 py-3 text-sm sm:text-base transition-all duration-200 ${editing ? "border-emerald-200 bg-emerald-50/50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 focus:bg-white" : "border-gray-200 bg-gray-50/50 text-gray-600 cursor-not-allowed"}`,
   aboutCharCount: "absolute bottom-3 right-3 text-xs text-gray-400",
-  
+
   // Schedule section
   scheduleHeader: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6",
   emptySchedule: "text-center py-10 rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/50",
   emptyScheduleIcon: "w-12 h-12 text-emerald-400 mx-auto mb-3",
   emptyScheduleText: "text-emerald-700 font-medium",
   emptyScheduleSubtext: "text-sm text-emerald-600 mt-1",
-  
+
   // Schedule grid
   scheduleGrid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5",
-  
+
   // Date card
   dateCard: "group relative bg-linear-to-br from-white to-emerald-50 p-4 sm:p-5 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
   dateHeader: "flex items-center justify-between mb-3 pb-3 border-b border-emerald-100",
@@ -1053,7 +1041,7 @@ export const editProfilePageStyles = {
   dateSlotCount: "text-xs font-medium px-3 py-1 rounded-full bg-emerald-100 text-emerald-700",
   dateDeleteButton: (editing) => `p-2 rounded-full cursor-pointer transition-colors ${editing ? "hover:bg-rose-50 text-rose-500 hover:text-rose-600" : "text-gray-400 cursor-not-allowed"}`,
   dateDeleteIcon: "w-4 h-4",
-  
+
   // Time slots
   timeSlotContainer: "space-y-3",
   timeSlotItem: "flex items-center justify-between bg-white px-3 py-2 rounded-full border border-emerald-100 hover:border-emerald-200 transition-colors",
@@ -1061,13 +1049,13 @@ export const editProfilePageStyles = {
   timeSlotText: "font-medium text-emerald-900 text-sm sm:text-base",
   timeSlotDeleteButton: (editing) => `p-1.5 rounded-full cursor-pointer transition-colors ${editing ? "hover:bg-rose-50 text-rose-500 hover:text-rose-600" : "text-gray-400 cursor-not-allowed"}`,
   timeSlotDeleteIcon: "w-4 h-4",
-  
+
   // Add time slot
   addSlotContainer: "pt-3 border-t border-emerald-100",
   addSlotInput: "flex-1 rounded-full px-3 py-2 text-sm border border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200",
   addSlotButton: "p-2 rounded-full cursor-pointer bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors",
   addSlotIcon: "w-4 h-4",
-  
+
   // Save message
   saveMessage: (type) => `px-4 py-2 rounded-lg ${type === "saving" ? "bg-blue-50 text-blue-700 border border-blue-200" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`,
 
@@ -1079,13 +1067,13 @@ export const editProfilePageStyles = {
   saveButton: "group relative overflow-hidden bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white px-6 py-3 rounded-full cursor-pointer shadow-lg transition-all duration-300 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-auto text-center",
   saveButtonContent: "relative flex items-center gap-2 justify-center",
   saveSpinner: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin",
-  
+
   // AddDate component styles
   addDateContainer: "flex items-center gap-2",
   addDateInput: "rounded-xl px-3 py-2 border-2 border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 text-sm sm:text-base",
   addDateButton: "flex items-center gap-2 bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm sm:text-base",
   addDateIcon: "w-4 h-4",
-  
+
   // Custom animations
   customCSS: `
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

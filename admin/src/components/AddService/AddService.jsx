@@ -1,5 +1,5 @@
-// AddService.jsx
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Image as ImageIcon,
   Plus,
@@ -15,6 +15,7 @@ import { addServiceStyles } from "../../assets/dummyStyles";
 
 
 export default function AddService({ apiBase, serviceId }) {
+  const navigate = useNavigate();
   const API_BASE = apiBase || import.meta.env.BACKEND_URL || "http://localhost:4000";
 
   const fileRef = useRef(null);
@@ -358,6 +359,8 @@ export default function AddService({ apiBase, serviceId }) {
           setRemoveImage(false);
         }
       }
+
+      navigate("/list-service");
     } catch (err) {
       console.error("service submit error:", err);
       showToast("error", "Network error", "Could not reach server.");

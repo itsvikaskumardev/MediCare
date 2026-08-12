@@ -188,6 +188,10 @@ namespace backend_dotnet.Services.Doctor
                             a.DoctorId == d.Id && a.Status == AppointmentStatus.Completed),
                         AppointmentsCanceled = _db.Appointments.Count(a =>
                             a.DoctorId == d.Id && a.Status == AppointmentStatus.Canceled),
+                        AppointmentsPending = _db.Appointments.Count(a =>
+                            a.DoctorId == d.Id && a.Status == AppointmentStatus.Pending),
+                        AppointmentsConfirmed = _db.Appointments.Count(a =>
+                            a.DoctorId == d.Id && a.Status == AppointmentStatus.Confirmed),
                         Earnings = _db.Appointments
                             .Where(a => a.DoctorId == d.Id && a.PaymentStatus == PaymentStatus.Paid)
                             .Sum(a => (decimal?)a.Fees) ?? 0
@@ -204,6 +208,8 @@ namespace backend_dotnet.Services.Doctor
                     AppointmentsTotal = d.AppointmentsTotal,
                     AppointmentsCompleted = d.AppointmentsCompleted,
                     AppointmentsCanceled = d.AppointmentsCanceled,
+                    AppointmentsPending = d.AppointmentsPending,
+                    AppointmentsConfirmed = d.AppointmentsConfirmed,
                     Earnings = d.Earnings,
                     Availability = d.Availability.ToString(),
                     Schedule = string.IsNullOrWhiteSpace(d.Schedule)

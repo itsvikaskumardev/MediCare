@@ -849,17 +849,19 @@ export default function ListServicePage({ apiBase }) {
                 onClick={() => toggleDetails(svc.id)}
               >
                 <div className={s.serviceImageContainer}>
-                  {svc.image ? (
-                    <img
-                      src={svc.image}
-                      alt={svc.name}
-                      className={s.serviceImage}
-                    />
-                  ) : (
-                    <div className={s.serviceImagePlaceholder}>
-                      <ImageIcon />
-                    </div>
-                  )}
+                  <img
+                    src={svc.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(svc.name || "Service")}&background=random`}
+                    alt={svc.name}
+                    className={s.serviceImage}
+                    style={{ objectFit: "cover" }}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(svc.name || "Service")}&background=random`;
+                      }
+                    }}
+                  />
                 </div>
 
                 <div className={s.serviceInfoContainer}>
@@ -914,17 +916,18 @@ export default function ListServicePage({ apiBase }) {
                   <div className={s.editForm}>
                     <div className={s.editImageContainer}>
                       <div className={s.editImagePreview}>
-                        {editForm?.imagePreview ? (
-                          <img
-                            src={editForm.imagePreview}
-                            alt="preview"
-                            className={s.serviceImage}
-                          />
-                        ) : (
-                          <div className={s.serviceImagePlaceholder}>
-                            <ImageIcon />
-                          </div>
-                        )}
+                        <img
+                          src={editForm?.imagePreview || editForm?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(editForm?.name || "Service")}&background=random`}
+                          alt="preview"
+                          className={s.serviceImage}
+                          style={{ objectFit: "cover" }}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            if (!e.currentTarget.src.includes("ui-avatars.com")) {
+                              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(editForm?.name || "Service")}&background=random`;
+                            }
+                          }}
+                        />
                       </div>
 
                       <div className={s.editFormFields}>

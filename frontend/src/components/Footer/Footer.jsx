@@ -117,15 +117,7 @@ const Footer = () => {
                 <div className={footerStyles.contactIconWrapper}>
                   <Phone className={footerStyles.contactIcon} />
                 </div>
-                <span className={footerStyles.contactText}>+91 8299431275</span>
-              </div>
-              <div className={footerStyles.contactItem}>
-                <div className={footerStyles.contactIconWrapper}>
-                  <Mail className={footerStyles.contactIcon} />
-                </div>
-                <span className={footerStyles.contactText}>
-                  hexagonsservices@gmail.com
-                </span>
+                <span className={footerStyles.contactText}>+91 8587054687</span>
               </div>
               <div className={footerStyles.contactItem}>
                 <div className={footerStyles.contactIconWrapper}>
@@ -177,60 +169,8 @@ const Footer = () => {
           <div className={footerStyles.newsletterSection}>
             <h3 className={footerStyles.newsletterTitle}>Stay Connected</h3>
             <p className={footerStyles.newsletterDescription}>
-              Subscribe for health tips, medical updates, and wellness insights
-              delivered to your inbox.
+              Get trusted health tips, medical updates, and wellness insights to help you make informed choices and live a healthier life.
             </p>
-
-            {/* Newsletter form */}
-            <div className={footerStyles.newsletterForm}>
-              {/* Mobile newsletter */}
-              <div className={footerStyles.mobileNewsletterContainer}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className={footerStyles.emailInput}
-                  aria-label="Email"
-                />
-                <button className={footerStyles.mobileSubscribeButton}>
-                  <Send className={footerStyles.mobileButtonIcon} />
-                  Subscribe
-                </button>
-              </div>
-
-              {/* Desktop newsletter */}
-              <div className={footerStyles.desktopNewsletterContainer}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className={footerStyles.desktopEmailInput}
-                  aria-label="Email"
-                />
-                <button className={footerStyles.desktopSubscribeButton}>
-                  <Send className={footerStyles.desktopButtonIcon} />
-                  <span className={footerStyles.desktopButtonText}>
-                    Subscribe
-                  </span>
-                </button>
-              </div>
-
-              {/* Social icons */}
-              <div className={footerStyles.socialContainer}>
-                {socialLinks.map(({ Icon, color, name, href }, index) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={footerStyles.socialLink}
-                    aria-label={name}
-                    style={{ animationDelay: `${index * 120}ms` }}
-                  >
-                    <div className={footerStyles.socialIconBackground} />
-                    <Icon className={`${footerStyles.socialIcon} ${color}`} />
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
@@ -241,15 +181,7 @@ const Footer = () => {
           </div>
 
           <div className={footerStyles.designerText}>
-            <span>Designed by</span>
-            <a
-              href="https://hexagondigitalservices.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={footerStyles.designerLink}
-            >
-              Hexagon Digital Services
-            </a>
+
           </div>
         </div>
       </div>
