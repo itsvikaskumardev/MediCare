@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 namespace backend_dotnet.Models.DTOs.Doctor
 {
     public class CreateDoctorRequestDTO
@@ -26,5 +27,8 @@ namespace backend_dotnet.Models.DTOs.Doctor
         public decimal? Rating { get; set; }
         public string? ImageUrl { get; set; }
         public string? ImagePublicId { get; set; }
+
+        [FromForm(Name = "image")]
+        public IFormFile? Image { get; set; }
     }
 }

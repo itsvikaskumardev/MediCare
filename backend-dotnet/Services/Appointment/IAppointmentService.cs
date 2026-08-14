@@ -17,3 +17,10 @@ namespace backend_dotnet.Services.Appointment
         Task<AppointmentListResultDTO> GetAppointmentsByDoctorAsync(Guid doctorId, GetAppointmentsByDoctorQueryDTO query);
     }
 }
+
+/*
+ For an async method in a C# interface, you generally use:
+
+Task<T> when the method returns a value asynchronously.
+Task when it doesn't return a value.
+ */

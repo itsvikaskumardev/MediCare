@@ -222,3 +222,18 @@ So, if you put the alias at the top of the file, the compiler ignores it, looks 
 By moving the alias **inside** the `namespace { ... }` block, you flip the priority. You are explicitly telling the compiler: *"Whenever you see `User` inside this specific block of code, I don't care about the sibling namespace, I want you to use the Domain Model."*
 
 *(Note: I noticed you removed the inner alias in your last file edit! If you try to run `dotnet build` right now, that exact same error will pop up again. You'll need to put `using User = backend_dotnet.Models.Domain.User;` back inside the namespace block to make it compile).*
+
+---
+---
+---
+Awesome to hear that the Cloudinary upload is working correctly now!
+
+To answer your question: **It is a combination of both!**
+
+Here is exactly how the flow works behind the scenes:
+
+1. **The Database stores the URL, not the image:** When you upload an image, Cloudinary saves the actual image file on their servers and hands you back a secure link (e.g., `https://res.cloudinary.com/.../doctor-image.jpg`). Your `.NET` backend saves **only this text URL** into your PostgreSQL database.
+2. **The API sends the URL:** When your frontend calls the "Get Doctors" API, your backend reads that text URL from the database and sends it to the frontend inside the JSON response (`"imageUrl": "https://res.cloudinary.com/..."`).
+3. **The Browser fetches the Image directly from Cloudinary:** Your React frontend takes that URL and puts it inside an HTML image tag: `<img src={doctor.imageUrl} />`. When the browser (like Chrome or Safari) sees that URL, **it makes a direct request straight to Cloudinary's servers** to download and render the actual picture.
+
+So to summarize: The UI gets the **address (URL)** of the image from your database, but the **actual image file itself** is downloaded directly from Cloudinary by the user's browser!

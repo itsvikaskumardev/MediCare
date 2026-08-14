@@ -1,4 +1,4 @@
-﻿namespace backend_dotnet.Models.DTOs.Service
+namespace backend_dotnet.Models.DTOs.Service
 {
     public class UpdateServiceRequestDTO
     {
@@ -9,5 +9,6 @@
         public string? Availability { get; set; }
         public string? Instructions { get; set; }
         public string? Slots { get; set; }
+        public Microsoft.AspNetCore.Http.IFormFile? Image { get; set; }
     }
 }

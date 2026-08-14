@@ -2,6 +2,8 @@ using backend_dotnet.Data;
 using backend_dotnet.Models.DTOs.Service;
 using backend_dotnet.Services.ImageUpload;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 using System.Text.Json;
 
 namespace backend_dotnet.Services.Service
@@ -45,7 +47,7 @@ namespace backend_dotnet.Services.Service
             {
                 try
                 {
-                    var uploadedUrl = await _imageUploadService.UploadImageAsync(image, "services");
+                    var uploadedUrl = await _imageUploadService.UploadImageAsync(image, "medicare");
                     if (!string.IsNullOrEmpty(uploadedUrl))
                     {
                         imageUrl = uploadedUrl;
@@ -269,7 +271,9 @@ namespace backend_dotnet.Services.Service
 
         private static Dictionary<string, object> NormalizeSlotsToMap(List<string> rawSlots)
         {
-            var map = new Dictionary<string, object>();
+            var map = new Dictionary<string, object>();//Dictionary<TKey, TValue> — key-value collection
+
+            //A Dictionary stores data as key + value pairs.
             for (int i = 0; i < rawSlots.Count; i++)
             {
                 map[i.ToString()] = rawSlots[i];

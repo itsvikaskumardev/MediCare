@@ -66,10 +66,13 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
 
         private static async Task<IResult> CreateDoctor(
             [FromForm] CreateDoctorRequestDTO createDoctorRequestDTO,
-            IFormFile? image,
             IDoctorService doctorService)
         {
-            var result = await doctorService.CreateDoctorAsync(createDoctorRequestDTO, image);
+            Console.WriteLine($"[DoctorEndpoints] CreateDoctor hit. DTO Image is null? {createDoctorRequestDTO.Image == null}");
+            if (createDoctorRequestDTO.Image != null)
+                Console.WriteLine($"[DoctorEndpoints] Image name: {createDoctorRequestDTO.Image.FileName}, Length: {createDoctorRequestDTO.Image.Length}");
+            
+            var result = await doctorService.CreateDoctorAsync(createDoctorRequestDTO, createDoctorRequestDTO.Image);
 
             if (!result.IsSuccess)
             {
@@ -175,7 +178,6 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
         private static async Task<IResult> UpdateDoctor(
         Guid id,
         [FromForm] UpdateDoctorRequestDTO updateDoctorRequestDTO,
-        IFormFile? image,
         ClaimsPrincipal user,
         IDoctorService doctorService,
         ApplicationDbContext dbContext)
@@ -192,7 +194,7 @@ namespace backend_dotnetWebMinimalExample.Endpoints.Doctor
                 }
             }
 
-            var result = await doctorService.UpdateDoctorAsync(id, updateDoctorRequestDTO, image);
+            var result = await doctorService.UpdateDoctorAsync(id, updateDoctorRequestDTO, updateDoctorRequestDTO.Image);
 
             if (!result.IsSuccess)
             {

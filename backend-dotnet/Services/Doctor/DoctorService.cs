@@ -90,7 +90,7 @@ namespace backend_dotnet.Services.Doctor
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-            
+
             _db.Users.Add(user);// Adds one entity to the DbContext.
 
             // 2. Create the Doctor profile linked to the User

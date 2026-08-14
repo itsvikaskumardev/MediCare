@@ -1,4 +1,4 @@
-﻿namespace backend_dotnet.Models.DTOs.Doctor
+namespace backend_dotnet.Models.DTOs.Doctor
 {
     public class UpdateDoctorRequestDTO
     {
@@ -18,5 +18,6 @@
         public string? Password { get; set; }
         public string? ImageUrl { get; set; }
         public string? Schedule { get; set; }
+        public Microsoft.AspNetCore.Http.IFormFile? Image { get; set; }
     }
 }

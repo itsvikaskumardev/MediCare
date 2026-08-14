@@ -50,12 +50,11 @@ namespace backend_dotnet.Endpoints
 
         private static async Task<IResult> CreateService(
         [FromForm] CreateServiceRequestDTO createServiceRequestDTO,
-        IFormFile? image,
         IServiceModuleService serviceService)
         {
             try
             {
-                var result = await serviceService.CreateServiceAsync(createServiceRequestDTO, image);
+                var result = await serviceService.CreateServiceAsync(createServiceRequestDTO, createServiceRequestDTO.Image);
 
                 if (!result.IsSuccess)
                 {
@@ -145,12 +144,11 @@ namespace backend_dotnet.Endpoints
         private static async Task<IResult> UpdateService(
             Guid id,
             [FromForm] UpdateServiceRequestDTO updateServiceRequestDTO,
-            IFormFile? image,
             IServiceModuleService serviceService)
         {
             try
             {
-                var result = await serviceService.UpdateServiceAsync(id, updateServiceRequestDTO, image);
+                var result = await serviceService.UpdateServiceAsync(id, updateServiceRequestDTO, updateServiceRequestDTO.Image);
 
                 if (!result.IsSuccess)
                 {

@@ -25,7 +25,7 @@ namespace backend_dotnet.Services.Appointment
             _frontendUrl = configuration["App:FrontendUrl"] ?? "http://localhost:5173";
         }
 
-        // Implementation of Appointment service methods will be defined here
+
 
         //-------------------------------GetAppointments------------------------------------------------------
 

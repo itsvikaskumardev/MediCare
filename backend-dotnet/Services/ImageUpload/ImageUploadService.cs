@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+using backend_dotnet.Models;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using backend_dotnet.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace backend_dotnet.Services.ImageUpload
 {
@@ -24,26 +25,44 @@ namespace backend_dotnet.Services.ImageUpload
         //-----------------------------------UploadImageAsync--------------------------------------------
 
 
-        public async Task<string?> UploadImageAsync(IFormFile file, string folderName = "medicare")
+        public async Task<string?> UploadImageAsync(IFormFile file, string folderName = "medicare") // IFormFile represents the uploaded file,
         {
+            /*
+             For example, the frontend might send: doctor.jpg , and your backend receives it as an IFormFile.
+             */
             if (file == null || file.Length == 0)
-                return null;
-
-            await using var stream = file.OpenReadStream();
-            var uploadParams = new ImageUploadParams
             {
-                File = new FileDescription(file.FileName, stream),
+                Console.WriteLine("ImageUploadService: File is null or empty.");
+                return null;
+            }
+
+            Console.WriteLine($"ImageUploadService: Attempting to upload image {file.FileName} to Cloudinary (folder: {folderName})...");
+
+            await using var stream = file.OpenReadStream();// Instead of loading the entire image into a byte[], you're opening a stream to read the image data.
+            //Stream containing image data
+            var uploadParams = new ImageUploadParams // This object tells Cloudinary what to upload and how to handle it.
+            {
+                File = new FileDescription(file.FileName, stream),// Here is the file named doctor.jpg, and its actual image data is available through this stream."
                 Folder = folderName,
                 Transformation = new Transformation().Quality("auto").FetchFormat("auto")
             };
 
-            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);// This is the actual upload. Your application sends the image data to Cloudinary.
+
+            Console.WriteLine($"ImageUploadService: Cloudinary response status: {uploadResult.StatusCode}");
+            /*
+             Cloudinary then returns a response containing information about the uploaded image.
+
+              For example, it can contain: StatusCode, SecureUrl, PublicId, Error
+             */
 
             if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                Console.WriteLine($"ImageUploadService: Upload successful! URL: {uploadResult.SecureUrl}");
                 return uploadResult.SecureUrl.ToString();
             }
 
+            Console.WriteLine($"ImageUploadService: Upload failed! Error: {uploadResult.Error?.Message}");
             return null;
         }
 
