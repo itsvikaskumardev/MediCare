@@ -14,6 +14,7 @@ import ServiceAppointments from "./pages/ServiceAppointments/ServiceAppointments
 import AdminProfile from "./pages/AdminProfile/AdminProfile";
 import Hero from "./components/Hero/Hero";
 import Login from "./pages/Login/Login";
+import ServerWakeupLoader from "./components/ServerWakeupLoader/ServerWakeupLoader";
 
 function RequireAuth({ children }) {
   const { isLoaded, user } = useAuth();
@@ -48,82 +49,84 @@ function RequireAuth({ children }) {
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Hero />} />
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/h"
-        element={
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <RequireAuth>
-            <AdminProfile />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/add"
-        element={
-          <RequireAuth>
-            <Add />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/list"
-        element={
-          <RequireAuth>
-            <List />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/appointments"
-        element={
-          <RequireAuth>
-            <Appointments />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/service-dashboard"
-        element={
-          <RequireAuth>
-            <SerDashboard />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/add-service"
-        element={
-          <RequireAuth>
-            <AddSer />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/list-service"
-        element={
-          <RequireAuth>
-            <ListService />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/service-appointments"
-        element={
-          <RequireAuth>
-            <ServiceAppointments />
-          </RequireAuth>
-        }
-      />
-    </Routes>
+    <ServerWakeupLoader>
+      <Routes>
+        <Route path="/" element={<Hero />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/h"
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <AdminProfile />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/add"
+          element={
+            <RequireAuth>
+              <Add />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/list"
+          element={
+            <RequireAuth>
+              <List />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/appointments"
+          element={
+            <RequireAuth>
+              <Appointments />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/service-dashboard"
+          element={
+            <RequireAuth>
+              <SerDashboard />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/add-service"
+          element={
+            <RequireAuth>
+              <AddSer />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/list-service"
+          element={
+            <RequireAuth>
+              <ListService />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/service-appointments"
+          element={
+            <RequireAuth>
+              <ServiceAppointments />
+            </RequireAuth>
+          }
+        />
+      </Routes>
+    </ServerWakeupLoader>
   );
 };
 

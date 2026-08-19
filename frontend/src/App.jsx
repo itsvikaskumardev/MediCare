@@ -18,6 +18,8 @@ import DHome from "./pages/DHome/DHome";
 import List from "./pages/List/List";
 import EditProfile from "./pages/EditProfile/EditProfile";
 
+import ServerWakeupLoader from "./components/ServerWakeupLoader/ServerWakeupLoader";
+
 // Lucide icon
 import { CircleChevronUp } from "lucide-react";
 
@@ -78,28 +80,30 @@ const App = () => {
       <ScrollToTop />
 
       <div className="overflow-x-hidden bg-white text-gray-900">
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<Home />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/doctors/:id" element={<DoctorDetail />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/services" element={<Service />} />
-          <Route path="/services/:id" element={<ServiceDetailPage />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/my-profile" element={<MyProfile />} />
-          <Route path="/doctor-admin/login" element={<Login />} />
+        <ServerWakeupLoader>
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<Home />} />
+            <Route path="/doctors" element={<Doctors />} />
+            <Route path="/doctors/:id" element={<DoctorDetail />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Service />} />
+            <Route path="/services/:id" element={<ServiceDetailPage />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/doctor-admin/login" element={<Login />} />
 
 
 
-          {/* Doctor Admin */}
-          <Route path="/doctor-admin/:id" element={<DHome />} />
-          <Route path="/doctor-admin/:id/appointments" element={<List />} />
-          <Route
-            path="/doctor-admin/:id/profile/edit"
-            element={<EditProfile />}
-          />
-        </Routes>
+            {/* Doctor Admin */}
+            <Route path="/doctor-admin/:id" element={<DHome />} />
+            <Route path="/doctor-admin/:id/appointments" element={<List />} />
+            <Route
+              path="/doctor-admin/:id/profile/edit"
+              element={<EditProfile />}
+            />
+          </Routes>
+        </ServerWakeupLoader>
       </div>
 
       <ScrollButton />

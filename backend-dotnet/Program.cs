@@ -132,11 +132,8 @@ builder.Services.AddAntiforgery();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();// scalar add in program.cs
-}
+app.MapOpenApi();
+app.MapScalarApiReference(); // scalar add in program.cs
 
 if (!app.Environment.IsDevelopment())
 {
@@ -152,6 +149,7 @@ app.UseAuthorization();
 app.UseAntiforgery();
 
 //-----------------------------Endpoints-----------------------------------------------------------------------
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow })).AllowAnonymous();
 app.MapAuthEndpoints();
 app.MapDoctorEndpoints();
 app.MapAppointmentEndpoints();
