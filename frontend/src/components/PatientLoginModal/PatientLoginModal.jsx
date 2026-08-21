@@ -6,7 +6,6 @@ import { useAuth } from "../../context/AuthContext";
 export default function PatientLoginModal({ isOpen, onClose, onLoginSuccess }) {
   const { login } = useAuth();
   const API_BASE =
-    import.meta.env.BACKEND_URL ||
     import.meta.env.VITE_BACKEND_URL ||
     "http://localhost:5205";
 

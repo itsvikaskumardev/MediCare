@@ -82,7 +82,7 @@ function dedupeAndSortSchedule(schedule = {}) {
 export default function EditProfilePage({ apiBase }) {
   const { id } = useParams(); // expects route like /doctor-edit/:id
   const navigate = useNavigate();
-  const API_BASE = `${import.meta.env.BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5205"}/api/doctors`;
+  const API_BASE = `${import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || "http://localhost:5205"}/api/doctors`;
 
   const [doc, setDoc] = useState(null);
   const [editing, setEditing] = useState(false);

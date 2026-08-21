@@ -101,7 +101,7 @@ function getSortedScheduleDates(scheduleLike) {
 /* --------------------------------------------------------------------- */
 
 export default function AnimatedDoctorListResponsive({ apiBase }) {
-  const API_BASE = apiBase || import.meta.env.BACKEND_URL || "http://localhost:4000";
+  const API_BASE = apiBase || import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
   const [doctors, setDoctors] = useState([]);
   const [expanded, setExpanded] = useState(null);

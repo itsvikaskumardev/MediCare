@@ -7,7 +7,7 @@ const ServerWakeupLoader = ({ children }) => {
 
   useEffect(() => {
     let isMounted = true;
-    const API_BASE = import.meta.env.VITE_BACKEND_URL || import.meta.env.BACKEND_URL || "http://localhost:5205";
+    const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
 
     // Show the loader only if it takes more than 500ms
     const loaderTimeout = setTimeout(() => {

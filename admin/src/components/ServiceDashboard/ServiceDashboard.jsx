@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { serviceDashboardStyles } from "../../assets/dummyStyles";
 
-const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 /* -----------------------
    Normalizer - robust to multiple backend shapes

@@ -15,7 +15,7 @@ import { serviceDetailStyles, iconSize } from "../../assets/dummyStyles";
 import { loadRazorpay } from "../../utils/loadRazorpay";
 
 const DEFAULT_HOST = (
-  import.meta.env.BACKEND_URL || "http://localhost:4000"
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
 ).replace(/\/$/, "");
 
 export default function ServiceDetail() {

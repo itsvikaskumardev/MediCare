@@ -8,7 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function LoginPage({ apiBase }) {
   const { login } = useAuth();
-  const API_BASE = apiBase || import.meta.env.BACKEND_URL || import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
+  const API_BASE = apiBase || import.meta.env.VITE_BACKEND_URL || "http://localhost:5205";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();

@@ -9,7 +9,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    plugins: [react(), tailwindcss()],
-    envPrefix: ['VITE_', 'BACKEND_URL']
+    plugins: [react(), tailwindcss()]
   }
 })

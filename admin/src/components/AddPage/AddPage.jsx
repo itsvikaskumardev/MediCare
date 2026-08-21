@@ -250,7 +250,7 @@ export default function DoctorDetailPage() {
 
       if (form.imageFile) fd.append("image", form.imageFile);
 
-      const API_BASE = `${import.meta.env.BACKEND_URL || "http://localhost:4000"}/api`;
+      const API_BASE = `${import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"}/api`;
 
       const res = await fetch(`${API_BASE}/doctors/CreateDoctor`, {
         method: "POST",

@@ -23,7 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 import { doctorDetailStyles } from "../../assets/dummyStyles";
 import { loadRazorpay } from "../../utils/loadRazorpay";
 
-const API_BASE = import.meta.env.BACKEND_URL || "http://localhost:4000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 function getScheduleDates(schedule) {
   if (!schedule) return [];

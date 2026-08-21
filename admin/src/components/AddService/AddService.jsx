@@ -16,7 +16,7 @@ import { addServiceStyles } from "../../assets/dummyStyles";
 
 export default function AddService({ apiBase, serviceId }) {
   const navigate = useNavigate();
-  const API_BASE = apiBase || import.meta.env.BACKEND_URL || "http://localhost:4000";
+  const API_BASE = apiBase || import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
   const fileRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null); // either objectURL or remote imageUrl
