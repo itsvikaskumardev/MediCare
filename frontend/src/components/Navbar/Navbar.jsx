@@ -136,7 +136,7 @@ export default function Navbar() {
                   Login
                 </button>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="hidden lg:flex items-center gap-2">
                   <Link to="/my-profile" className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-full text-xs font-medium border border-emerald-200 transition-colors cursor-pointer" title="My Profile">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="max-w-[120px] truncate">{user.fullName || user.email}</span>

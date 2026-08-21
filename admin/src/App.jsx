@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 // Import your pages
@@ -125,6 +125,9 @@ const App = () => {
             </RequireAuth>
           }
         />
+
+        {/* Catch-all route to redirect unknown URLs to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </ServerWakeupLoader>
   );

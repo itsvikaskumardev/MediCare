@@ -1,6 +1,5 @@
-// src/App.jsx
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Pages
 import Home from "./pages/Home/Home";
@@ -102,6 +101,9 @@ const App = () => {
               path="/doctor-admin/:id/profile/edit"
               element={<EditProfile />}
             />
+
+            {/* Catch-all route to redirect unknown URLs to Home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </ServerWakeupLoader>
       </div>
